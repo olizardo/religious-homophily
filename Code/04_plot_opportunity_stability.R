@@ -68,5 +68,5 @@ ggplot(wave_alter_props, aes(x = Wave_Num, y = prop, color = alt_rel, group = al
   )
 
 # Save Plot
-ggsave(here("plot_opportunity_pool_stability.png"), width = 7, height = 4.5, dpi = 300)
-cat("Opportunity stability plot successfully generated and saved to plot_opportunity_pool_stability.png\n")
+ggsave(here("Plots", "plot_opportunity_pool_stability.png"), width = 7, height = 4.5, dpi = 300)
+cat("Opportunity stability plot successfully generated and saved to Plots/plot_opportunity_pool_stability.png\n")

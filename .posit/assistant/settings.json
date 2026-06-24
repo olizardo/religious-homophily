@@ -5,7 +5,12 @@
     },
     "edit": {
       "*.md": "allow",
-      "*.R": "allow"
+      "*.R": "allow",
+      "*.qmd": "allow"
+    },
+    "bash": {
+      "mkdir *": "allow",
+      "mv *": "allow"
     }
   }
 }

@@ -108,12 +108,13 @@ cat("ERGM MODEL A Summary:\n")
 cat("======================================================\n")
 print(summary(model_ergm_a))
 
-# Model B: Adding structural controls for popular people (gwdegree) 
+# Model B: Adding structural controls for popular people (gwidegree/gwodegree) 
 # and structural triadic closure/transitivity (gwnsp). 
-# This is the gold-standard specification.
+# This is the gold-standard specification for directed networks.
 model_ergm_b <- ergm(net ~ edges + 
                        mutual + 
-                       gwdegree(decay = 0.5, fixed = TRUE) + 
+                       gwidegree(decay = 0.5, fixed = TRUE) + 
+                       gwodegree(decay = 0.5, fixed = TRUE) + 
                        gwnsp(alpha = 0.5, fixed = TRUE) + 
                        nodematch("gender") + 
                        nodematch("race") + 

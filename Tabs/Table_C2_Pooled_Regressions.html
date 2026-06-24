@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 20px; color: #333; }
+h2 { color: #1a365d; margin-bottom: 5px; font-size: 1.5em; }
+p { color: #555; margin-top: 0; margin-bottom: 20px; font-size: 0.95em; }
+table { border-collapse: collapse; width: 100%; max-width: 1000px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+th { background-color: #2b6cb0; color: white; font-weight: bold; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+tr:nth-child(even) { background-color: #f7fafc; }
+tr:hover { background-color: #edf2f7; }
+td { font-size: 0.9em; }
+td.numeric { text-align: center; }
+th.numeric { text-align: center; }
+</style>
+</head>
+<body>
+<h2>Table C2: Pooled Models (Full vs Intimate)</h2>
+<p>Generated on 2026-06-23</p>
+<table>
+<thead>
+<tr>
+<th>Predictor</th>
+<th class='numeric'>Full Pooled Model</th>
+<th class='numeric'>Intimate Ties Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intercept (Catholic Baseline)</td>
+<td class='numeric'>0.167 (0.123)</td>
+<td class='numeric'>0.093 (0.174)</td>
+</tr>
+<tr>
+<td>Protestant (Ego)</td>
+<td class='numeric'>0.530** (0.186)</td>
+<td class='numeric'>0.715** (0.269)</td>
+</tr>
+<tr>
+<td>No Religion (Ego)</td>
+<td class='numeric'>0.585** (0.197)</td>
+<td class='numeric'>0.279 (0.354)</td>
+</tr>
+<tr>
+<td>Other Religion (Ego)</td>
+<td class='numeric'>1.785*** (0.526)</td>
+<td class='numeric'>0.946&dagger; (0.567)</td>
+</tr>
+<tr>
+<td>Same Gender</td>
+<td class='numeric'>0.117 (0.135)</td>
+<td class='numeric'>0.229 (0.171)</td>
+</tr>
+<tr>
+<td>Same Race</td>
+<td class='numeric'>0.268* (0.118)</td>
+<td class='numeric'>0.284* (0.135)</td>
+</tr>
+<tr>
+<td>Roommates (TRUE)</td>
+<td class='numeric'>-0.149 (0.105)</td>
+<td class='numeric'>-0.053 (0.127)</td>
+</tr>
+<tr>
+<td>Same Dorm (TRUE)</td>
+<td class='numeric'>-0.266* (0.124)</td>
+<td class='numeric'>-0.345* (0.157)</td>
+</tr>
+<tr>
+<td>Longitudinal Trend (wave_num)</td>
+<td class='numeric'>0.018 (0.026)</td>
+<td class='numeric'>0.001 (0.032)</td>
+</tr>
+<tr>
+<td>Observations (N)</td>
+<td class='numeric'>9,790</td>
+<td class='numeric'>5,523</td>
+</tr>
+<tr>
+<td>Unique Egos</td>
+<td class='numeric'>441</td>
+<td class='numeric'>364</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

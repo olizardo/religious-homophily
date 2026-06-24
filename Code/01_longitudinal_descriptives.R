@@ -156,4 +156,4 @@ ggplot(df_plot, aes(x = Wave_Num, y = Yules_Q, color = Group, group = Group)) +
   ylim(0, 1)
 
 # Save Plot
-ggsave(here("plot_yules_q_trajectory.png"), width = 7, height = 4.5, dpi = 300)
+ggsave(here("Plots", "plot_yules_q_trajectory.png"), width = 7, height = 4.5, dpi = 300)
