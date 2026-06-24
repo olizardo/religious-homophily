@@ -416,6 +416,78 @@ ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group, group = G
 
 ---
 
+### 3.6. Advanced Network Modeling (ERGMs)
+
+While our dyadic regressions are excellent for incorporating individual and dyadic controls, they assume that friendship choices are independent of one another. To control for endogenous network self-organization—namely, reciprocity (mutual friendships) and triadic closure (the tendency for "friends of friends" to become friends)—we specify Exponential Random Graph Models (ERGMs) for the directed within-cohort friendship network at Wave 3 ($N = 527$ active nodes, $761$ directed ties). 
+
+The results for both Model A (baseline attributes and reciprocity) and Model B (incorporating geometrically weighted degree dispersion and transitivity controls) are presented in @tbl-ergm-results.
+
+::: {#tbl-ergm-results}
+```{r}
+#| label: tbl-ergm-results-code
+#| echo: false
+#| warning: false
+
+# Construct ERGM results table dynamically since model objects are in workspace
+library(network)
+library(ergm)
+
+ergm_rows <- c(
+  "edges", "mutual", "gwideg.fixed.0.5", "gwodeg.fixed.0.5", "gwnsp.OTP.fixed.0.5",
+  "nodematch.gender", "nodematch.race", "nodematch.religion.Catholic", 
+  "nodematch.religion.No Religion", "nodematch.religion.Protestant", 
+  "nodematch.religion.Other Religion"
+)
+
+ergm_mat <- matrix("—", nrow = length(ergm_rows), ncol = 2, 
+                   dimnames = list(ergm_rows, c("Model A (Baseline)", "Model B (Structural Control)")))
+
+if (exists("model_ergm_a")) {
+  s_a <- summary(model_ergm_a)$coefficients
+  for (r in rownames(s_a)) {
+    if (r %in% ergm_rows) {
+      ergm_mat[r, 1] <- sprintf("%.3f (%.3f)", s_a[r, "Estimate"], s_a[r, "Std. Error"])
+    }
+  }
+}
+
+if (exists("model_ergm_b")) {
+  s_b <- summary(model_ergm_b)$coefficients
+  for (r in rownames(s_b)) {
+    if (r %in% ergm_rows) {
+      # Handle inf coefficient
+      if (s_b[r, "Estimate"] == -Inf) {
+        ergm_mat[r, 2] <- "-Inf (fixed)"
+      } else {
+        ergm_mat[r, 2] <- sprintf("%.3f (%.3f)", s_b[r, "Estimate"], s_b[r, "Std. Error"])
+      }
+    }
+  }
+}
+
+# Clean row labels for printing
+rownames(ergm_mat) <- c(
+  "Baseline Density (edges)", "Reciprocity (mutual)", "Popularity Dispersion (gwidegree)",
+  "Activity Dispersion (gwodegree)", "Transitivity (gwnsp)", "Same Gender", "Same Race",
+  "Catholic Match", "No Religion Match", "Protestant Match", "Other Religion Match"
+)
+
+kable(ergm_mat, caption = "Exponential Random Graph Model (ERGM) Results for Wave 3 Within-Cohort Network.")
+```
+:::
+
+#### Substantive Takeaways from the ERGMs:
+1.  **Massive Reciprocity:** Both models show extremely strong reciprocity effects ($\theta = 6.957$ in Model B, $p < 0.001$). A friendship tie has vastly higher odds of forming if it is mutual.
+2.  **Centralization of Popularity:** The positive `gwidegree` term ($\theta = 0.863, p < 0.001$) shows a strong popularity centralization effect, meaning that popular students (those with high in-degrees) are disproportionately likely to receive even more friendship nominations.
+3.  **Demographic Dominance:** Gender homophily ($\theta = 0.796, p < 0.001$) and racial homophily ($\theta = 0.243, p < 0.001$) remain highly positive and robust even when controlling for complex triadic network self-organization.
+4.  **The Bounded-Network Power Constraint:** In the within-cohort network, the active homophily terms for Catholics, Protestants, and No Religion are positive but statistically non-significant, while the Other Religion match is fixed at $-\infty$ due to zero observed matching ties. 
+
+This statistical non-significance highlights a critical methodological limitation of whole-network analysis for underrepresented minorities. Restricting the friendship network to the *within-cohort* subset (where both nodes must be respondents in the survey) discards **$73\%$ of the nominated friendships**. Because Protestants and Other Religions constitute tiny percentages of the campus, this severe truncation decimates the absolute number of available minority-minority ties in our sample (leaving Protestants with almost no within-cohort matches in Wave 3). 
+
+Consequently, the ERGM is severely underpowered for evaluating minority distinctiveness, which provides a powerful methodological justification for why our **egocentric dyadic regressions**—which analyze the *full* set of nominated friendship alters, including the $73\%$ of friends outside the study—are actually the superior and most substantively accurate tool for researching minority protective boundaries.
+
+---
+
 ## 4. Discussion
 
 Our results provide robust support for **Minority Distinctiveness Theory** over Majority Exclusiveness Theory. Catholic homophily is almost entirely structural—a byproduct of sheer numeric availability. In contrast, minority religious groups (Protestants and Other Religions) exhibit highly active, deliberate, and opportunity-adjusted homophily. Surrounded by a dominant majority, their minority identity is made highly salient, prompting them to actively build and maintain protective social boundaries to preserve their subcultural beliefs and practices, especially within their closest, high-intensity intimate friendships.

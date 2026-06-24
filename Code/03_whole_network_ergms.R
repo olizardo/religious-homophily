@@ -115,7 +115,7 @@ model_ergm_b <- ergm(net ~ edges +
                        mutual + 
                        gwidegree(decay = 0.5, fixed = TRUE) + 
                        gwodegree(decay = 0.5, fixed = TRUE) + 
-                       gwnsp(alpha = 0.5, fixed = TRUE) + 
+                       gwnsp(decay = 0.5, fixed = TRUE) + 
                        nodematch("gender") + 
                        nodematch("race") + 
                        nodematch("religion", diff = TRUE))

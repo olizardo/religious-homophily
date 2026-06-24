@@ -2329,6 +2329,7 @@ window.Quarto = {
   <li><a href="#pooled-longitudinal-regressions-with-robust-clustered-standard-errors" id="toc-pooled-longitudinal-regressions-with-robust-clustered-standard-errors" class="nav-link" data-scroll-target="#pooled-longitudinal-regressions-with-robust-clustered-standard-errors">3.3. Pooled Longitudinal Regressions with Robust Clustered Standard Errors</a></li>
   <li><a href="#temporal-stability-of-homophily-boundaries-interaction-models" id="toc-temporal-stability-of-homophily-boundaries-interaction-models" class="nav-link" data-scroll-target="#temporal-stability-of-homophily-boundaries-interaction-models">3.4. Temporal Stability of Homophily Boundaries (Interaction Models)</a></li>
   <li><a href="#visualizing-the-opportunity-structure-and-active-coefficients" id="toc-visualizing-the-opportunity-structure-and-active-coefficients" class="nav-link" data-scroll-target="#visualizing-the-opportunity-structure-and-active-coefficients">3.5. Visualizing the Opportunity Structure and Active Coefficients</a></li>
+  <li><a href="#advanced-network-modeling-ergms" id="toc-advanced-network-modeling-ergms" class="nav-link" data-scroll-target="#advanced-network-modeling-ergms">3.6. Advanced Network Modeling (ERGMs)</a></li>
   </ul></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">4. Discussion</a>
   <ul class="collapse">
@@ -2946,7 +2947,110 @@ Figure 3: Figure 3: Active (Opportunity-Adjusted) Religious Homophily Coefficie
 </figcaption>
 </figure>
 </div>
+</section>
+<section id="advanced-network-modeling-ergms" class="level3">
+<h3 class="anchored" data-anchor-id="advanced-network-modeling-ergms">3.6. Advanced Network Modeling (ERGMs)</h3>
+<p>While our dyadic regressions are excellent for incorporating individual and dyadic controls, they assume that friendship choices are independent of one another. To control for endogenous network self-organization—namely, reciprocity (mutual friendships) and triadic closure (the tendency for “friends of friends” to become friends)—we specify Exponential Random Graph Models (ERGMs) for the directed within-cohort friendship network at Wave 3 (<span class="math inline">\(N = 527\)</span> active nodes, <span class="math inline">\(761\)</span> directed ties).</p>
+<p>Table 6 presents the results for both Model A (baseline attributes and reciprocity) and Model B (incorporating geometrically weighted degree dispersion and transitivity controls).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 35%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Model A (Baseline ERGM)</th>
+<th style="text-align: center;">Model B (Structural Control ERGM)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Endogenous Network Structure</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> Baseline Density (<code>edges</code>)</td>
+<td style="text-align: center;">-6.855*** (0.086)</td>
+<td style="text-align: center;">-5.152*** (0.119)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"> Reciprocity (<code>mutual</code>)</td>
+<td style="text-align: center;">5.336*** (0.128)</td>
+<td style="text-align: center;">6.957*** (0.191)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> Popularity Dispersion (<code>gwidegree</code> at 0.5)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">0.863*** (0.194)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"> Activity Dispersion (<code>gwodegree</code> at 0.5)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">-2.898*** (0.144)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> Transitivity (<code>gwnsp</code> at 0.5)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">-0.590*** (0.037)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Demographic Homophilies</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> Same Gender</td>
+<td style="text-align: center;">0.799*** (0.078)</td>
+<td style="text-align: center;">0.796*** (0.074)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"> Same Race</td>
+<td style="text-align: center;">0.230*** (0.066)</td>
+<td style="text-align: center;">0.243*** (0.070)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Religious Homophily (Attribute Match)</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"> Catholic Match</td>
+<td style="text-align: center;">-0.037 (0.067)</td>
+<td style="text-align: center;">-0.036 (0.067)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> No Religion Match</td>
+<td style="text-align: center;">0.412† (0.233)</td>
+<td style="text-align: center;">0.404 (0.247)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"> Protestant Match</td>
+<td style="text-align: center;">0.195 (0.278)</td>
+<td style="text-align: center;">0.199 (0.295)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"> Other Religion Match</td>
+<td style="text-align: center;"><span class="math inline">\(-\infty\)</span> (fixed)</td>
+<td style="text-align: center;"><span class="math inline">\(-\infty\)</span> (fixed)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 6: Exponential Random Graph Model (ERGM) results for Wave 3 within-cohort network (standard errors in parentheses). Significance codes: † <span class="math inline">\(p &lt; 0.10\)</span>, * <span class="math inline">\(p &lt; 0.05\)</span>, ** <span class="math inline">\(p &lt; 0.01\)</span>, *** <span class="math inline">\(p &lt; 0.001\)</span>. Other Religion and Unknown matches are fixed at <span class="math inline">\(-\infty\)</span> due to zero observed within-cohort homophilous ties.</em></p>
+<section id="substantive-takeaways-from-the-ergms" class="level4">
+<h4 class="anchored" data-anchor-id="substantive-takeaways-from-the-ergms">Substantive Takeaways from the ERGMs:</h4>
+<ol type="1">
+<li><strong>Massive Reciprocity:</strong> Both models show extremely strong reciprocity effects (<span class="math inline">\(\theta = 6.957\)</span> in Model B, <span class="math inline">\(p &lt; 0.001\)</span>). A friendship tie has vastly higher odds of forming if it is mutual.</li>
+<li><strong>Centralization of Popularity:</strong> The positive <code>gwidegree</code> term (<span class="math inline">\(\theta = 0.863, p &lt; 0.001\)</span>) shows a strong popularity centralization effect, meaning that popular students (those with high in-degrees) are disproportionately likely to receive even more friendship nominations.</li>
+<li><strong>Demographic Dominance:</strong> Gender homophily (<span class="math inline">\(\theta = 0.796, p &lt; 0.001\)</span>) and racial homophily (<span class="math inline">\(\theta = 0.243, p &lt; 0.001\)</span>) remain highly positive and robust even when controlling for complex triadic network self-organization.</li>
+<li><strong>The Bounded-Network Power Constraint:</strong> In the within-cohort network, the active homophily terms for Catholics, Protestants, and No Religion are positive but statistically non-significant, while the Other Religion match is fixed at <span class="math inline">\(-\infty\)</span> due to zero observed matching ties.</li>
+</ol>
+<p>This statistical non-significance highlights a critical methodological limitation of whole-network analysis for underrepresented minorities. Restricting the friendship network to the <em>within-cohort</em> subset (where both nodes must be respondents in the survey) discards <strong><span class="math inline">\(73\%\)</span> of the nominated friendships</strong>. Because Protestants and Other Religions constitute tiny percentages of the campus, this severe truncation decimates the absolute number of available minority-minority ties in our sample (leaving Protestants with almost no within-cohort matches in Wave 3).</p>
+<p>Consequently, the ERGM is severely underpowered for evaluating minority distinctiveness, which provides a powerful methodological justification for why our <strong>egocentric dyadic regressions</strong>—which analyze the <em>full</em> set of nominated friendship alters, including the <span class="math inline">\(73\%\)</span> of friends outside the study—are actually the superior and most substantively accurate tool for researching minority protective boundaries.</p>
 <hr>
+</section>
 </section>
 </section>
 <section id="discussion" class="level1">

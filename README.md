@@ -40,7 +40,8 @@ The project directory is structured as follows:
     ├── Table_B1_Opportunity_Structure.html # Opportunity base rates & offset values
     ├── Table_C1_Wave3_Regressions.html   # Wave 3 cross-sectional regressions
     ├── Table_C2_Pooled_Regressions.html  # Pooled models (full vs. intimate ties)
-    └── Table_C3_Interaction_Regression.html # Interaction model results (clustered SEs)
+    ├── Table_C3_Interaction_Regression.html # Interaction model results (clustered SEs)
+    └── Table_C4_ERGM_Results.html        # Table 6: ERGM results for Wave 3 Network
 ```
 
 ---

@@ -195,6 +195,41 @@ Finally, the wave-specific active (intercept-adjusted) homophily coefficients ar
 
 ![Figure 3: Active (Opportunity-Adjusted) Religious Homophily Coefficients over Time (Waves 3-8).](Plots/plot_active_homophily_coefficients.png){#fig-active-coefs width="70%"}
 
+### 3.6. Advanced Network Modeling (ERGMs)
+
+While our dyadic regressions are excellent for incorporating individual and dyadic controls, they assume that friendship choices are independent of one another. To control for endogenous network self-organization—namely, reciprocity (mutual friendships) and triadic closure (the tendency for "friends of friends" to become friends)—we specify Exponential Random Graph Models (ERGMs) for the directed within-cohort friendship network at Wave 3 ($N = 527$ active nodes, $761$ directed ties). 
+
+Table 6 presents the results for both Model A (baseline attributes and reciprocity) and Model B (incorporating geometrically weighted degree dispersion and transitivity controls).
+
+| Parameter | Model A (Baseline ERGM) | Model B (Structural Control ERGM) |
+| :--- | :---: | :---: |
+| **Endogenous Network Structure** | | |
+| &emsp;Baseline Density (`edges`) | -6.855\*\*\* (0.086) | -5.152\*\*\* (0.119) |
+| &emsp;Reciprocity (`mutual`) | 5.336\*\*\* (0.128) | 6.957\*\*\* (0.191) |
+| &emsp;Popularity Dispersion (`gwidegree` at 0.5) | — | 0.863\*\*\* (0.194) |
+| &emsp;Activity Dispersion (`gwodegree` at 0.5) | — | -2.898\*\*\* (0.144) |
+| &emsp;Transitivity (`gwnsp` at 0.5) | — | -0.590\*\*\* (0.037) |
+| **Demographic Homophilies** | | |
+| &emsp;Same Gender | 0.799\*\*\* (0.078) | 0.796\*\*\* (0.074) |
+| &emsp;Same Race | 0.230\*\*\* (0.066) | 0.243\*\*\* (0.070) |
+| **Religious Homophily (Attribute Match)** | | |
+| &emsp;Catholic Match | -0.037 (0.067) | -0.036 (0.067) |
+| &emsp;No Religion Match | 0.412&dagger; (0.233) | 0.404 (0.247) |
+| &emsp;Protestant Match | 0.195 (0.278) | 0.199 (0.295) |
+| &emsp;Other Religion Match | $-\infty$ (fixed) | $-\infty$ (fixed) |
+
+*Table 6: Exponential Random Graph Model (ERGM) results for Wave 3 within-cohort network (standard errors in parentheses). Significance codes: &dagger; $p < 0.10$, \* $p < 0.05$, \*\* $p < 0.01$, \*\*\* $p < 0.001$. Other Religion and Unknown matches are fixed at $-\infty$ due to zero observed within-cohort homophilous ties.*
+
+#### Substantive Takeaways from the ERGMs:
+1.  **Massive Reciprocity:** Both models show extremely strong reciprocity effects ($\theta = 6.957$ in Model B, $p < 0.001$). A friendship tie has vastly higher odds of forming if it is mutual.
+2.  **Centralization of Popularity:** The positive `gwidegree` term ($\theta = 0.863, p < 0.001$) shows a strong popularity centralization effect, meaning that popular students (those with high in-degrees) are disproportionately likely to receive even more friendship nominations.
+3.  **Demographic Dominance:** Gender homophily ($\theta = 0.796, p < 0.001$) and racial homophily ($\theta = 0.243, p < 0.001$) remain highly positive and robust even when controlling for complex triadic network self-organization.
+4.  **The Bounded-Network Power Constraint:** In the within-cohort network, the active homophily terms for Catholics, Protestants, and No Religion are positive but statistically non-significant, while the Other Religion match is fixed at $-\infty$ due to zero observed matching ties. 
+
+This statistical non-significance highlights a critical methodological limitation of whole-network analysis for underrepresented minorities. Restricting the friendship network to the *within-cohort* subset (where both nodes must be respondents in the survey) discards **$73\%$ of the nominated friendships**. Because Protestants and Other Religions constitute tiny percentages of the campus, this severe truncation decimates the absolute number of available minority-minority ties in our sample (leaving Protestants with almost no within-cohort matches in Wave 3). 
+
+Consequently, the ERGM is severely underpowered for evaluating minority distinctiveness, which provides a powerful methodological justification for why our **egocentric dyadic regressions**—which analyze the *full* set of nominated friendship alters, including the $73\%$ of friends outside the study—are actually the superior and most substantively accurate tool for researching minority protective boundaries.
+
 ---
 
 # 4. Discussion

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 20px; color: #333; }
+h2 { color: #1a365d; margin-bottom: 5px; font-size: 1.5em; }
+p { color: #555; margin-top: 0; margin-bottom: 20px; font-size: 0.95em; }
+table { border-collapse: collapse; width: 100%; max-width: 1000px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+th { background-color: #2b6cb0; color: white; font-weight: bold; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+tr:nth-child(even) { background-color: #f7fafc; }
+tr:hover { background-color: #edf2f7; }
+td { font-size: 0.9em; }
+td.numeric { text-align: center; }
+th.numeric { text-align: center; }
+</style>
+</head>
+<body>
+<h2>Table C4: Exponential Random Graph Model (ERGM) Results</h2>
+<p>Generated on 2026-06-24</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th class='numeric'>Model A (Baseline)</th>
+<th class='numeric'>Model B (Structural Control)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline Density (edges)</td>
+<td class='numeric'>-6.855***</td>
+<td class='numeric'>-5.152***</td>
+</tr>
+<tr>
+<td>Reciprocity (mutual)</td>
+<td class='numeric'>5.336***</td>
+<td class='numeric'>6.957***</td>
+</tr>
+<tr>
+<td>Popularity Dispersion (gwidegree)</td>
+<td class='numeric'>—</td>
+<td class='numeric'>0.863***</td>
+</tr>
+<tr>
+<td>Activity Dispersion (gwodegree)</td>
+<td class='numeric'>—</td>
+<td class='numeric'>-2.898***</td>
+</tr>
+<tr>
+<td>Transitivity (gwnsp)</td>
+<td class='numeric'>—</td>
+<td class='numeric'>-0.590***</td>
+</tr>
+<tr>
+<td>Same Gender</td>
+<td class='numeric'>0.799***</td>
+<td class='numeric'>0.796***</td>
+</tr>
+<tr>
+<td>Same Race</td>
+<td class='numeric'>0.230***</td>
+<td class='numeric'>0.243***</td>
+</tr>
+<tr>
+<td>Catholic Match</td>
+<td class='numeric'>-0.037</td>
+<td class='numeric'>-0.036</td>
+</tr>
+<tr>
+<td>No Religion Match</td>
+<td class='numeric'>0.412&dagger;</td>
+<td class='numeric'>0.404</td>
+</tr>
+<tr>
+<td>Protestant Match</td>
+<td class='numeric'>0.195</td>
+<td class='numeric'>0.199</td>
+</tr>
+<tr>
+<td>Other Religion Match</td>
+<td class='numeric'>-Inf (fixed)</td>
+<td class='numeric'>-Inf (fixed)</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
