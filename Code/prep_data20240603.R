@@ -17,10 +17,10 @@ library(dplyr)
 # Load data ---------------------------------------------------------------
 
 # load ego network survey
-df_netsurv <- read_csv(here('data', 'NetWorkSurvey(2-28-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
 
 # load basic survey
-df_basicsurv <- read_csv(here('data', 'BasicSurvey(3-6-20).csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
 
 # Subset Data -------------------------------------------------------------
 
@@ -185,6 +185,68 @@ df_w3_model_data <- df_w3_comb_data |>
   select(egoid, yourelig_1, degree, ei, ei_norm, n_samerelig, gender_1, race_1)
 
 df_w3_model_data <- distinct(df_w3_model_data)
+
+# Save cleaned Wave 3 model data as RDS
+saveRDS(df_w3_model_data, here("Data", "cleaned_wave3_model_data.RDS"))
+
+
+# Section: Prepare and Save Cleaned Pooled Dyadic Dataset (Waves 3-8) -------
+cat("Preparing pooled 8-wave dyadic dataset for archiving...\n")
+
+# Re-read raw datasets to avoid side effects
+df_netsurv_raw <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
+df_basicsurv_raw <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+
+df_all_waves <- df_netsurv_raw |> 
+  filter(wave %in% paste0("Wave", 3:8)) |>
+  left_join(df_basicsurv_raw, by = "egoid") |>
+  filter(!is.na(yourelig_1)) |>
+  filter(altrelucat == "Student") |>
+  filter(!is.na(altrelig)) |>
+  mutate(
+    ego_rel = as.character(yourelig_1),
+    alt_rel = case_when(
+      altrelig == "NoReligion" ~ "No Religion",
+      altrelig == "OtherReligion" ~ "Other Religion",
+      TRUE ~ altrelig
+    )
+  ) |>
+  filter(
+    ego_rel %in% c("Catholic", "No Religion", "Other Religion", "Protestant"),
+    alt_rel %in% c("Catholic", "No Religion", "Other Religion", "Protestant")
+  )
+
+# Calculate wave-specific alter proportions
+wave_alter_props <- df_all_waves |>
+  group_by(wave, alt_rel) |>
+  count() |>
+  group_by(wave) |>
+  mutate(prop = n / sum(n)) |>
+  ungroup()
+
+# Merge proportions and construct dyadic variables
+df_pooled_archive <- df_all_waves |>
+  left_join(wave_alter_props |> select(wave, alt_rel, prop), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  mutate(
+    same_religion = ifelse(ego_rel == alt_rel, 1, 0),
+    opportunity_offset = log(prop / (1 - prop)),
+    same_gender = ifelse(gender_1 == altsex, 1, 0),
+    same_race = case_when(
+      race_1 == "White" & altwhite == TRUE ~ 1,
+      race_1 == "African-American" & altblack == TRUE ~ 1,
+      race_1 == "Asian-American" & altasian == TRUE ~ 1,
+      race_1 == "Latino/a" & althisla == TRUE ~ 1,
+      race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
+      TRUE ~ NA_real_
+    ),
+    wave_num = as.numeric(gsub("Wave", "", wave)) - 3
+  ) |>
+  filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+
+# Save cleaned pooled dyadic dataset as RDS
+saveRDS(df_pooled_archive, here("Data", "pooled_clean_dyads.RDS"))
+cat("Cleaned 8-wave pooled dyadic dataset successfully saved to Data/pooled_clean_dyads.RDS\n")
 
 
 # Create a df for comparing observed avg ei to simulated networks ---------
