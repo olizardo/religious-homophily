@@ -1,0 +1,58 @@
+\begin{thebibliography}{10}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Blau(1977)]{blau1977book}
+Peter~M Blau.
+\newblock \emph{Inequality and heterogeneity: A primitive theory of social structure}.
+\newblock Free Press, 1977.
+
+\bibitem[Feld(1981)]{feld1981}
+Scott~L Feld.
+\newblock The focused organization of social ties.
+\newblock \emph{American journal of sociology}, 86\penalty0 (5):\penalty0 1015--1035, 1981.
+
+\bibitem[Feld and Grofman(2009)]{feld2009}
+Scott~L Feld and Bernard Grofman.
+\newblock Homophily and the focused organization of ties.
+\newblock In Peter Hedstrom and Peter Bearman, editors, \emph{Oxford Handbook of Analytical Sociology}, pages 521--543. Oxford University Press, 2009.
+
+\bibitem[Kossinets and Watts(2009)]{kossinets2009}
+Gueorgi Kossinets and Duncan~J Watts.
+\newblock Origins of homophily in an evolving social network.
+\newblock \emph{American Journal of Sociology}, 115\penalty0 (2):\penalty0 405--450, 2009.
+
+\bibitem[Leonard et~al.(2008)Leonard, Mehra, and Katerberg]{leonard2008}
+Ana~Sierra Leonard, Ajay Mehra, and Ralph Katerberg.
+\newblock The social identity and social networks of ethnic minority groups in organizations: A crucial test of distinctiveness theory.
+\newblock \emph{Journal of Organizational Behavior}, 29\penalty0 (5):\penalty0 573--589, 2008.
+
+\bibitem[Marsden(1988)]{marsden1988}
+Peter~V Marsden.
+\newblock Homogeneity in confiding relations.
+\newblock \emph{Social Networks}, 10\penalty0 (1):\penalty0 57--76, 1988.
+
+\bibitem[McPherson et~al.(2001)McPherson, Smith-Lovin, and Cook]{mcpherson2001}
+Miller McPherson, Lynn Smith-Lovin, and James~M Cook.
+\newblock Birds of a feather: Homophily in social networks.
+\newblock \emph{Annual review of sociology}, 27\penalty0 (1):\penalty0 415--444, 2001.
+
+\bibitem[Mehra et~al.(1998)Mehra, Kilduff, and Brass]{mehra1998}
+Ajay Mehra, Martin Kilduff, and Daniel~J Brass.
+\newblock At the margins: A distinctiveness approach to the social identity and social networks of underrepresented groups.
+\newblock \emph{Academy of management journal}, 41\penalty0 (4):\penalty0 441--452, 1998.
+
+\bibitem[Sepulvado et~al.(2015)Sepulvado, Hachen, Penta, and Lizardo]{sepulvado2015}
+Brandon Sepulvado, David Hachen, Michael Penta, and Omar Lizardo.
+\newblock Social affiliation from religious disaffiliation: Evidence of selective mixing among youth with no religious preference during the transition to college.
+\newblock \emph{Journal for the Scientific Study of Religion}, 54\penalty0 (4):\penalty0 833--841, 2015.
+
+\bibitem[Tavory(2016)]{tavory2016}
+Iddo Tavory.
+\newblock \emph{Summoned: Identification and religious life in a Jewish neighborhood}.
+\newblock University of Chicago Press, 2016.
+
+\end{thebibliography}

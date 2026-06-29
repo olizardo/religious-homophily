@@ -1,0 +1,524 @@
+Distinctive Minorities or a Groupy Majority?
+Religious Homophily at a Religious University
+
+Michael Lee Wood, Brigham Young University
+
+David Hachen, University of Notre Dame
+
+Brandon Sepulvado, NORC at the University of Chicago
+
+Omar Lizardo, UCLA
+
+
+Abstract
+Homophily, or the tendency to have ties to similar others, is one of the most enduring findings in social network analysis. Forming a tie with a similar other is an individual choice but is also shaped by structural factors, including relative group sizes within a population. Previous research offers competing theories about the link between relative group size and homophily. Minority Distinctiveness Theory (MDT) predicts that members of relatively smaller groups will “band together” and form more homophilous networks. On the other hand, Blau (1977) argued that relatively larger groups are often more discriminative and, thus, more homophilous. Following the precedent of MDT, we call Blau’s hypothesis the Majority Exclusiveness Theory (MET). This paper examines the link between relative group size and religious homophily using data from the NetHealth Study. We find all religious identity groups show evidence of homophily, but Catholic students (the religious majority) tend to have more in-group preference than non-Catholic students, consistent with Blau’s predictions. We discuss contextual factors that might lead to differing patterns of homophily.
+
+Introduction
+
+The tendency to have ties to similar others, known as homophily or assortative mixing, is one of the most enduring findings in social network analysis (Aral, Muchnik, and Sundararajan 2009; Kandel 1978; Laumann 1966; Lazarsfeld and Merton 1954; Marsden 1987; McPherson, Smith-Lovin, and Cook 2001). Friends, colleagues, partners, and other chosen relations tend to be more similar than expected from random chance based on many different traits, including race, gender, socioeconomic status, education, and religion. 
+
+Although forming a tie with a similar other can be an individual choice, it is also influenced by structural considerations (Rivera, Soderstrom, and Uzzi 2010). For example, physical location influences who is available as a potential tie (Simpkins et al. 2013). Similarly, relative group size determines one’s “baseline homophily,”  as members of larger groups are more likely to have ties to similar individuals simply because there are more similar individuals in the population (Blau 1977). Thus, network analysts refer to homophily resulting from individual processes as “choice homophily” and homophily resulting from structural processes as “induced homophily” (Kossinets and Watts 2009; McPherson and Smith-Lovin 1987; McPherson et al. 2001). 
+
+Individual preferences and structural processes may intersect insofar as structural conditions make homophily more or less salient, resulting in groups that are more or less homophilous than their respective random chance baselines. For example, Minority Distinctiveness Theory (MDT) (Leonard, Mehra, and Katerberg 2008; Marsden 1988; Mehra, Kilduff, and Brass 1998; Sepulvado et al. 2015) states that in populations with uneven group sizes, the networks of minority group members are more homophilous than would be expected by chance. In these cases, being a member of a minority group may heighten the salience of that trait, leading to a process of “banding together.”  
+
+Alternatively, some find that group size has the opposite effect, such that members of relatively larger groups have personal networks with more in-group ties than would be expected by chance. (Blau 1977; Sampson 1984). Following the precedent of MDT, we call this Majority Exclusiveness Theory (MET). According to Blau (1977:81): 
+
+“Ceteris paribus, the larger of two groups discriminates more than the smaller against associating with members of the other group… It is not generally the clannishness of small groups that accounts for discrimination in social intercourse, though it sometimes is. The more typical case is that discrimination in social relations emanates from the majority or the larger group, because outgroup relations are most deviant and most apt to be discouraged there.”
+
+This paper contributes to research on religious homophily, focusing on how group size is related to homophilous relationships. Previous studies in various contexts have found that people are more likely to have ties with those of the same religious identity (Cheadle and Schwadel 2012; McPherson et al. 2001:425; Sepulvado et al. 2015) and similar patterns of religiosity (Adams, Schaefer, and Ettekal 2020). Some research suggests that context is an important factor insofar as it can make religious identity more or less salient (Cook, Schwadel, and Cheadle 2017:77; Sepulvado et al. 2015). This study builds on previous work on religious homophily and social context using data from the NetHealth study conducted at the University of Notre Dame. The goal of the analysis is to measure whether Catholics, the largest religious identity group on campus, differ in religious homophily from minority religious identity groups, and if so, in which direction. 
+
+Notre Dame is a private Catholic university in South Bend, Indiana with a student body around 75% Catholic, making it an ideal location to study the effects of relative group size on homophily because there are clear normative and numerical majority and minority religious groups. In this context, Catholics are more likely to have more homophilous networks by chance. However, might Catholic students have higher or lower rates of religious homophily than their non-Catholic peers than expected by chance? MDT and MET offer plausible competing hypotheses. Following MDT, students with minority religious identities (e.g., Protestants and non-religious students) might be expected to have disproportionately more homophilous networks because they “band together” more than their Catholic peers who don’t feel religiously isolated. 
+
+On the other hand, consistent with MET, Catholic students might have disproportionately higher homophily rates given an in-group preference and little motivation to associate with the outgroup. Catholics attending a Catholic University might also be more motivated to befriend other Catholics because the environment “summons” their religious identity, increasing its salience (Tavory 2016). Additionally, intra-Catholic preference might also be heightened because the University provides many specifically Catholic “foci” (Feld and Grofman 2009) for tie-formation (e.g., Catholic mass held in the various dorms). As Blau (1977:79) observes, “social associations depend on opportunities for social contacts.” At Notre Dame, many of the best opportunities might be specifically catered to Catholics. 
+Data and Methods
+
+The data used in the analysis come from the NetHealth study, a multiyear study of a cohort of undergraduate students at the University of Notre Dame. The study was designed to measure the relations between individual traits, social networks, physical activity, and health outcomes, and also included some measures of religion. Data were collected from 2015 to 2019 via multiple sources, including demographic surveys, ego-network surveys, smartphone metadata from calls and text messages, and Fitbit tracking devices. 
+
+All incoming students were invited to participate in the study, and the final sample was built in three tiers. The first tier was assembled during the Summer of 2015 and included students who answered the first invitation to participate before coming to Notre Dame (n=405). The second tier was recruited during the Fall 2015 semester from referrals from Tier 1 students (n=93). Tier 3 was recruited during the Spring 2016 semester via an additional open call to all first-year students (n=220). Appendix A shows the religious composition of each tier. Though there is some slight variation, the overall composition is consistent in each. Our analysis uses data from the demographic survey, taken by all participants upon joining the study, and the third wave of the network survey. Surveys were administered online. 
+
+The demographic survey included questions about the students, including their religious identity. The third wave of the network survey was administered in the summer of 2016, and the network characteristics were measured after the students had completed their first year of school. The survey included a name generator, which we used to create ego networks. Respondents were given the following prompt: “We would like to know who you consider to be in your social network. In the spaces below, please list up to 20 people with whom you spend time communicating or interacting.” Respondents then answered a series of name interpreters about each of their listed alters, including their religious identification. 
+
+Information about the egos and their alters is shown in Table 1. Egos were removed from the study sample if they did not answer the religious identity question or if they did not complete the network survey. Alters were removed if they were not Notre Dame students or if their ego did not report their religious identity. The resulting sample included 361 students and 2131 alters. At 74.79%, Catholics make up a supermajority. Notably, the distribution of alters does not match the distribution of egos. Catholics are overrepresented among listed alters (81.33%) relative to the distribution of the NetHealthstudy sample (see Appendix A), while all other religious identity groups are underrepresented. 
+
+
+
+
+
+
+
+Table 1. Network Study Sample Information
+
+Variable
+N
+Percentage
+Egos
+361
+100.0
+
+Men
+191
+47.09
+
+Women
+170
+52.91
+
+
+
+
+
+Catholics
+270
+74.79
+
+Protestants
+39
+10.80
+
+Other Religion
+16
+4.43
+
+No Religion
+36
+9.97
+
+
+
+
+Alters
+2132
+100.0
+
+Men
+1055
+49.48
+
+Women
+1077
+50.52
+
+
+
+
+
+Catholics
+1734
+81.33
+
+Protestants
+181
+8.49
+
+Other Religion
+166
+2.39
+
+No Religion
+51
+7.79
+
+To compare the religious homophily of the different religious groups on campus, we measured religious homophily in students’ ego networks using the EI Index (Krackhardt and Stern 1988). The EI Index is a measure of ingroup/outgroup preference calculated via the following formula:
+
+EI Index =E-IE+I
+
+E refers to the number of ties to members of an outgroup (i.e., “external” ties) and I refers to the number of ties to members of the ingroup (i.e., “internal” ties). A person’s EI score ranges from -1 to 1, with negative values indicating overall in-group preference and positive values indicating overall out-group preference. 
+
+The EI Index is biased when group sizes are unequal. If a person’s ties are chosen randomly, their EI Index should theoretically be at or near zero. However, if a population is divided into unevenly sized groups, egos who belong to disproportionately larger groups will have negative EI Indices because there is a higher probability that their ties will belong to the ingroup. Said differently, members of larger groups have a larger “baseline homophily.” 
+
+We accounted for the limitation of the EI Index in two ways. First, we compared the observed distribution of EI scores to scores derived from simulated data to measure how far the observed distributions varied from chance. We created 500 random ego networks for each individual, holding ego’s degree constant, but randomizing the religious identity of each alter. We weighted probabilities according to the religious distribution of the student population estimated from the NetHealth student sample (see Appendix A). Thus, each simulated alter had a 73% chance of being Catholic, a 12% chance of having no religion, and so on). For each of the 500 simulated datasets, we measured each ego’s EI score and calculated the average EI score for each religious identity group, which provides a random “baseline” homophily measure that takes into account uneven group sizes. We then compared the distribution of these average EI scores of the 500 random datasets with the average EI scores of the observed data. If the average EI scores of the observed data fall outside the distribution of average EI scores from the simulated data (i.e., the random “baseline”), that suggests a deviation from chance. 
+
+The simulation approach enables straightforward measurement of deviation from chance, showing the presence or absence of homophily within groups. To facilitate comparison between religious groups, we also created a normalized EI Index following Everett and Borgatti’s (2012) normalization strategy. The Normalized EI Index divides E and I by each group’s highest possible values of E and I. Each religious group has its own values of En and In derived from the full NetHealth sample. 
+
+Normalized EI Index =(Ei/En) - (Ii/In)(Ei/En) + (Ii/In)
+
+We used OLS regression to estimate in-group/out-group preference differences between religious identity groups, with normalized EI as the main outcome and religious identity as the main predictor. The descriptive statistics for EI and normalized EI, as well as degree, are shown in Table 2. Catholics are the only religious identity group with negative mean EI scores, suggesting that they are the only group with an average overall in-group preference. This pattern persists after normalization, though the means for all groups are brought closer to the center. The standard deviations for EI and normalized EI are quite high because complete homophily (EI = -1) and heterophily (EI = 1) are frequently observed.
+
+Table 2. EI and Normalized EI by Religious Identity
+Variable
+Mean
+Standard Deviation
+Min
+Max
+
+EI
+-0.3188
+0.7432
+-1
+1
+
+Normalized EI
+-0.2612
+0.7264
+-1
+1
+
+Degree
+5.906
+3.8452
+1
+20
+
+
+
+
+
+
+EI by Religious Identity
+
+
+
+
+
+Catholic
+-0.622
+0.499
+-1
+1
+
+Protestant
+0.583
+0.581
+-1
+1
+
+Other Religion
+0.698
+0.440
+-1
+1
+
+No Religion
+0.529
+0.697
+-1
+1
+
+
+
+
+
+
+Normalized EI by Religious Identity
+
+
+
+
+
+Catholic
+-0.418
+0.623
+-1
+1
+
+Protestant
+0.168
+0.816
+-1
+1
+
+Other Religion
+0.306
+0.926
+-1
+1
+
+No Religion
+0.195
+0.776
+-1
+1
+Percentage Change after Normalization
+
+
+
+
+Catholic
++ 32.80%
+
+
+
+
+Protestant
+- 71.18%
+
+
+
+
+Other Religion
+- 56.16%
+
+
+
+
+No Religion
+- 63.14%
+
+
+
+Results
+To test whether/how Catholics differ in religious homophily from minority religious identity groups, we first compared average EI scores from 500 simulated ego networks with the average EI scores of the observed ego networks for each of the four religious identity groups. We calculated Z scores by subtracting the average of the simulated average EI scores (Xs) from the average of the observed EI scores (Xo) and dividing by the standard deviation of the observed scores (σo).
+
+Z =(Xo - Xs)σo 
+
+The results of this analysis are shown in Figure 1. Each of the observed average EI scores (the black diamonds in the figure) is significantly lower than expected by chance, meaning there is evidence of some religious homophily across all religious identity groups. However, “more homophily than expected by chance” does not mean “overall in-group preference.” Although non-Catholics were more homophilous than expected by chance, and in fact deviated further from chance than Catholics, they all had positive EI scores, suggesting overall out-group preference. The precise values and z-scores are shown in Table 3. 
+
+
+Figure 1. Average EI Scores in Observed vs Simulated Ego Networks
+
+
+
+
+
+Table 3. Comparison of Observed Average EI and Simulated Average EI 
+Religious Identity
+Observed Average EI
+Simulated Average EI
+(Mean of 500 Simulations)
+Difference
+Z-Score
+Catholic
+-0.622
+-0.460
+-0.162
+-5.704
+Protestant
+0.583
+0.805
+-0.222
+-4.370
+Other Religion
+0.698
+0.909
+-0.211
+-3.493
+No Religion
+0.529
+0.756
+-0.227
+-3.558
+
+
+To test whether the group differences in EI scores are statistically significant,  we used OLS regression to estimate in-group/out-group preference differences between religious identity groups. We created two models with different dependent variables: EI and normalized EI. The results of these models are shown in  Table 4.
+
+Table 4. Regression Table 
+
+Variable
+Model 1: EI
+Model 2: Normalized EI
+Catholic (Reference)
+–
+
+–
+
+Protestant
+1.20
+***
+0.58
+***
+
+(0.10)
+
+(0.14)
+
+Other Religion
+1.31
+***
+0.71
+**
+
+(0.12)
+
+(0.23)
+
+No Religion
+1.15
+***
+0.61
+***
+
+(0.12)
+
+(0.13)
+
+
+
+
+
+
+Degree
+-0.00
+
+-0.00
+
+
+(0.01)
+
+(0.01)
+
+Women (Reference)
+–
+
+–
+
+Men
+-0.01
+
+-0.03
+
+
+(0.06)
+
+(0.07)
+
+N
+361
+ 
+361
+ 
+R2
+0.50
+ 
+0.14
+ 
+Standard errors are heteroskedasticity robust. 
+*** p < 0.001; ** p < 0.01; * p < 0.05.
+
+Each of the minority religious identity groups had significantly higher EI scores than Catholics, meaning that on average, they all manifested more out-group preference (heterophily) than Catholics. The side-by-side comparison of the two models shows the importance of normalization. Without normalization, the model has an R2 of 0.50 because most of the variation in EI is explained by population group sizes. Although the direction of the effects did not change after normalization, the coefficients all dropped, as did the R2, once we controlled for group size.
+Discussion
+The findings support several conclusions. First, we see clear evidence of induced homophily resulting from different group sizes, visible in the difference between variance explained before and after controlling for relative group size. Second, we find evidence of homophily among all religious identity groups, visible in the differences between the simulated and observed average EI scores in Figure 1. Third, despite the presence of homophily among all groups, non-Catholic groups tended to have more out-group preference and Catholics tended to have more in-group preference, even after controlling for relative group size. As seen in Table 4., these differences are statistically significant. 
+
+We found only limited support for Minority Distinctiveness Theory (MDT). Consistent with previous findings and MDT, (Sepulvado et al. 2015), we found that students belonging to religious minority groups reported more homophily than expected by chance. Furthermore, these deviations from chance were greater for religious minority groups than Catholics, as shown in Table 3. Similarly, the percent changes between EI scores and normalized EI scores (which control for group size) are larger for non-Catholics. At the same time, we found that non-Catholic students still had overall positive EI scores net of the (large) effect of group size, indicating overall outgroup preference. While group size accounted for a significant portion of the observed out-group preference among non-Catholics, controlling for group size did not make these outgroup preferences disappear. Thus, while we can conclude that students belonging to religious minority groups reported more homophily than expected by chance, the simple image of non-Catholics “banding together” and avoiding outsiders is inaccurate. 
+
+The findings more clearly support Minority Exclusiveness Theory (MET). Consistent with MET, we found that Catholic students reported more homophily on average than expected by chance and more overall in-group preference than religious minority groups. Catholic students’ average EI scores remained negative after normalization, indicating an overall in-group preference net of group size. Thus, while much of Catholics’ in-group preferences can be explained by their high baseline homophily, there appears to be an interaction between individual preference and relative group size as predicted by Blau (1977:81). 
+
+Taken together, we found that 1) all religious groups were more homophilous than expected by chance; 2) Catholics had an overall in-group preference net of group size effects; and 3) non-Catholics had slight overall out-group preferences net of group size effects. What might account for these observed patterns? Regarding the overall average in-group preference among Catholics, in addition to proposed social psychological mechanisms accounting for such patterns (Peter Michael Blau 1977:81; Tavory 2016), Notre Dame offers students many opportunities to participate in Catholic religious life, generating many “structural contexts” for tie formation (Feld and Grofman 2009). For example, first-year students are required to live on campus in student dormitories, and each dormitory has a chapel where mass is regularly held. At times, masses are followed with non-religious socializing, such as the ever-popular “milkshake mass.” These masses offer Catholic students opportunities to meet other Catholics and form ties. Non-Catholics may attend mass and some do, but it is arguably a more appealing social opportunity for Catholic students. Notre Dame’s Campus Ministry does offer opportunities for non-Catholics to meet and discuss faith, but these are smaller, less frequent, and do not include all groups (for example, there is no official atheist club at Notre Dame).
+The religious composition  of the Notre Dame student body means that  non-Catholics have more Catholics to associate with. If the most popular and salient social events on campus are Catholic events (such as special masses), these events likely hold some attraction to non-Catholics because of their size and status. However, the reverse is unlikely to be true. Small events catered to Protestants would probably not evoke much interest from Catholics, who do not have any particular need to socialize with minority religious groups. This dynamic would account for the observed homophily patterns–Catholics having the strongest in-group preference, with non-Catholics having an overall out-group preference (because they are drawn to outgroup social foci) while still having more choice homophily than expected by chance (because in-group social foci are still available yet smaller). 
+
+More generally, the findings provide new insights into homophily patterns. First, we observe that a simplified image of MDT where members of minority groups have clear overall in-group preferences may be misleading in some cases. At Notre Dame, we found that non-Catholics on average had overall out-group preferences (inconsistent with a simple interpretation of MDT), yet more in-group preferences than expected (consistent with MDT). The case suggests that minority distinctiveness is best thought of as a sliding scale rather than a categorical measure. At the extreme end of the scale, minority groups may have an overall in-group preference net of group size effects. This pattern is probably rare outside cases of extreme segregation, and is probably more likely to occur with more visible identities such as race and gender that can facilitate such segregation. In cases like Notre Dame, where non-Catholics have many interactions with Catholics and may participate in some Catholic events, we see a much less extreme form of MDT, with some choice homophily yet overall out-group preferences.
+
+Our findings illustrate the need for researchers to be clear about how they measure and compare homophily rates to test competing theories. If our comparison were based wholly on deviations of observed from expected homophily rates, we might conclude that the observed patterns are most consistent with MDT, because although all groups had evidence of choice homophily, non-Catholics had the larger deviations from expected baselines. However, if we compare the EI indices taking into account differences in group size , we see that MET is supported, as Catholics had significantly more average in-group preference than non-Catholics. To paint a full, accurate picture, we suggest taking both approaches, as illustrated here. 
+
+In sum, both MDT and MET are plausible explanations for observed patterns of homophily. The precise pattern observed in any given context will be determined by specific local conditions, and will also depend on the precise criteria used to make comparisons. Previous research has tended to focus on MDT, while Blau’s MET hypothesis has gone relatively unnoticed. However, our findings suggest that both should be considered as plausible competing hypotheses. 
+Future research can build on these findings. The present study measured static student ego networks after one year of school but did not measure whether/how these networks evolved throughout students’ tenure at the university. Future research is needed to determine whether the observed patterns endure. It is possible, for instance, that minority students become increasingly homophilous as they find like-minded students. Additionally, future research on social context and homophily would benefit from a detailed investigation of where ties are being formed, and whether these social foci vary across groups. Future research may also benefit by adopting the “religious mosaics” approach advocated by Adams et al. (2020), rather than using a self-reported measure of religious identity. 
+
+References
+Adams, Jimi, David R. Schaefer, and Andrea Vest Ettekal. 2020. “Crafting Mosaics: Person-Centered Religious Influence and Selection in Adolescent Friendships.” Journal for the Scientific Study of Religion 59(1):39–61.
+Aral, Sinan, Lev Muchnik, and Arun Sundararajan. 2009. “Distinguishing Influence-Based Contagion from Homophily-Driven Diffusion in Dynamic Networks.” Proceedings of the National Academy of Sciences of the United States of America 106(51):21544–49.
+Blau, Peter M. 1977. “A Macrosociological Theory of Social Structure.” The American Journal of Sociology 83(1):26–54.
+Blau, Peter Michael. 1977. Inequality and Heterogeneity: A Primitive Theory of Social Structure. Vol. 7. Free Press New York.
+Cheadle, J. E., and P. Schwadel. 2012. “The ‘Friendship Dynamics of Religion,’or the ‘Religious Dynamics of Friendship’? A Social Network Analysis of Adolescents Who Attend Small Schools.” Social Science Research.
+Cook, J. Benjamin, Philip Schwadel, and Jacob E. Cheadle. 2017. “The Origins of Religious Homophily in a Medium and Large School.” Review of Religious Research 59(1):65–80.
+Everett, Martin G., and Stephen P. Borgatti. 2012. “Categorical Attribute Based Centrality: E–I and G–F Centrality.” Social Networks 34(4):562–69.
+Feld, Scott, and Bernard Grofman. 2009. “Homophily and the Focused Organization of Ties.” Pp. 521–43 in Oxford Handbook of Analytical Sociology, edited by P. Hedstrom and P. Bearman. Oxford, UK: Oxford University Press Oxford.
+Kandel, Denise B. 1978. “Similarity in Real-Life Adolescent Friendship Pairs.” Journal of Personality and Social Psychology 36(3):306–12.
+Kossinets, Gueorgi, and Duncan J. Watts. 2009. “Origins of Homophily in an Evolving Social Network.” The American Journal of Sociology 115(2):405–50.
+Krackhardt, David, and Robert N. Stern. 1988. “Informal Networks and Organizational Crises: An Experimental Simulation.” Social Psychology Quarterly 51(2):123–40.
+Laumann, Edward O. 1966. Prestige and Occation in an Urban Community: An Analysis of an Urban Stratification System. Bobbs-Merrill.
+Lazarsfeld, P. F., and R. K. Merton. 1954. “Friendship as a Social Process: A Substantive and Methodological Analysis.” Freedom and Control in Modern Society.
+Leonard, Ana Sierra, Ajay Mehra, and Ralph Katerberg. 2008. “The Social Identity and Social Networks of Ethnic Minority Groups in Organizations: A Crucial Test of Distinctiveness Theory.” Journal of Organizational Behavior 29(5):573–89.
+Marsden, Peter V. 1987. “Core Discussion Networks of Americans.” American Sociological Review 52(1):122–31.
+Marsden, Peter V. 1988. “Homogeneity in Confiding Relations.” Social Networks 10(1):57–76.
+McPherson, J. Miller, and Lynn Smith-Lovin. 1987. “Homophily in Voluntary Organizations: Status Distance and the Composition of Face-to-Face Groups.” American Sociological Review 52(3):370–79.
+McPherson, Miller, Lynn Smith-Lovin, and James M. Cook. 2001. “Birds of a Feather: Homophily in Social Networks.” Annual Review of Sociology 27(1):415–44.
+Mehra, Ajay, Martin Kilduff, and Daniel J. Brass. 1998. “At the Margins: A Distinctiveness Approach to the Social Identity and Social Networks of Underrepresented Groups.” Academy of Management Journal; Briarcliff Manor 41(4):441–52.
+Rivera, Mark T., Sara B. Soderstrom, and Brian Uzzi. 2010. “Dynamics of Dyads in Social Networks: Assortative, Relational, and Proximity Mechanisms.” Annual Review of Sociology 36(1):91–115.
+Sampson, Robert J. 1984. “Group Size, Heterogeneity, and Intergroup Conflict: A Test of Blau’s Inequality and Heterogeneity*.” Social Forces; a Scientific Medium of Social Study and Interpretation 62(3):618–39.
+Sepulvado, Brandon, David Hachen, Michael Penta, and Omar Lizardo. 2015. “Social Affiliation from Religious Disaffiliation: Evidence of Selective Mixing Among Youth with No Religious Preference During the Transition to College.” Journal for the Scientific Study of Religion 54(4):833–41.
+Simpkins, Sandra D., David R. Schaefer, Chara D. Price, and Andrea E. Vest. 2013. “Adolescent Friendships, BMI, and Physical Activity: Untangling Selection and Influence Through Longitudinal Social Network Analysis.” Journal of Research on Adolescence 23(3). doi: 10.1111/j.1532-7795.2012.00836.x.
+Tavory, Iddo. 2016. Summoned: Identification and Religious Life in a Jewish Neighborhood. University of Chicago Press.
+
+Appendix A. Religious Composition of NetHealth Sample (By Tier)
+
+Variable
+N
+Percentage
+Tier 1
+405
+56.41
+
+Catholics
+294
+72.59
+
+Protestants
+44
+10.86
+
+Other Religion
+23
+5.68
+
+No Religion
+44
+10.86
+
+
+
+
+Tier 2
+93
+12.95
+
+Catholics
+72
+77.42
+
+Protestants
+6
+6.45
+
+Other Religion
+2
+2.15
+
+No Religion
+13
+13.98
+
+
+
+
+Tier 3
+220
+30.64
+
+Catholics
+159
+72.27
+
+Protestants
+21
+9.54
+
+Other Religion
+8
+3.63
+
+No Religion
+32
+14.54
+
+
+
+
+Total
+718
+100.0
+
+Catholics
+525
+73.12
+
+Protestants
+71
+9.89
+
+Other Religion
+33
+4.60
+
+No Religion
+89
+12.39
+
