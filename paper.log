@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 15:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 16:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -262,30 +262,32 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 )
 \Hy@SectionHShift=\skip56
-) (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 21.
+ (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count318
 ) (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -330,56 +332,69 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 17.
+ (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2026-05-17 v1.3f Standard LaTeX Color (DPC)
+ (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+ (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+Package hyperref Info: Link coloring ON on input line 27.
  (./paper.out) (./paper.out)
 \@outlinefile=\write3
 \openout3 = `paper.out'.
 
  [1
 
-{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<Plots/fig-yules-q.pdf, id=129, 505.89pt x 361.35pt>
-File: Plots/fig-yules-q.pdf Graphic file (type pdf)
-<use Plots/fig-yules-q.pdf>
-Package pdftex.def Info: Plots/fig-yules-q.pdf  used on input line 72.
-(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- (./Tabs/tbl-yules-q.tex) (./Tabs/tbl-wave3-reg.tex [3 <./Plots/fig-yules-q.pdf>]) (./Tabs/tbl-pooled-reg.tex) (./Tabs/tbl-interaction-reg.tex) [4] [5]
-<Plots/fig-opportunity-stability.pdf, id=161, 505.89pt x 361.35pt>
+{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
+<Plots/fig-opportunity-stability.pdf, id=182, 505.89pt x 361.35pt>
 File: Plots/fig-opportunity-stability.pdf Graphic file (type pdf)
 <use Plots/fig-opportunity-stability.pdf>
-Package pdftex.def Info: Plots/fig-opportunity-stability.pdf  used on input line 123.
+Package pdftex.def Info: Plots/fig-opportunity-stability.pdf  used on input line 99.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
-<Plots/fig-active-coefs.pdf, id=163, 505.89pt x 361.35pt>
+ [5 <./Plots/fig-opportunity-stability.pdf>]
+<Plots/fig-yules-q.pdf, id=196, 505.89pt x 361.35pt>
+File: Plots/fig-yules-q.pdf Graphic file (type pdf)
+<use Plots/fig-yules-q.pdf>
+Package pdftex.def Info: Plots/fig-yules-q.pdf  used on input line 120.
+(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
+ (./Tabs/tbl-wave3-reg.tex) [6 <./Plots/fig-yules-q.pdf>] (./Tabs/tbl-pooled-reg.tex) [7] (./Tabs/tbl-interaction-reg.tex)
+<Plots/fig-marginal-effects.pdf, id=220, 505.89pt x 361.35pt>
+File: Plots/fig-marginal-effects.pdf Graphic file (type pdf)
+<use Plots/fig-marginal-effects.pdf>
+Package pdftex.def Info: Plots/fig-marginal-effects.pdf  used on input line 161.
+(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
+<Plots/fig-active-coefs.pdf, id=222, 505.89pt x 361.35pt>
 File: Plots/fig-active-coefs.pdf Graphic file (type pdf)
 <use Plots/fig-active-coefs.pdf>
-Package pdftex.def Info: Plots/fig-active-coefs.pdf  used on input line 132.
+Package pdftex.def Info: Plots/fig-active-coefs.pdf  used on input line 170.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- (./Tabs/tbl-ergm-results.tex) [6 <./Plots/fig-opportunity-stability.pdf>] [7 <./Plots/fig-active-coefs.pdf>]
-Overfull \hbox (2.76855pt too wide) in paragraph at lines 166--167
+ [8] [9 <./Plots/fig-marginal-effects.pdf> <./Plots/fig-active-coefs.pdf>]
+Overfull \hbox (2.76855pt too wide) in paragraph at lines 185--186
 \OT1/cmr/m/n/10.95 This study has re-solved the group-size ar-ti-fact in com-par-a-tive ho-mophily by uti-liz-ing an opportunity-
  []
 
-[8] [9] (./paper.bbl [10]) [11] (./paper.aux)
+[10] (./paper.bbl [11]) [12] (./paper.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: C924D225299531192A681CD1BDA36D7F;5074.
+(rerunfilecheck)             Checksum: 1693DDB4B33F35730789908E8C9E0B30;5575.
  ) 
 Here is how much of TeX's memory you used:
- 11232 strings out of 469097
- 179121 string characters out of 5457857
- 613093 words of memory out of 5000000
- 40076 multiletter control sequences out of 15000+600000
- 635189 words of font info for 66 fonts, out of 8000000 for 9000
+ 11339 strings out of 469097
+ 181442 string characters out of 5457857
+ 607380 words of memory out of 5000000
+ 40169 multiletter control sequences out of 15000+600000
+ 636943 words of font info for 72 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,8n,79p,1260b,568s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/omarlizardo/.TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (11 pages, 233212 bytes).
+ 74i,10n,79p,1531b,552s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/omarlizardo/.TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on paper.pdf (12 pages, 264477 bytes).
 PDF statistics:
- 292 PDF objects out of 1000 (max. 8388607)
- 241 compressed objects within 3 object streams
- 60 named destinations out of 1000 (max. 500000)
- 160 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 354 PDF objects out of 1000 (max. 8388607)
+ 296 compressed objects within 3 object streams
+ 67 named destinations out of 1000 (max. 500000)
+ 197 words of extra memory for PDF output out of 10000 (max. 10000000)
 
