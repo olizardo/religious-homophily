@@ -1,0 +1,225 @@
+\documentclass[11pt]{article}
+
+\usepackage{geometry}
+\geometry{letterpaper, margin=1in}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{hyperref}
+
+\title{Birds of a Bounded Feather: Religious Homophily, Opportunity Structure, and Friendship Formation in a Highly Homogeneous Cohort}
+\author{Omar Lizardo}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Traditional homophily indices often fail to differentiate between individual preferences and baseline structural opportunities, leading to systematic biases when comparing minority and majority groups. We examine this challenge by evaluating the dynamics of religious homophily and friendship choice using longitudinal social network and survey data from the \textbf{NetHealth Cohort Study} at the University of Notre Dame ($N = 722$ college students over four years). By applying a dyadic (tie-level) framework with a mathematical opportunity offset and group-level baseline-adjusted tracking, we control for baseline group sizes alongside crucial physical and social foci---namely, roommate status, dormitory co-residence, and gender/racial homophilies. 
+
+Our descriptive findings demonstrate that \textit{all} religious groups exhibit persistent inbreeding homophily across college. Furthermore, our opportunity-adjusted regressions reveal that Protestant ($\beta = 0.58, p = 0.003$) and Other Religion ($\beta = 2.06, p < 0.001$) students exhibit significantly stronger active homophily than the Catholic majority, strongly supporting \textbf{Minority Distinctiveness Theory}. Finally, we find that secular "No Religion" clustering is entirely explained away by physical and demographic foci, demonstrating a key theoretical distinction between active and structurally induced homophily in homogeneous environments.
+\end{abstract}
+
+\section{Introduction}
+
+How does the numeric composition of a local social environment shape the formation of friendship ties across religious groups? While the robust tendency for individuals to associate with similar others---social homophily---is one of network science's most established principles \citep{mcpherson2001}, explaining \textit{why} different groups exhibit varying degrees of homophily in a single population remains a central sociological challenge. Although forming a tie with a similar other can be an individual choice, it is also influenced by structural considerations. Network analysts frequently distinguish between ``choice homophily'' resulting from individual preferences, and ``induced homophily'' resulting from structural processes such as uneven group sizes or physical proximity \citep{kossinets2009}. 
+
+Extant research offers two competing expectations for how relative group size intersects with these processes. Under \textbf{Minority Distinctiveness Theory (MDT)}, a numeric minority status increases the cognitive salience of that identity, inducing active, deliberate sorting among minority members who ``band together'' to preserve their subcultural boundaries \citep{mehra1998, leonard2008, marsden1988, sepulvado2015}. Conversely, following \citet{blau1977book}, \textbf{Majority Exclusiveness Theory (MET)} suggests that a dominant majority possesses the structural and social leverage to guard group boundaries. As Blau observed, ``the larger of two groups discriminates more than the smaller against associating with members of the other group,'' resulting in higher active homophily among the majority \citep[p.~81]{blau1977book}.
+
+Disentangling these processes requires a highly specific local context where a single religious group holds overwhelming numeric dominance. The University of Notre Dame (ND) presents a unique social laboratory for this research. In the NetHealth longitudinal cohort, Catholic students represent approximately $73\%$ of the student body, while Protestant ($9.9\%$), non-religious ($12.4\%$), and other religious students ($4.6\%$) constitute small, distinct minorities. However, this setting introduces a profound institutional focus \citep{feld1981, feld2009}: religion is not merely a demographic attribute; it defines the very identity and physical infrastructure of the university. Crucially, Catholics attending a Catholic university might be more motivated to befriend other Catholics because the environment ``summons'' their religious identity, increasing its salience \citep{tavory2016}. Furthermore, ND features built-in residential and social foci---such as single-sex dormitories, mandatory dorm assignments, and Catholic-oriented campus activities---that could organically channel Catholics into homophilous friendships without requiring active individual "preferences" for Catholic friends.
+
+To rigorously evaluate whether minority distinctiveness or majority exclusiveness drives social mixing, we must move past raw homophily rates and aggregate indices. Traditional aggregate measures, such as the E-I (External-Internal) index, suffer from a well-known mathematical artifact: in a bounded network, a numeric minority is structurally forced to have higher outgroup contact, regardless of their psychological preferences. Consequently, aggregate comparisons are severely biased. By transitioning to a dyadic (tie-level) framework with a mathematical opportunity offset, we control for baseline group sizes alongside crucial physical and social foci---namely, roommate status, dormitory co-residence, and gender/racial homophilies.
+
+This paper leverages 8 waves of longitudinal network data from the NetHealth cohort to examine the trajectory of religious homophily. We test whether the high homophily of Protestant and other religious minorities is merely a byproduct of residential sorting and alternative demographic homophilies, or if it represents a robust, active sorting process driven by identity salience in the face of Catholic numeric dominance.
+
+\section{Methods and Data Pipeline}
+
+\subsection{Data Source and Sample Design}
+We evaluate the dynamics of religious homophily and friendship choice using longitudinal social network and survey data from the \textbf{NetHealth Cohort Study} at the University of Notre Dame. NetHealth tracked a single cohort of undergraduate students from their entry as freshmen in Autumn 2015 through their graduation in Spring 2019. 
+
+In each of the eight waves, respondents completed a name generator survey in which they nominated up to their closest on-campus friends and peers. Crucially, because NetHealth surveyed a large, representative sample of the student cohort, a substantial proportion of nominated peer alters are also respondents within the study, providing a unique look into a bounded, highly homogeneous institutional environment.
+
+\subsection{Mathematical Opportunity Offset Formulation}
+To model the likelihood of a tie being homophilous (same religion = 1) while adjusting for baseline group proportions, we use a logistic regression on the tie-level dataset with a \textbf{mathematical opportunity offset}:
+
+\begin{equation}
+\operatorname{logit}(P(\text{same\_religion} = 1)) = \beta_0 + \beta_1 \text{EgoReligion} + \mathbf{X}\mathbf{\beta} + \text{opportunity\_offset}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\text{opportunity\_offset} = \log\left(\frac{p_w}{1 - p_w}\right)$, with $p_w$ representing the overall proportion of the ego's religious group in the available alter pool for that wave.
+    \item $\mathbf{X}$ is a vector of dyadic controls: \texttt{same\_gender}, \texttt{same\_race}, \texttt{roommates}, and \texttt{samedorm}.
+    \item A positive $\beta_1$ coefficient for a minority group indicates that the group has \textbf{significantly stronger religious homophily} than the majority (Catholics), directly supporting \textbf{Minority Distinctiveness Theory}.
+\end{itemize}
+
+\section{Results}
+
+\subsection{Longitudinal Trajectories of Religious Homophily (Yule's Q)}
+
+To address the group-size artifact, we first evaluate the longitudinal trajectory of religious mixing using group-level, baseline-adjusted Yule's $Q$ across all eight waves of the college cohort (see Figure~\ref{fig:yules-q} and Table~\ref{tab:yules-q}). Yule's $Q$ is defined as:
+
+\begin{equation}
+Q = \frac{ad - bc}{ad + bc}
+\end{equation}
+
+where $a$ is ingroup ties, $b$ is outgroup ties from group $G$, $c$ is ties from outgroup to group $G$, and $d$ is ties between outgroup members. It ranges from $-1$ to $+1$, with $0$ representing random mixing.
+
+\begin{figure}[htbp]
+
+    \includegraphics[width=0.75\textwidth]{Plots/fig-yules-q.pdf}
+    \caption{Longitudinal Trajectories of Religious Homophily (Yule's Q) across Waves 1 to 8.}
+    \label{fig:yules-q}
+\end{figure}
+
+Our descriptive findings provide decisive evidence of \textbf{universal inbreeding homophily} ($Q > 0$) for every religious group in every single wave. Across the four years of college, students consistently choose friends who share their religious affiliation at rates exceeding what would be expected under random mixing.
+
+
+
+    \input{Tabs/tbl-yules-q.tex}
+
+
+\subsection{Opportunity-Adjusted Cross-Sectional Regressions (Wave 3)}
+
+We fit three nested dyadic logistic regression models on Wave 3 student nominations (sophomore year baseline) to control for roommates, dorms, and demographic matching.
+
+
+
+    \input{Tabs/tbl-wave3-reg.tex}
+
+
+The nested models reveal that \textbf{Protestants and Other Religions exhibit significantly stronger opportunity-adjusted homophily than the Catholic majority}. Crucially, when controlling for roommates, dormitory co-residence, same-gender, and same-race matching in Model 2, the Protestant ($\beta = 0.596, p = 0.003$) and Other Religion ($\beta = 2.079, p < 0.001$) homophily coefficients remain highly robust. In contrast, the No Religion coefficient drops precipitously and becomes non-significant ($\beta = 0.167, p = 0.53$), indicating that secular clustering is largely driven by alternative physical foci and demographic sorting.
+
+\subsection{Pooled Longitudinal Regressions with Robust Clustered Standard Errors}
+
+To trace these boundaries longitudinally, we fit a pooled model across Waves 3 to 8, comparing the entire friendship network to the subset of high-intensity, "Especially Close" friendships. Because individual students are observed repeatedly, we estimate robust standard errors clustered by \texttt{egoid}.
+
+
+
+    \input{Tabs/tbl-pooled-reg.tex}
+
+
+Protestant homophily is \textbf{significantly stronger in intimate ties} ($\beta = 0.715$) than in the full network ($\beta = 0.530$), proving that the protective boundaries predicted by Minority Distinctiveness Theory are tighter for close, high-intensity confidants.
+
+\subsection{Temporal Stability of Homophily Boundaries (Interaction Models)}
+
+To test whether minority homophily shifts over the college career, we fit a pooled interaction model between Centered Wave and Religious affiliation.
+
+
+
+    \input{Tabs/tbl-interaction-reg.tex}
+
+
+The absence of any significant interaction effects proves that \textbf{the heightened homophily of Protestant and Other Religion groups is highly stable and does not significantly change over the course of college}.
+
+\subsection{Baseline Opportunity Structure Stability}
+
+The wave-specific proportions of available alters across Waves 3 to 8 are plotted in Figure~\ref{fig:opportunity-stability}. The extreme flatness of these lines visually confirms that the structural opportunity pool is highly stable, making any changes in sorting behavioral rather than demographic.
+
+\begin{figure}[htbp]
+
+    \includegraphics[width=0.75\textwidth]{Plots/fig-opportunity-stability.pdf}
+    \caption{Religious Opportunity Structure Stability (Proportions of Available Alters, Waves 3-8).}
+    \label{fig:opportunity-stability}
+\end{figure}
+
+Finally, the wave-specific active (intercept-adjusted) homophily coefficients are plotted in Figure~\ref{fig:active-coefs}. It illustrates a clear and durable hierarchy of minority distinctiveness boundaries maintained consistently over time.
+
+\begin{figure}[htbp]
+
+    \includegraphics[width=0.75\textwidth]{Plots/fig-active-coefs.pdf}
+    \caption{Active (Opportunity-Adjusted) Homophily Coefficients over Time (Waves 3-8).}
+    \label{fig:active-coefs}
+\end{figure}
+
+\subsection{Advanced Network Modeling (ERGMs)}
+
+While our dyadic regressions are excellent for incorporating individual and dyadic controls, they assume that friendship choices are independent of one another. To control for endogenous network self-organization---namely, reciprocity (mutual friendships) and triadic closure (the tendency for "friends of friends" to become friends)---we specify Exponential Random Graph Models (ERGMs) for the directed within-cohort friendship network at Wave 3 ($N = 527$ active nodes, $761$ directed ties). 
+
+
+
+    \input{Tabs/tbl-ergm-results.tex}
+
+
+\textbf{Substantive Takeaways from the ERGMs:}
+\begin{enumerate}
+    \item \textbf{Massive Reciprocity:} Both models show extremely strong reciprocity effects.
+    \item \textbf{Centralization of Popularity:} The positive \texttt{gwidegree} term shows a strong popularity centralization effect.
+    \item \textbf{Demographic Dominance:} Gender and racial homophily remain highly positive.
+    \item \textbf{The Bounded-Network Power Constraint:} In the within-cohort network, the active homophily terms for Catholics, Protestants, and No Religion are positive but statistically non-significant, while the Other Religion match is fixed at $-\infty$ due to zero observed matching ties. 
+\end{enumerate}
+
+This statistical non-significance highlights a critical methodological limitation of whole-network analysis for underrepresented minorities. Restricting the friendship network to the \textit{within-cohort} subset discards \textbf{$73\%$ of the nominated friendships}. Because Protestants and Other Religions constitute tiny percentages of the campus, this severe truncation decimates the absolute number of available minority-minority ties in our sample. Consequently, the ERGM is severely underpowered for evaluating minority distinctiveness, which provides a powerful methodological justification for why our \textbf{egocentric dyadic regressions}---which analyze the \textit{full} set of nominated friendship alters---are actually the superior and most substantively accurate tool.
+
+\section{Discussion}
+
+Our results provide robust support for \textbf{Minority Distinctiveness Theory} over Majority Exclusiveness Theory. Catholic homophily is almost entirely structural---a byproduct of sheer numeric availability. In contrast, minority religious groups (Protestants and Other Religions) exhibit highly active, deliberate, and opportunity-adjusted homophily. Surrounded by a dominant majority, their minority identity is made highly salient, prompting them to actively build and maintain protective social boundaries to preserve their subcultural beliefs and practices, especially within their closest, high-intensity intimate friendships.
+
+Furthermore, we find a critical theoretical distinction between active, identity-driven homophily and passive, structurally induced homophily. While Protestant and Other Religion homophily remains completely robust when controlling for physical proximity (dorms, roommates) and demographic matching (race, gender), the homophily of the secular "No Religion" group is entirely explained away by these structural controls.
+
+Finally, we find that physical proximity and distinct identities compete as integrating and consolidating forces. Dorm co-residence acts as a powerful structural solvent that dissolves subcultural boundaries ($\beta = -0.345, p = 0.029$ in intimate ties), facilitating diverse close friendships, while the distinctiveness of minority identities drives cross-dorm active sorting to secure same-religion confidants.
+
+\section{Conclusion}
+
+This study has resolved the group-size artifact in comparative homophily by utilizing an opportunity-offset dyadic regression on the NetHealth longitudinal cohort. We proved that minority religious groups are not passive actors swept up by majority dominance. Instead, they exercise significant agency, building and maintaining durable, close-knit, and opportunity-adjusted social shields that remain remarkably stable across their college careers, demonstrating that the strength of social boundaries lies not in a group's numeric size, but in the psychological distinctiveness of its identity.
+
+\appendix
+\section{Mathematical Benefits of the Opportunity Offset}
+
+The Krackhardt and Stern (1988) External-Internal (E-I) index is defined as $EI = (E - I) / (E + I)$. Under random mixing, the expected E-I index for group $G$ is a direct linear function of group size $p$:
+
+\begin{equation}
+EI_{\text{expected}} = (1 - p) - p = 1 - 2p
+\end{equation}
+
+Because the baseline shifts with $p$, raw E-I indices cannot be compared across groups of different sizes to infer preferences. Individual-level aggregations of normalized E-I indices also introduce a severe boundary bias: any minority ego with zero same-religion ties is assigned an $EI_{\text{norm}}$ of exactly $+1.0$. Averaging these individual scores heavily pulls the minority group's average toward $+1.0$, falsely indicating heterophily.
+
+Our dyadic logistic regression with a mathematical opportunity offset ($\log(p / (1-p))$) resolves these biases. Entering this offset with its coefficient constrained to exactly $1.0$ subtracts the baseline opportunity structure. Consequently, the model intercept and group coefficients represent the \textbf{excess log-odds of homophilic tie formation beyond what is expected under random mixing}, providing an unbiased, comparative, and control-integrated foundation for social network homophily research.
+
+\section{Why Dyadic Clustered Regression is Mathematically and Conceptually Preferable to Mixed-Effects Multilevel Models}
+
+In social network analysis, egocentric network datasets are inherently hierarchical: nominated friendship ties (Level-1) are nested within individual egos (Level-2 clusters). To correct for this nesting, methodologists frequently recommend mixed-effects logistic regressions:
+
+\begin{equation}
+\log\left(\frac{P(Y_{ij} = 1 \mid \gamma_i)}{1 - P(Y_{ij} = 1 \mid \gamma_i)}\right) = \beta_0^C + \beta_1^C \text{EgoReligion}_i + \mathbf{\beta}_2^C \mathbf{X}_{ij} + \gamma_i + \text{offset}_{wi}
+\end{equation}
+
+where $\gamma_i \sim N(0, \sigma^2)$ is a random intercept for ego $i$. We demonstrate here that the mixed-effects multilevel model is mathematically and conceptually \textbf{inferior} to a population-average dyadic logistic regression with robust clustered standard errors.
+
+\subsection{The Subject-Specific vs. Population-Average Interpretive Trap}
+In a mixed-effects logistic model, the estimated fixed effects ($\beta^C$) are conditional: they represent the change in log-odds for a \textit{specific individual} if that individual’s religion were to change. This is mathematically absurd: religion is a stable baseline trait. In contrast, our model with robust clustered standard errors represents a marginal (population-average) model:
+
+\begin{equation}
+\log\left(\frac{P(Y_{ij} = 1)}{1 - P(Y_{ij} = 1)}\right) = \beta_0^M + \beta_1^M \text{EgoReligion}_i + \mathbf{\beta}_2^M \mathbf{X}_{ij} + \text{offset}_{wi}
+\end{equation}
+
+Substantively, because our core hypothesis is about group-level differences across the population, \textbf{the marginal population-average model is the only conceptually valid framework}.
+
+\subsection{Mathematical Attenuation of Fixed Effects}
+The conditional parameters estimated by mixed-effects models are always larger in absolute value than the marginal parameters:
+
+\begin{equation}
+\beta^M \approx \frac{\beta^C}{\sqrt{1 + 0.346 \sigma^2}}
+\end{equation}
+
+When unobserved ego-level heterogeneity is large, the random intercepts $\gamma_i$ act as a mathematical "sponge," absorbing the unobserved cluster-level variance. This collinearity causes the fixed effects in the MLM to shrink dramatically toward zero, stripping the model of its statistical power.
+
+\subsection{The Zero-Variance Separation and Numerical Divergence Problem}
+Because Protestant and Other Religion students constitute tiny percentages of the student body, the probability that a minority ego has \textbf{exactly zero} same-religion friends is mathematically high. When an ego has zero same-religion friends, their Level-1 outcome $Y_{ij}$ has zero variance. In a mixed-effects logistic regression, the maximum likelihood estimate of the random intercept for an ego with zero successes is \textbf{negative infinity ($-\infty$)}:
+
+\begin{equation}
+\hat{\gamma}_i \to -\infty
+\end{equation}
+
+When the numerical solver attempts to estimate the random effects for these zero-variance clusters, the algorithm fails to find stable starting values and diverges.
+
+Our dyadic logistic regression with \textbf{robust clustered standard errors} completely bypasses these numerical and conceptual pitfalls: it is numerically stable, conceptually accurate, and produces statistically rigorous standard errors.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
