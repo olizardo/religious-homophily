@@ -1,0 +1,16 @@
+{
+  "permission": {
+    "executeCode": {
+      "*": "allow"
+    },
+    "edit": {
+      "*.md": "allow",
+      "*.R": "allow",
+      "*.qmd": "allow"
+    },
+    "bash": {
+      "mkdir *": "allow",
+      "mv *": "allow"
+    }
+  }
+}
