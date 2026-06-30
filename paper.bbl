@@ -75,6 +75,11 @@ Mehra, A., Kilduff, M., and Brass, D.~J. (1998).
 \newblock At the margins: A distinctiveness approach to the social identity and social networks of underrepresented groups.
 \newblock {\em Academy of management journal}, 41(4):441--452.
 
+\bibitem[Perry et~al., 2018]{perry2018}
+Perry, B.~L., Pescosolido, B.~A., and Borgatti, S.~P. (2018).
+\newblock {\em Egocentric network analysis: Foundations, methods, and models}.
+\newblock Cambridge University Press.
+
 \bibitem[Purta et~al., 2016]{purta2016experiences-7de}
 Purta, R., Mattingly, S., Song, L., Lizardo, O., Hachen, D., Poellabauer, C., and Striegel, A. (2016).
 \newblock Experiences measuring sleep and physical activity patterns across a large college cohort with fitbits.
@@ -85,10 +90,20 @@ Rivera, M.~T., Soderstrom, S.~B., and Uzzi, B. (2010).
 \newblock Dynamics of dyads in social networks: Assortative, relational, and proximity mechanisms.
 \newblock {\em Annual review of sociology}, 36(1):91--115.
 
+\bibitem[Scott and Wild, 1991]{scott_wild91}
+Scott, A. and Wild, C. (1991).
+\newblock Fitting logistic regression models in stratified case-control studies.
+\newblock {\em Biometrics}, pages 497--510.
+
 \bibitem[Sepulvado et~al., 2015]{sepulvado2015}
 Sepulvado, B., Hachen, D., Penta, M., and Lizardo, O. (2015).
 \newblock Social affiliation from religious disaffiliation: Evidence of selective mixing among youth with no religious preference during the transition to college.
 \newblock {\em Journal for the Scientific Study of Religion}, 54(4):833--841.
+
+\bibitem[Snijders and Baerveldt, 2003]{snijders2003multilevel-9af}
+Snijders, T. A.~B. and Baerveldt, C. (2003).
+\newblock A multilevel network study of the effects of delinquent behavior on friendship evolution.
+\newblock {\em The Journal of mathematical sociology}, 27(2-3):123--151.
 
 \bibitem[Tavory, 2016]{tavory2016}
 Tavory, I. (2016).

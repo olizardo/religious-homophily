@@ -2,45 +2,48 @@ This is BibTeX, Version 0.99e (TeX Live 2026)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: paper.aux
 The style file: apalike.bst
+A level-1 auxiliary file: Tabs/tbl-wave3-reg.aux
+A level-1 auxiliary file: Tabs/tbl-pooled-reg.aux
+A level-1 auxiliary file: Tabs/tbl-interaction-reg.aux
 Database file #1: references.bib
-You've used 19 entries,
+You've used 22 entries,
             1935 wiz_defined-function locations,
-            595 strings with 6998 characters,
-and the built_in function-call counts, 7917 in all, are:
-= -- 793
-> -- 300
-< -- 12
-+ -- 107
-- -- 98
-* -- 696
-:= -- 1355
-add.period$ -- 58
-call.type$ -- 19
-change.case$ -- 141
-chr.to.int$ -- 18
-cite$ -- 19
-duplicate$ -- 286
-empty$ -- 568
-format.name$ -- 127
-if$ -- 1543
+            617 strings with 7567 characters,
+and the built_in function-call counts, 9161 in all, are:
+= -- 919
+> -- 344
+< -- 15
++ -- 123
+- -- 112
+* -- 794
+:= -- 1560
+add.period$ -- 67
+call.type$ -- 22
+change.case$ -- 162
+chr.to.int$ -- 21
+cite$ -- 22
+duplicate$ -- 337
+empty$ -- 656
+format.name$ -- 148
+if$ -- 1795
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 21
-newline$ -- 98
-num.names$ -- 59
-pop$ -- 112
+missing$ -- 25
+newline$ -- 113
+num.names$ -- 68
+pop$ -- 133
 preamble$ -- 1
-purify$ -- 143
+purify$ -- 165
 quote$ -- 0
-skip$ -- 219
+skip$ -- 262
 stack$ -- 0
-substring$ -- 652
-swap$ -- 35
-text.length$ -- 2
+substring$ -- 747
+swap$ -- 47
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 110
+type$ -- 126
 warning$ -- 0
-while$ -- 75
+while$ -- 86
 width$ -- 0
-write$ -- 248
+write$ -- 286

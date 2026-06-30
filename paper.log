@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 19:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  30 JUN 2026 08:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -267,7 +267,7 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 21.
  (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count318
-) (./paper.aux)
+) (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-reg.aux) (./Tabs/tbl-interaction-reg.aux))
 \openout1 = `paper.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -346,43 +346,64 @@ Package hyperref Info: Link coloring ON on input line 27.
 
  [1
 
-{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] [8] [9] (./Tabs/tbl-wave3-reg.tex) (./Tabs/tbl-pooled-reg.tex) (./Tabs/tbl-interaction-reg.tex)
-<Plots/fig-opportunity-stability.png, id=215, 505.89pt x 361.35pt>
+{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] [8] (./paper.bbl [9]) [10]
+\openout2 = `Tabs/tbl-wave3-reg.aux'.
+
+ (./Tabs/tbl-wave3-reg.tex) [11]
+\openout2 = `Tabs/tbl-pooled-reg.aux'.
+
+ (./Tabs/tbl-pooled-reg.tex) [12]
+\openout2 = `Tabs/tbl-interaction-reg.aux'.
+
+ (./Tabs/tbl-interaction-reg.tex) [13]
+<Plots/fig-opportunity-stability.png, id=243, 505.89pt x 361.35pt>
 File: Plots/fig-opportunity-stability.png Graphic file (type png)
 <use Plots/fig-opportunity-stability.png>
-Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 197.
+Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 177.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
-<Plots/fig-yules-q.png, id=216, 505.89pt x 361.35pt>
+ [14
+
+
+
+
+
+
+
+
+
+ <./Plots/fig-opportunity-stability.png>]
+<Plots/fig-yules-q.png, id=248, 505.89pt x 361.35pt>
 File: Plots/fig-yules-q.png Graphic file (type png)
 <use Plots/fig-yules-q.png>
-Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 204.
+Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 184.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
-<Plots/fig-active-coefs.png, id=217, 505.89pt x 361.35pt>
+ [15 <./Plots/fig-yules-q.png>]
+<Plots/fig-active-coefs.png, id=253, 505.89pt x 361.35pt>
 File: Plots/fig-active-coefs.png Graphic file (type png)
 <use Plots/fig-active-coefs.png>
-Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 211.
+Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 191.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- (./paper.bbl [10] [11] [12 <./Plots/fig-opportunity-stability.png> <./Plots/fig-yules-q.png>]) [13 <./Plots/fig-active-coefs.png>] (./paper.aux)
+ [16 <./Plots/fig-active-coefs.png>] (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-reg.aux) (./Tabs/tbl-interaction-reg.aux))
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 94035B714DF19158967E064565987A55;4361.
+(rerunfilecheck)             Checksum: 6CD66FC3613BBD2725F4A03450CA2521;4225.
  ) 
 Here is how much of TeX's memory you used:
- 11316 strings out of 469097
- 180939 string characters out of 5457857
- 612334 words of memory out of 5000000
- 40152 multiletter control sequences out of 15000+600000
+ 11383 strings out of 469097
+ 183318 string characters out of 5457857
+ 609602 words of memory out of 5000000
+ 40206 multiletter control sequences out of 15000+600000
  634848 words of font info for 65 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,9n,79p,1872b,575s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 74i,9n,79p,1883b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (13 pages, 673012 bytes).
+Output written on paper.pdf (16 pages, 672739 bytes).
 PDF statistics:
- 314 PDF objects out of 1000 (max. 8388607)
- 265 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 335 PDF objects out of 1000 (max. 8388607)
+ 283 compressed objects within 3 object streams
+ 69 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 
