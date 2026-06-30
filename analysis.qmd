@@ -241,21 +241,37 @@ df_w3_clean <- df_w3_clean |>
 m3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
 
 # Generate simple output summary
-c_m1 <- summary(m1)$coefficients[, 1:2]
-c_m2 <- summary(m2)$coefficients[, 1:2]
-c_m3 <- summary(m3)$coefficients[, 1:2]
+c_m1 <- summary(m1)$coefficients
+c_m2 <- summary(m2)$coefficients
+c_m3 <- summary(m3)$coefficients
+
+format_est <- function(est, se, pval) {
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  sprintf("%.3f%s (%.3f)", est, stars, se)
+}
 
 # Build comparison matrix
 rows <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "discuss_num")
-res_mat <- matrix("---", nrow = length(rows), ncol = 3, dimnames = list(rows, c("Model 1", "Model 2", "Model 3")))
+row_labels <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "Religious Salience")
 
-for (r in rows) {
-  if (r %in% rownames(c_m1)) res_mat[r, 1] <- sprintf("%.3f (%.3f)", c_m1[r, 1], c_m1[r, 2])
-  if (r %in% rownames(c_m2)) res_mat[r, 2] <- sprintf("%.3f (%.3f)", c_m2[r, 1], c_m2[r, 2])
-  if (r %in% rownames(c_m3)) res_mat[r, 3] <- sprintf("%.3f (%.3f)", c_m3[r, 1], c_m3[r, 2])
+res_mat <- matrix("---", nrow = length(rows), ncol = 3, dimnames = list(row_labels, c("Model 1", "Model 2", "Model 3")))
+
+for (i in seq_along(rows)) {
+  r <- rows[i]
+  r_lab <- row_labels[i]
+  if (r %in% rownames(c_m1)) res_mat[r_lab, 1] <- format_est(c_m1[r, 1], c_m1[r, 2], c_m1[r, 4])
+  if (r %in% rownames(c_m2)) res_mat[r_lab, 2] <- format_est(c_m2[r, 1], c_m2[r, 2], c_m2[r, 4])
+  if (r %in% rownames(c_m3)) res_mat[r_lab, 3] <- format_est(c_m3[r, 1], c_m3[r, 2], c_m3[r, 4])
 }
 
-kable(res_mat, format = "latex", booktabs = TRUE, caption = "Nested Dyadic Logistic Regressions Predicting Same-Religion Ties (Wave 3).") |>
+# Add significance note
+note <- "\\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$"
+
+kable(res_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Nested Dyadic Logistic Regressions Predicting Same-Religion Ties (Wave 3).") |>
+  footnote(general = note, escape = FALSE) |>
   cat(file = here("Tabs", "tbl-wave3-reg.tex"))
 ```
 

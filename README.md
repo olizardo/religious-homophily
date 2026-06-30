@@ -79,13 +79,12 @@ For users who prefer to run the analysis step-by-step interactively without Quar
 **Note:** If running the standalone scripts, you must first manually download the raw CSV files (`BasicSurvey.csv` and `NetWorkSurvey.csv`) from the [NetHealth Data Portal](https://sites.nd.edu/nethealth/data-2/) and place them in the `Data/` directory.
 
 Scripts should be executed in the following order:
-1. `Code/prep_data20240603.R`
-2. `Code/01_longitudinal_descriptives.R`
-3. `Code/02_dyadic_models.R`
-4. `Code/02_dyadic_models_pooled.R`
-5. `Code/02_dyadic_models_interaction.R`
-6. `Code/04_plot_opportunity_stability.R`
-7. `Code/05_plot_active_coefficients.R`
+1. `Code/01_longitudinal_descriptives.R`
+2. `Code/02_dyadic_models.R`
+3. `Code/02_dyadic_models_pooled.R`
+4. `Code/02_dyadic_models_interaction.R`
+5. `Code/04_plot_opportunity_stability.R`
+6. `Code/05_plot_active_coefficients.R`
 
 ---
 
