@@ -15,8 +15,8 @@ library(tidyr)
 library(ggplot2)
 
 # Load data ---------------------------------------------------------------
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # Prepare Data ------------------------------------------------------------
 df_all <- df_netsurv |> 
@@ -60,10 +60,17 @@ df_pooled <- df_all |>
       race_1 == "Latino/a" & althisla == TRUE ~ 1,
       race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
       TRUE ~ NA_real_
+    ),
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
     )
   ) |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
 
 # Extract active homophily coefficients wave-by-wave
 coef_results <- list()
@@ -72,7 +79,7 @@ for (w in paste0("Wave", 3:8)) {
   df_w <- df_pooled |> filter(wave == w)
   
   model <- glm(
-    same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm, 
+    same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
     family = binomial, 
     offset = opportunity_offset, 
     data = df_w

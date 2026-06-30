@@ -16,8 +16,8 @@ library(sandwich)
 library(lmtest)
 
 # Load data ---------------------------------------------------------------
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # Prepare Pooled Dataset (Waves 3-8) --------------------------------------
 df_all <- df_netsurv |> 

@@ -38,6 +38,29 @@ dir.create(here("Plots"), showWarnings = FALSE)
 dir.create(here("Tabs"), showWarnings = FALSE)
 ```
 
+# Data Download and Preparation
+
+```{r}
+#| label: data-download
+#| message: false
+#| warning: false
+
+# URLs from the NetHealth data page
+basic_url <- "https://drive.google.com/uc?export=download&id=1pRHQOTXuCbZzTY1vm3imTwMVVIPZybJ_"
+network_url <- "https://drive.google.com/uc?export=download&id=1oDsK1C48BjcPTh4cfZXfug2WWb55pvy1"
+
+basic_file <- here("Data", "BasicSurvey.csv")
+network_file <- here("Data", "NetWorkSurvey.csv")
+
+# Download files if they do not exist
+if (!file.exists(basic_file)) {
+  download.file(basic_url, basic_file, mode = "wb")
+}
+if (!file.exists(network_file)) {
+  download.file(network_url, network_file, mode = "wb")
+}
+```
+
 # Data Cleaning and Imputation Pipeline
 
 ```{r}
@@ -46,8 +69,8 @@ dir.create(here("Tabs"), showWarnings = FALSE)
 #| warning: false
 
 # 1. Load Raw Data
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # 2. Impute Alter Religion longitudinally
 df_all_waves_impute <- df_netsurv |>
@@ -124,6 +147,13 @@ df_dyads <- df_all_clean |>
       race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
       TRUE ~ NA_real_
     ),
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
+    ),
     wave_num = as.numeric(gsub("Wave", "", wave)) - 3
   )
 ```
@@ -167,7 +197,7 @@ p_q <- ggplot(df_q_waves, aes(x = Wave_Num, y = Yules_Q, color = Group, group = 
   ) +
   ylim(0, 1)
 
-ggsave(here("Plots", "fig-yules-q.pdf"), p_q, width = 7, height = 5)
+ggsave(here("Plots", "fig-yules-q.png"), p_q, width = 7, height = 5)
 
 # Save Table
 df_wide_q <- df_q_waves |>
@@ -189,11 +219,11 @@ kable(df_wide_q, digits = 3, format = "latex", booktabs = TRUE, caption = "Basel
 df_w3_clean <- df_dyads |> 
   filter(wave == "Wave3") |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
 
 # Fit models
 m1 <- glm(same_religion ~ ego_rel, family = binomial, offset = opportunity_offset, data = df_w3_clean)
-m2 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm, family = binomial, offset = opportunity_offset, data = df_w3_clean)
+m2 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
 
 # Load Wave 2 religious discussion proxy
 df_w3_clean <- df_w3_clean |>
@@ -208,7 +238,7 @@ df_w3_clean <- df_w3_clean |>
     )
   )
 
-m3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + discuss_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
+m3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
 
 # Generate simple output summary
 c_m1 <- summary(m1)$coefficients[, 1:2]
@@ -216,7 +246,7 @@ c_m2 <- summary(m2)$coefficients[, 1:2]
 c_m3 <- summary(m3)$coefficients[, 1:2]
 
 # Build comparison matrix
-rows <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "discuss_num")
+rows <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "discuss_num")
 res_mat <- matrix("---", nrow = length(rows), ncol = 3, dimnames = list(rows, c("Model 1", "Model 2", "Model 3")))
 
 for (r in rows) {
@@ -238,28 +268,20 @@ kable(res_mat, format = "latex", booktabs = TRUE, caption = "Nested Dyadic Logis
 
 df_pooled_clean <- df_dyads |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
 
 # Full Pooled Model
-model_full <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + wave_num, 
+model_full <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + wave_num, 
                   family = binomial, offset = opportunity_offset, data = df_pooled_clean)
 vcov_full <- vcovCL(model_full, cluster = df_pooled_clean$egoid)
 se_full <- sqrt(diag(vcov_full))
 
-# Intimate ties Model
-df_intimate <- df_pooled_clean |> filter(close == "EspeciallyClose")
-model_intimate <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + wave_num, 
-                      family = binomial, offset = opportunity_offset, data = df_intimate)
-vcov_intimate <- vcovCL(model_intimate, cluster = df_intimate$egoid)
-se_intimate <- sqrt(diag(vcov_intimate))
-
 # Build Table
-terms_pooled <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "wave_num")
-pooled_mat <- matrix("", nrow = length(terms_pooled), ncol = 2, dimnames = list(terms_pooled, c("Full Network", "Intimate Ties Only")))
+terms_pooled <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "wave_num")
+pooled_mat <- matrix("", nrow = length(terms_pooled), ncol = 1, dimnames = list(terms_pooled, c("Full Network")))
 
 for (t in terms_pooled) {
   pooled_mat[t, 1] <- sprintf("%.3f (%.3f)", coef(model_full)[t], se_full[t])
-  pooled_mat[t, 2] <- sprintf("%.3f (%.3f)", coef(model_intimate)[t], se_intimate[t])
 }
 
 kable(pooled_mat, format = "latex", booktabs = TRUE, caption = "Pooled Longitudinal Logistic Models (Waves 3-8, Clustered SEs).") |>
@@ -273,7 +295,7 @@ kable(pooled_mat, format = "latex", booktabs = TRUE, caption = "Pooled Longitudi
 #| message: false
 #| warning: false
 
-model_int <- glm(same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm, 
+model_int <- glm(same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm + close_num, 
                  family = binomial, offset = opportunity_offset, data = df_pooled_clean)
 vcov_int <- vcovCL(model_int, cluster = df_pooled_clean$egoid)
 clust_int <- coeftest(model_int, vcov = vcov_int)
@@ -300,12 +322,12 @@ p_opp <- ggplot(wave_alter_props, aes(x = Wave_Num, y = prop, color = alt_rel, g
     color = "Religious Group"
   )
 
-ggsave(here("Plots", "fig-opportunity-stability.pdf"), p_opp, width = 7, height = 5)
+ggsave(here("Plots", "fig-opportunity-stability.png"), p_opp, width = 7, height = 5)
 
 coef_results <- list()
 for (w in paste0("Wave", 3:8)) {
   df_w <- df_pooled_clean |> filter(wave == w)
-  m_w <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm, 
+  m_w <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
              family = binomial, offset = opportunity_offset, data = df_w)
   cf <- coef(m_w)
   b0 <- cf["(Intercept)"]
@@ -329,7 +351,7 @@ p_coef <- ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group,
     color = "Religious Group"
   )
   
-ggsave(here("Plots", "fig-active-coefs.pdf"), p_coef, width = 7, height = 5)
+ggsave(here("Plots", "fig-active-coefs.png"), p_coef, width = 7, height = 5)
 ```
 
 # Advanced Network Modeling (ERGMs)

@@ -17,10 +17,10 @@ library(dplyr)
 # Load data ---------------------------------------------------------------
 
 # load ego network survey
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 
 # load basic survey
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # Subset Data -------------------------------------------------------------
 
@@ -194,8 +194,8 @@ saveRDS(df_w3_model_data, here("Data", "cleaned_wave3_model_data.RDS"))
 cat("Preparing pooled 8-wave dyadic dataset for archiving...\n")
 
 # Re-read raw datasets to avoid side effects
-df_netsurv_raw <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv_raw <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv_raw <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv_raw <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 df_all_waves <- df_netsurv_raw |> 
   filter(wave %in% paste0("Wave", 3:8)) |>

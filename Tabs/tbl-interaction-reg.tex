@@ -1,26 +1,26 @@
 \begin{table}
+
 \caption{\label{tab:interaction-reg}Longitudinal Interaction Model with Clustered Standard Errors.}
 \centering
-\begin{tabular}[t]{ll}
+\begin{tabular}[t]{lrrrr}
 \toprule
-Predictor & Estimate (SE)\\
+  & Estimate & Std. Error & z value & Pr(>|z|)\\
 \midrule
-Intercept (Catholic Baseline) & 0.220 (0.283) \\
-Respondent: No Religion & 0.384 (0.227) \\
-Respondent: Other Religion & 1.719 (0.553)** \\
-Respondent: Protestant & 0.635 (0.231)** \\
-Survey Wave (Time) & 0.019 (0.026) \\
+(Intercept) & 0.224 & 0.268 & 0.834 & 0.404\\
+ego\_relNo Religion & 0.394 & 0.233 & 1.691 & 0.091\\
+ego\_relOther Religion & 1.561 & 0.550 & 2.841 & 0.004\\
+ego\_relProtestant & 0.651 & 0.226 & 2.883 & 0.004\\
+wave\_num & 0.019 & 0.025 & 0.750 & 0.453\\
 \addlinespace
-Same Gender & 0.114 (0.135) \\
-Same Race & 0.265 (0.118)* \\
-Are Roommates & -0.146 (0.106) \\
-Live in Same Dorm & -0.256 (0.124)* \\
-Friendship Closeness (1-4) & -0.027 (0.075) \\
+same\_gender & 0.130 & 0.132 & 0.986 & 0.324\\
+same\_race & 0.256 & 0.115 & 2.217 & 0.027\\
+roommatesTRUE & -0.145 & 0.107 & -1.363 & 0.173\\
+samedormTRUE & -0.247 & 0.124 & -1.991 & 0.047\\
+close\_num & -0.032 & 0.071 & -0.454 & 0.650\\
 \addlinespace
-No Religion $\times$ Wave & 0.085 (0.078) \\
-Other Religion $\times$ Wave & 0.028 (0.108) \\
-Protestant $\times$ Wave & -0.048 (0.071) \\
+ego\_relNo Religion:wave\_num & 0.084 & 0.077 & 1.095 & 0.274\\
+ego\_relOther Religion:wave\_num & 0.053 & 0.101 & 0.528 & 0.598\\
+ego\_relProtestant:wave\_num & -0.059 & 0.071 & -0.828 & 0.407\\
 \bottomrule
-\multicolumn{2}{l}{\footnotesize * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$}
 \end{tabular}
 \end{table}

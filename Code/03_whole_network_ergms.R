@@ -24,8 +24,8 @@ library(readr)
 library(dplyr)
 
 # Load data ---------------------------------------------------------------
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # 1. Filter to Wave 3 and within-cohort student-to-student ties -----------
 # To fit an ERGM, we require a closed, bounded network. We restrict the 

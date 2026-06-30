@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 17:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -344,60 +344,158 @@ Package hyperref Info: Link coloring ON on input line 27.
 \@outlinefile=\write3
 \openout3 = `paper.out'.
 
- [1
 
-{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] [8] (./Tabs/tbl-wave3-reg.tex) [9] (./Tabs/tbl-pooled-reg.tex) (./Tabs/tbl-interaction-reg.tex)
-<Plots/fig-opportunity-stability.pdf, id=199, 505.89pt x 361.35pt>
-File: Plots/fig-opportunity-stability.pdf Graphic file (type pdf)
-<use Plots/fig-opportunity-stability.pdf>
-Package pdftex.def Info: Plots/fig-opportunity-stability.pdf  used on input line 168.
+
+Package natbib Warning: Citation `mcpherson2001' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `rivera2010dynamics-e3e' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `feld2009' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `kossinets2009' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `mcpherson2001' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `marsden1988' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `hofstra2017sources-be0' on page 1 undefined on input line 37.
+
+
+Package natbib Warning: Citation `mehra1998' on page 1 undefined on input line 39.
+
+
+Package natbib Warning: Citation `leonard2008' on page 1 undefined on input line 39.
+
+
+Package natbib Warning: Citation `marsden1988' on page 1 undefined on input line 39.
+
+
+Package natbib Warning: Citation `sepulvado2015' on page 1 undefined on input line 39.
+
+
+Package natbib Warning: Citation `blau1977book' on page 1 undefined on input line 39.
+
+
+Package natbib Warning: Citation `blau1977book' on page 1 undefined on input line 39.
+
+[1
+
+{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+
+Package natbib Warning: Citation `purta2016experiences-7de' on page 2 undefined on input line 42.
+
+
+Package natbib Warning: Citation `feld1981' on page 2 undefined on input line 42.
+
+
+Package natbib Warning: Citation `feld2009' on page 2 undefined on input line 42.
+
+
+Package natbib Warning: Citation `tavory2016' on page 2 undefined on input line 42.
+
+
+Package natbib Warning: Citation `krackhardt1988informal-42d' on page 2 undefined on input line 44.
+
+
+Package natbib Warning: Citation `blau1977' on page 2 undefined on input line 44.
+
+
+Package natbib Warning: Citation `everett2012categorical-592' on page 2 undefined on input line 44.
+
+[2] [3]
+
+LaTeX Warning: Reference `fig:opportunity-stability' on page 4 undefined on input line 83.
+
+
+LaTeX Warning: Reference `fig:yules-q' on page 4 undefined on input line 88.
+
+[4]
+
+Package natbib Warning: Citation `imai2010' on page 5 undefined on input line 113.
+
+[5]
+
+LaTeX Warning: Reference `tab:interaction-reg' on page 6 undefined on input line 117.
+
+
+LaTeX Warning: Reference `tab:interaction-reg' on page 6 undefined on input line 119.
+
+
+LaTeX Warning: Reference `fig:active-coefs' on page 6 undefined on input line 121.
+
+
+LaTeX Warning: Reference `tab:wave3-reg' on page 6 undefined on input line 121.
+
+[6] [7] (./Tabs/tbl-wave3-reg.tex) (./Tabs/tbl-pooled-reg.tex) (./Tabs/tbl-interaction-reg.tex)
+<Plots/fig-opportunity-stability.png, id=65, 505.89pt x 361.35pt>
+File: Plots/fig-opportunity-stability.png Graphic file (type png)
+<use Plots/fig-opportunity-stability.png>
+Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 144.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [10] [11 <./Plots/fig-opportunity-stability.pdf>]
-<Plots/fig-yules-q.pdf, id=214, 505.89pt x 361.35pt>
-File: Plots/fig-yules-q.pdf Graphic file (type pdf)
-<use Plots/fig-yules-q.pdf>
-Package pdftex.def Info: Plots/fig-yules-q.pdf  used on input line 176.
+<Plots/fig-yules-q.png, id=66, 505.89pt x 361.35pt>
+File: Plots/fig-yules-q.png Graphic file (type png)
+<use Plots/fig-yules-q.png>
+Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 151.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [12 <./Plots/fig-yules-q.pdf>]
-<Plots/fig-marginal-effects-intimacy.pdf, id=224, 505.89pt x 361.35pt>
-File: Plots/fig-marginal-effects-intimacy.pdf Graphic file (type pdf)
-<use Plots/fig-marginal-effects-intimacy.pdf>
-Package pdftex.def Info: Plots/fig-marginal-effects-intimacy.pdf  used on input line 184.
+<Plots/fig-active-coefs.png, id=67, 505.89pt x 361.35pt>
+File: Plots/fig-active-coefs.png Graphic file (type png)
+<use Plots/fig-active-coefs.png>
+Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 158.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [13 <./Plots/fig-marginal-effects-intimacy.pdf>]
-<Plots/fig-active-coefs.pdf, id=238, 505.89pt x 361.35pt>
-File: Plots/fig-active-coefs.pdf Graphic file (type pdf)
-<use Plots/fig-active-coefs.pdf>
-Package pdftex.def Info: Plots/fig-active-coefs.pdf  used on input line 192.
-(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [14 <./Plots/fig-active-coefs.pdf>]
-Overfull \hbox (1.6145pt too wide) in paragraph at lines 213--213
+ [8] [9 <./Plots/fig-opportunity-stability.png>] [10 <./Plots/fig-yules-q.png> <./Plots/fig-active-coefs.png>]
+Overfull \hbox (1.6145pt too wide) in paragraph at lines 177--177
 [][]\OT1/cmr/bx/n/12 B. Why Dyadic Clus-tered Re-gres-sion is Math-e-mat-i-cally and Con-cep-tu-ally Prefer-
  []
 
-[15
+[11] (./paper.bbl [12])
 
-] (./paper.bbl [16]) [17] (./paper.aux)
+Package natbib Warning: There were undefined citations.
+
+[13] (./paper.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
-Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: E4B563676F2F8158B88F24C4D81B7A72;3235.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `paper.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `paper.out':
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
+(rerunfilecheck)             After:  E4B563676F2F8158B88F24C4D81B7A72;3235.
  ) 
 Here is how much of TeX's memory you used:
- 11338 strings out of 469097
- 181435 string characters out of 5457857
- 607416 words of memory out of 5000000
- 40161 multiletter control sequences out of 15000+600000
- 636943 words of font info for 72 fonts, out of 8000000 for 9000
+ 11288 strings out of 469097
+ 180452 string characters out of 5457857
+ 610104 words of memory out of 5000000
+ 40126 multiletter control sequences out of 15000+600000
+ 634848 words of font info for 65 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,10n,79p,1531b,563s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/omarlizardo/.TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (17 pages, 268535 bytes).
+ 74i,8n,79p,1881b,577s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on paper.pdf (13 pages, 666612 bytes).
 PDF statistics:
- 363 PDF objects out of 1000 (max. 8388607)
- 300 compressed objects within 3 object streams
- 74 named destinations out of 1000 (max. 500000)
- 141 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 203 PDF objects out of 1000 (max. 8388607)
+ 155 compressed objects within 2 object streams
+ 66 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

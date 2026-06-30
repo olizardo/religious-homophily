@@ -15,10 +15,10 @@ library(ggplot2)
 
 # Load data ---------------------------------------------------------------
 # load ego network survey
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 
 # load basic survey
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # Analysis Function --------------------------------------------------------
 calc_all_waves_q <- function() {

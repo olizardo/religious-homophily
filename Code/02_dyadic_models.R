@@ -12,8 +12,8 @@ library(readr)
 library(dplyr)
 
 # Load data ---------------------------------------------------------------
-df_netsurv <- read_csv(here('Data', 'NetWorkSurvey(2-28-20).csv'))
-df_basicsurv <- read_csv(here('Data', 'BasicSurvey(3-6-20).csv'))
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
 # Prepare Dyadic (Tie-level) Dataset for Wave 3 ----------------------------
 df_w3 <- df_netsurv |> 
@@ -62,6 +62,15 @@ df_w3_clean <- df_w3 |>
       TRUE ~ NA_real_
     ),
     
+    # Intimacy controls
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
+    ),
+    
     # Discussion frequency as a proxy for individual religious salience
     discuss_num = case_when(
       discussrelig_2 == "Not at all" ~ 1,
@@ -82,13 +91,13 @@ model1 <- glm(same_religion ~ ego_rel,
               data = df_w3_clean)
 
 # Model 2: Adding Demographic and Foci Controls (Race, Gender, Roommate, Dorm)
-model2 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm, 
+model2 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
               family = binomial, 
               offset = opportunity_offset, 
               data = df_w3_clean)
 
 # Model 3: Adding Individual Religious Salience (Discussion Frequency)
-model3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + discuss_num, 
+model3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num, 
               family = binomial, 
               offset = opportunity_offset, 
               data = df_w3_clean)
