@@ -76,6 +76,59 @@ The model also includes $\mathbf{X}$, a vector of dyadic controls representing a
 
 Crucially, this specification provides a direct test of our competing theoretical frameworks. A positive $\beta_1$ coefficient for a minority group indicates that the group exhibits significantly stronger religious homophily than the Catholic majority, even after accounting for their smaller population size and alternative sorting mechanisms. Such a result would directly support the Minority Distinctiveness Hypothesis, demonstrating that numeric minorities actively forge tighter same-group bonds in response to a dominant majority environment.
 
+\subsection{Methodological Advantages of the Dyadic Approach}
+
+\subsubsection{Mathematical Benefits of the Opportunity Offset}
+
+The Krackhardt and Stern (1988) External-Internal (E-I) index is defined as $EI = (E - I) / (E + I)$. Under random mixing, the expected E-I index for group $G$ is a direct linear function of group size $p$:
+
+\begin{equation}
+EI_{\text{expected}} = (1 - p) - p = 1 - 2p
+\end{equation}
+
+Because the baseline shifts with $p$, raw E-I indices cannot be compared across groups of different sizes to infer preferences. Individual-level aggregations of normalized E-I indices also introduce a severe boundary bias: any minority ego with zero same-religion ties is assigned an $EI_{\text{norm}}$ of exactly $+1.0$. Averaging these individual scores heavily pulls the minority group's average toward $+1.0$, falsely indicating heterophily.
+
+Our dyadic logistic regression with a mathematical opportunity offset ($\log(p / (1-p))$) mitigates these biases. Entering this offset with its coefficient constrained to exactly $1.0$ subtracts the baseline opportunity structure. Consequently, the model intercept and group coefficients represent the \textit{excess log-odds of homophilic tie formation beyond what is expected under random mixing}, providing an unbiased, comparative, and control-integrated foundation for social network homophily research.
+
+\subsubsection{Why Dyadic Clustered Regression is Preferable to Mixed-Effects Multilevel Models}
+
+In social network analysis, egocentric network datasets are inherently hierarchical: nominated friendship ties (Level-1) are nested within individual egos (Level-2 clusters). To correct for this nesting, methodologists frequently recommend mixed-effects logistic regressions:
+
+\begin{equation}
+\log\left(\frac{P(Y_{ij} = 1 \mid \gamma_i)}{1 - P(Y_{ij} = 1 \mid \gamma_i)}\right) = \beta_0^C + \beta_1^C \text{EgoReligion}_i + \mathbf{\beta}_2^C \mathbf{X}_{ij} + \gamma_i + \text{offset}_{wi}
+\end{equation}
+
+where $\gamma_i \sim N(0, \sigma^2)$ is a random intercept for ego $i$. We demonstrate here that the mixed-effects multilevel model is mathematically and conceptually \textit{inferior} to a population-average dyadic logistic regression with robust clustered standard errors.
+
+\paragraph{1. The Subject-Specific vs. Population-Average Interpretive Trap.}
+In a mixed-effects logistic model, the estimated fixed effects ($\beta^C$) are conditional: they represent the change in log-odds for a \textit{specific individual} if that individual's religion were to change. This is mathematically absurd: religion is a stable baseline trait. In contrast, our model with robust clustered standard errors represents a marginal (population-average) model:
+
+\begin{equation}
+\log\left(\frac{P(Y_{ij} = 1)}{1 - P(Y_{ij} = 1)}\right) = \beta_0^M + \beta_1^M \text{EgoReligion}_i + \mathbf{\beta}_2^M \mathbf{X}_{ij} + \text{offset}_{wi}
+\end{equation}
+
+Substantively, because our core hypothesis is about group-level differences across the population, \textit{the marginal population-average model is the only conceptually valid framework}.
+
+\paragraph{2. Mathematical Attenuation of Fixed Effects.}
+The conditional parameters estimated by mixed-effects models are always larger in absolute value than the marginal parameters:
+
+\begin{equation}
+\beta^M \approx \frac{\beta^C}{\sqrt{1 + 0.346 \sigma^2}}
+\end{equation}
+
+When unobserved ego-level heterogeneity is large, the random intercepts $\gamma_i$ act as a mathematical ``sponge,'' absorbing the unobserved cluster-level variance. This collinearity causes the fixed effects in the MLM to shrink dramatically toward zero, stripping the model of its statistical power.
+
+\paragraph{3. The Zero-Variance Separation and Numerical Divergence Problem.}
+Because Protestant and Other Religion students constitute tiny percentages of the student body, the probability that a minority ego has \textit{exactly zero} same-religion friends is mathematically high. When an ego has zero same-religion friends, their Level-1 outcome $Y_{ij}$ has zero variance. In a mixed-effects logistic regression, the maximum likelihood estimate of the random intercept for an ego with zero successes is \textit{negative infinity ($-\infty$)}:
+
+\begin{equation}
+\hat{\gamma}_i \to -\infty
+\end{equation}
+
+When the numerical solver attempts to estimate the random effects for these zero-variance clusters, the algorithm fails to find stable starting values and diverges.
+
+Our dyadic logistic regression with \textit{robust clustered standard errors} avoids these numerical and conceptual pitfalls: it is numerically stable, conceptually accurate, and produces statistically rigorous standard errors.
+
 \section{Results}
 
 \subsection{Baseline Opportunity Structure Stability}
@@ -159,59 +212,6 @@ This study has addressed the group-size artifact in comparative homophily by uti
     \caption{Active (Opportunity-Adjusted) Homophily Coefficients over Time (Waves 3-8).}
     \label{fig:active-coefs}
 \end{figure}
-
-\newpage
-\section*{Appendix}
-\subsection*{A. Mathematical Benefits of the Opportunity Offset}
-
-The Krackhardt and Stern (1988) External-Internal (E-I) index is defined as $EI = (E - I) / (E + I)$. Under random mixing, the expected E-I index for group $G$ is a direct linear function of group size $p$:
-
-\begin{equation}
-EI_{\text{expected}} = (1 - p) - p = 1 - 2p
-\end{equation}
-
-Because the baseline shifts with $p$, raw E-I indices cannot be compared across groups of different sizes to infer preferences. Individual-level aggregations of normalized E-I indices also introduce a severe boundary bias: any minority ego with zero same-religion ties is assigned an $EI_{\text{norm}}$ of exactly $+1.0$. Averaging these individual scores heavily pulls the minority group's average toward $+1.0$, falsely indicating heterophily.
-
-Our dyadic logistic regression with a mathematical opportunity offset ($\log(p / (1-p))$) mitigates these biases. Entering this offset with its coefficient constrained to exactly $1.0$ subtracts the baseline opportunity structure. Consequently, the model intercept and group coefficients represent the \textit{excess log-odds of homophilic tie formation beyond what is expected under random mixing}, providing an unbiased, comparative, and control-integrated foundation for social network homophily research.
-
-\subsection*{B. Why Dyadic Clustered Regression is Mathematically and Conceptually Preferable to Mixed-Effects Multilevel Models}
-
-In social network analysis, egocentric network datasets are inherently hierarchical: nominated friendship ties (Level-1) are nested within individual egos (Level-2 clusters). To correct for this nesting, methodologists frequently recommend mixed-effects logistic regressions:
-
-\begin{equation}
-\log\left(\frac{P(Y_{ij} = 1 \mid \gamma_i)}{1 - P(Y_{ij} = 1 \mid \gamma_i)}\right) = \beta_0^C + \beta_1^C \text{EgoReligion}_i + \mathbf{\beta}_2^C \mathbf{X}_{ij} + \gamma_i + \text{offset}_{wi}
-\end{equation}
-
-where $\gamma_i \sim N(0, \sigma^2)$ is a random intercept for ego $i$. We demonstrate here that the mixed-effects multilevel model is mathematically and conceptually \textit{inferior} to a population-average dyadic logistic regression with robust clustered standard errors.
-
-\subsubsection*{1. The Subject-Specific vs. Population-Average Interpretive Trap}
-In a mixed-effects logistic model, the estimated fixed effects ($\beta^C$) are conditional: they represent the change in log-odds for a \textit{specific individual} if that individual’s religion were to change. This is mathematically absurd: religion is a stable baseline trait. In contrast, our model with robust clustered standard errors represents a marginal (population-average) model:
-
-\begin{equation}
-\log\left(\frac{P(Y_{ij} = 1)}{1 - P(Y_{ij} = 1)}\right) = \beta_0^M + \beta_1^M \text{EgoReligion}_i + \mathbf{\beta}_2^M \mathbf{X}_{ij} + \text{offset}_{wi}
-\end{equation}
-
-Substantively, because our core hypothesis is about group-level differences across the population, \textit{the marginal population-average model is the only conceptually valid framework}.
-
-\subsubsection*{2. Mathematical Attenuation of Fixed Effects}
-The conditional parameters estimated by mixed-effects models are always larger in absolute value than the marginal parameters:
-
-\begin{equation}
-\beta^M \approx \frac{\beta^C}{\sqrt{1 + 0.346 \sigma^2}}
-\end{equation}
-
-When unobserved ego-level heterogeneity is large, the random intercepts $\gamma_i$ act as a mathematical "sponge," absorbing the unobserved cluster-level variance. This collinearity causes the fixed effects in the MLM to shrink dramatically toward zero, stripping the model of its statistical power.
-
-\subsubsection*{3. The Zero-Variance Separation and Numerical Divergence Problem}
-Because Protestant and Other Religion students constitute tiny percentages of the student body, the probability that a minority ego has \textit{exactly zero} same-religion friends is mathematically high. When an ego has zero same-religion friends, their Level-1 outcome $Y_{ij}$ has zero variance. In a mixed-effects logistic regression, the maximum likelihood estimate of the random intercept for an ego with zero successes is \textit{negative infinity ($-\infty$)}:
-
-\begin{equation}
-\hat{\gamma}_i \to -\infty
-\end{equation}
-
-When the numerical solver attempts to estimate the random effects for these zero-variance clusters, the algorithm fails to find stable starting values and diverges.
-
-Our dyadic logistic regression with \textit{robust clustered standard errors} avoids these numerical and conceptual pitfalls: it is numerically stable, conceptually accurate, and produces statistically rigorous standard errors.
 
 \bibliographystyle{apalike}
 \bibliography{references}
