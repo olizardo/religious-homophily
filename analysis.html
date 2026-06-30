@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Omar Lizardo">
-<meta name="dcterms.date" content="2026-06-29">
+<meta name="dcterms.date" content="2026-06-30">
 
 <title>Birds of a Bounded Feather: Data Analysis and Reproducible Pipeline</title>
 <style>
@@ -2217,7 +2217,6 @@ vertical-align: -.125em;
   <li><a href="#pooled-longitudinal-regressions-with-robust-clustered-standard-errors" id="toc-pooled-longitudinal-regressions-with-robust-clustered-standard-errors" class="nav-link" data-scroll-target="#pooled-longitudinal-regressions-with-robust-clustered-standard-errors">Pooled Longitudinal Regressions with Robust Clustered Standard Errors</a></li>
   <li><a href="#temporal-stability-of-homophily-boundaries-interaction-models" id="toc-temporal-stability-of-homophily-boundaries-interaction-models" class="nav-link" data-scroll-target="#temporal-stability-of-homophily-boundaries-interaction-models">Temporal Stability of Homophily Boundaries (Interaction Models)</a></li>
   <li><a href="#baseline-opportunity-structure-stability" id="toc-baseline-opportunity-structure-stability" class="nav-link" data-scroll-target="#baseline-opportunity-structure-stability">Baseline Opportunity Structure Stability</a></li>
-  <li><a href="#advanced-network-modeling-ergms" id="toc-advanced-network-modeling-ergms" class="nav-link" data-scroll-target="#advanced-network-modeling-ergms">Advanced Network Modeling (ERGMs)</a></li>
   </ul>
 </nav>
 </div>
@@ -2242,7 +2241,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 29, 2026</p>
+      <p class="date">June 30, 2026</p>
     </div>
   </div>
   
@@ -2585,68 +2584,41 @@ vertical-align: -.125em;
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">&quot;Plots&quot;</span>, <span class="st">&quot;fig-opportunity-stability.png&quot;</span>), p_opp, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>coef_results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (w <span class="cf">in</span> <span class="fu">paste0</span>(<span class="st">&quot;Wave&quot;</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)) {</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  df_w <span class="ot">&lt;-</span> df_pooled_clean <span class="sc">|&gt;</span> <span class="fu">filter</span>(wave <span class="sc">==</span> w)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  m_w <span class="ot">&lt;-</span> <span class="fu">glm</span>(same_religion <span class="sc">~</span> ego_rel <span class="sc">+</span> same_gender <span class="sc">+</span> same_race <span class="sc">+</span> roommates <span class="sc">+</span> samedorm <span class="sc">+</span> close_num, </span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> binomial, <span class="at">offset =</span> opportunity_offset, <span class="at">data =</span> df_w)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  cf <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_w)</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  b0 <span class="ot">&lt;-</span> cf[<span class="st">&quot;(Intercept)&quot;</span>]</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  coef_results[[w]] <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Catholic&quot;</span>, <span class="at">Coefficient =</span> b0),</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;No Religion&quot;</span>, <span class="at">Coefficient =</span> b0 <span class="sc">+</span> cf[<span class="st">&quot;ego_relNo Religion&quot;</span>]),</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Other Religion&quot;</span>, <span class="at">Coefficient =</span> b0 <span class="sc">+</span> cf[<span class="st">&quot;ego_relOther Religion&quot;</span>]),</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Protestant&quot;</span>, <span class="at">Coefficient =</span> b0 <span class="sc">+</span> cf[<span class="st">&quot;ego_relProtestant&quot;</span>])</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>df_coef_plot <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(coef_results) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Wave_Num =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;Wave&quot;</span>, <span class="st">&quot;&quot;</span>, Wave)))</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>p_coef <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_coef_plot, <span class="fu">aes</span>(<span class="at">x =</span> Wave_Num, <span class="at">y =</span> Coefficient, <span class="at">color =</span> Group, <span class="at">group =</span> Group)) <span class="sc">+</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">labels =</span> <span class="fu">paste0</span>(<span class="st">&quot;W&quot;</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)) <span class="sc">+</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Study Wave&quot;</span>,</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Active Homophily Coefficient (Log-Odds)&quot;</span>,</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Religious Group&quot;</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">&quot;Plots&quot;</span>, <span class="st">&quot;fig-active-coefs.png&quot;</span>), p_coef, <span class="at">width =</span> <span class="dv">7</span>, <span class="at">height =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="advanced-network-modeling-ergms" class="level1">
-<h1>Advanced Network Modeling (ERGMs)</h1>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct ERGM results table dynamically since model objects are in workspace.</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># For the purpose of reproducible compilation without needing to run ERGMs which </span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># take a long time, we output the pre-compiled values based on the text. </span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># You can uncomment and run actual ERGM models here if needed.</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>ergm_rows <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Baseline Density (edges)&quot;</span>, <span class="st">&quot;Reciprocity (mutual)&quot;</span>, <span class="st">&quot;Popularity Dispersion (gwidegree)&quot;</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Activity Dispersion (gwodegree)&quot;</span>, <span class="st">&quot;Transitivity (gwnsp)&quot;</span>, <span class="st">&quot;Same Gender&quot;</span>, <span class="st">&quot;Same Race&quot;</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Catholic Match&quot;</span>, <span class="st">&quot;No Religion Match&quot;</span>, <span class="st">&quot;Protestant Match&quot;</span>, <span class="st">&quot;Other Religion Match&quot;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>ergm_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="st">&quot;---&quot;</span>, <span class="at">nrow =</span> <span class="fu">length</span>(ergm_rows), <span class="at">ncol =</span> <span class="dv">2</span>, </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dimnames =</span> <span class="fu">list</span>(ergm_rows, <span class="fu">c</span>(<span class="st">&quot;Model A (Baseline)&quot;</span>, <span class="st">&quot;Model B (Structural Control)&quot;</span>)))</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Values taken from the original output expectations</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Baseline Density (edges)&quot;</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;-6.353 (0.345)&quot;</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Reciprocity (mutual)&quot;</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;6.950 (0.421)&quot;</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Same Gender&quot;</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.852 (0.134)&quot;</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Same Race&quot;</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.260 (0.111)&quot;</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Baseline Density (edges)&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;-7.123 (0.412)&quot;</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Reciprocity (mutual)&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;6.957 (0.455)&quot;</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Popularity Dispersion (gwidegree)&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.863 (0.231)&quot;</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Transitivity (gwnsp)&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.540 (0.180)&quot;</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Same Gender&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.796 (0.145)&quot;</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>ergm_mat[<span class="st">&quot;Same Race&quot;</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;0.243 (0.122)&quot;</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(ergm_mat, <span class="at">format =</span> <span class="st">&quot;latex&quot;</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>, <span class="at">caption =</span> <span class="st">&quot;Exponential Random Graph Model (ERGM) Results for Wave 3 Within-Cohort Network.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="at">file =</span> <span class="fu">here</span>(<span class="st">&quot;Tabs&quot;</span>, <span class="st">&quot;tbl-ergm-results.tex&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate coefficients AND standard errors for the plot</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>coef_results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (w <span class="cf">in</span> <span class="fu">paste0</span>(<span class="st">&quot;Wave&quot;</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)) {</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  df_w <span class="ot">&lt;-</span> df_pooled_clean <span class="sc">|&gt;</span> <span class="fu">filter</span>(wave <span class="sc">==</span> w)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  m_w <span class="ot">&lt;-</span> <span class="fu">glm</span>(same_religion <span class="sc">~</span> ego_rel <span class="sc">+</span> same_gender <span class="sc">+</span> same_race <span class="sc">+</span> roommates <span class="sc">+</span> samedorm <span class="sc">+</span> close_num, </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> binomial, <span class="at">offset =</span> opportunity_offset, <span class="at">data =</span> df_w)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  vcov_w <span class="ot">&lt;-</span> <span class="fu">vcovCL</span>(m_w, <span class="at">cluster =</span> df_w<span class="sc">$</span>egoid)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  se_w <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(vcov_w))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  cf <span class="ot">&lt;-</span> <span class="fu">coef</span>(m_w)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Helper to compute CI</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  get_ci <span class="ot">&lt;-</span> <span class="cf">function</span>(est, se) {</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Coefficient =</span> est, <span class="at">Lower =</span> est <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se, <span class="at">Upper =</span> est <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  coef_results[[w]] <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Catholic&quot;</span>, <span class="fu">get_ci</span>(cf[<span class="st">&quot;(Intercept)&quot;</span>], se_w[<span class="st">&quot;(Intercept)&quot;</span>])),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;No Religion&quot;</span>, <span class="fu">get_ci</span>(cf[<span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> cf[<span class="st">&quot;ego_relNo Religion&quot;</span>], <span class="fu">sqrt</span>(vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> vcov_w[<span class="st">&quot;ego_relNo Religion&quot;</span>, <span class="st">&quot;ego_relNo Religion&quot;</span>] <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;ego_relNo Religion&quot;</span>]))),</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Other Religion&quot;</span>, <span class="fu">get_ci</span>(cf[<span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> cf[<span class="st">&quot;ego_relOther Religion&quot;</span>], <span class="fu">sqrt</span>(vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> vcov_w[<span class="st">&quot;ego_relOther Religion&quot;</span>, <span class="st">&quot;ego_relOther Religion&quot;</span>] <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;ego_relOther Religion&quot;</span>]))),</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">Wave =</span> w, <span class="at">Group =</span> <span class="st">&quot;Protestant&quot;</span>, <span class="fu">get_ci</span>(cf[<span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> cf[<span class="st">&quot;ego_relProtestant&quot;</span>], <span class="fu">sqrt</span>(vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;(Intercept)&quot;</span>] <span class="sc">+</span> vcov_w[<span class="st">&quot;ego_relProtestant&quot;</span>, <span class="st">&quot;ego_relProtestant&quot;</span>] <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>vcov_w[<span class="st">&quot;(Intercept)&quot;</span>, <span class="st">&quot;ego_relProtestant&quot;</span>])))</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>df_coef_plot <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(coef_results) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Wave_Num =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;Wave&quot;</span>, <span class="st">&quot;&quot;</span>, Wave)))</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>p_coef <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_coef_plot, <span class="fu">aes</span>(<span class="at">x =</span> Wave_Num, <span class="at">y =</span> Coefficient, <span class="at">color =</span> Group, <span class="at">group =</span> Group)) <span class="sc">+</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Lower, <span class="at">ymax =</span> Upper), <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">labels =</span> <span class="fu">paste0</span>(<span class="st">&quot;W&quot;</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">8</span>)) <span class="sc">+</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Study Wave&quot;</span>,</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Active Homophily Coefficient (Log-Odds)&quot;</span>,</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Religious Group&quot;</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 

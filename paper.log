@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  30 JUN 2026 11:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  30 JUN 2026 12:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -267,7 +267,7 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 21.
  (/home/omarlizardo/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count318
-) (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-reg.aux) (./Tabs/tbl-interaction-reg.aux))
+) (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-interaction-reg.aux))
 \openout1 = `paper.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
@@ -346,64 +346,63 @@ Package hyperref Info: Link coloring ON on input line 32.
 
  [1
 
-{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] [8] (./paper.bbl [9]) [10]
+{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7] [8] [9] (./paper.bbl [10]) [11]
 \openout2 = `Tabs/tbl-wave3-reg.aux'.
 
- (./Tabs/tbl-wave3-reg.tex) [11]
-\openout2 = `Tabs/tbl-pooled-reg.aux'.
+ (./Tabs/tbl-wave3-reg.tex) [12]
+\openout2 = `Tabs/tbl-pooled-interaction-reg.aux'.
 
- (./Tabs/tbl-pooled-reg.tex) [12]
-\openout2 = `Tabs/tbl-interaction-reg.aux'.
+ (./Tabs/tbl-pooled-interaction-reg.tex) [13
 
- (./Tabs/tbl-interaction-reg.tex) [13]
-<Plots/fig-opportunity-stability.png, id=244, 505.89pt x 361.35pt>
+
+
+
+]
+<Plots/fig-opportunity-stability.png, id=248, 722.7pt x 289.08pt>
 File: Plots/fig-opportunity-stability.png Graphic file (type png)
 <use Plots/fig-opportunity-stability.png>
-Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 182.
-(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
+Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 176.
+(pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
  [14
 
 
-
-
-
-
-
-
-
  <./Plots/fig-opportunity-stability.png>]
-<Plots/fig-yules-q.png, id=249, 505.89pt x 361.35pt>
+<Plots/fig-yules-q.png, id=253, 722.7pt x 289.08pt>
 File: Plots/fig-yules-q.png Graphic file (type png)
 <use Plots/fig-yules-q.png>
-Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 189.
-(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
+Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 184.
+(pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
  [15 <./Plots/fig-yules-q.png>]
-<Plots/fig-active-coefs.png, id=254, 505.89pt x 361.35pt>
+<Plots/fig-active-coefs.png, id=259, 722.7pt x 289.08pt>
 File: Plots/fig-active-coefs.png Graphic file (type png)
 <use Plots/fig-active-coefs.png>
-Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 196.
-(pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [16 <./Plots/fig-active-coefs.png>] (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-reg.aux) (./Tabs/tbl-interaction-reg.aux))
+Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 192.
+(pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
+ [16 <./Plots/fig-active-coefs.png>] (./paper.aux (./Tabs/tbl-wave3-reg.aux) (./Tabs/tbl-pooled-interaction-reg.aux))
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 6CD66FC3613BBD2725F4A03450CA2521;4225.
  ) 
 Here is how much of TeX's memory you used:
- 11385 strings out of 469097
- 183339 string characters out of 5457857
- 611244 words of memory out of 5000000
- 40207 multiletter control sequences out of 15000+600000
+ 11362 strings out of 469097
+ 182741 string characters out of 5457857
+ 606797 words of memory out of 5000000
+ 40191 multiletter control sequences out of 15000+600000
  635195 words of font info for 66 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,9n,79p,1883b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 74i,9n,79p,1885b,560s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (16 pages, 688724 bytes).
+Output written on paper.pdf (16 pages, 491126 bytes).
 PDF statistics:
- 340 PDF objects out of 1000 (max. 8388607)
- 286 compressed objects within 3 object streams
+ 344 PDF objects out of 1000 (max. 8388607)
+ 290 compressed objects within 3 object streams
  69 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 

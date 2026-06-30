@@ -190,10 +190,10 @@ p_q <- ggplot(df_q_waves, aes(x = Wave_Num, y = Yules_Q, color = Group, group = 
   geom_line(linewidth = 1.2) +
   geom_point(size = 3) +
   scale_x_continuous(breaks = 1:8, labels = paste0("W", 1:8)) +
-  labs(
+  labs(color = NULL, 
     x = "Study Wave",
     y = "Yule's Q (Homophily)",
-    color = "Religious Group"
+    color = NULL
   ) +
   ylim(0, 1)
 
@@ -365,26 +365,447 @@ p_opp <- ggplot(wave_alter_props, aes(x = Wave_Num, y = prop, color = alt_rel, g
   geom_point(size = 3) +
   scale_x_continuous(breaks = 3:8, labels = paste0("W", 3:8)) +
   scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-  labs(
+  labs(color = NULL, 
     x = "Study Wave",
     y = "Proportion of Alter Pool",
-    color = "Religious Group"
+    color = NULL
   )
 
 ggsave(here("Plots", "fig-opportunity-stability.png"), p_opp, width = 7, height = 5)
 
+# Calculate coefficients AND standard errors for the plot
 coef_results <- list()
 for (w in paste0("Wave", 3:8)) {
   df_w <- df_pooled_clean |> filter(wave == w)
   m_w <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
              family = binomial, offset = opportunity_offset, data = df_w)
+  vcov_w <- vcovCL(m_w, cluster = df_w$egoid)
+  se_w <- sqrt(diag(vcov_w))
   cf <- coef(m_w)
-  b0 <- cf["(Intercept)"]
+  
+  # Helper to compute CI
+  get_ci <- function(est, se) {
+    data.frame(Coefficient = est, Lower = est - 1.96 * se, Upper = est + 1.96 * se)
+  }
+  
   coef_results[[w]] <- bind_rows(
-    data.frame(Wave = w, Group = "Catholic", Coefficient = b0),
-    data.frame(Wave = w, Group = "No Religion", Coefficient = b0 + cf["ego_relNo Religion"]),
-    data.frame(Wave = w, Group = "Other Religion", Coefficient = b0 + cf["ego_relOther Religion"]),
-    data.frame(Wave = w, Group = "Protestant", Coefficient = b0 + cf["ego_relProtestant"])
+    data.frame(Wave = w, Group = "Catholic", get_ci(cf["(Intercept)"], se_w["(Intercept)"])),
+    data.frame(Wave = w, Group = "No Religion", get_ci(cf["(Intercept)"] + cf["ego_relNo Religion"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relNo Religion", "ego_relNo Religion"] + 2*vcov_w["(Intercept)", "ego_relNo Religion"]))),
+    data.frame(Wave = w, Group = "Other Religion", get_ci(cf["(Intercept)"] + cf["ego_relOther Religion"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relOther Religion", "ego_relOther Religion"] + 2*vcov_w["(Intercept)", "ego_relOther Religion"]))),
+    data.frame(Wave = w, Group = "Protestant", get_ci(cf["(Intercept)"] + cf["ego_relProtestant"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relProtestant", "ego_relProtestant"] + 2*vcov_w["(Intercept)", "ego_relProtestant"])))
+  )
+}
+df_coef_plot <- bind_rows(coef_results) |> mutate(Wave_Num = as.numeric(gsub("Wave", "", Wave)))
+
+
+p_coef <- ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient)) +
+  geom_line(color = "black", linewidth = 0.8) +
+  geom_point(size = 2) +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red", alpha = 0.6) +
+  facet_wrap(~ Group) +
+  theme_minimal() +
+  scale_x_continuous(breaks = 3:8, labels = paste0("W", 3:8)) +
+  labs(color = NULL, 
+    x = "Study Wave",
+    y = "Active Homophily Coefficient (Log-Odds)"
+  )
+  
+ggsave(here("Plots", "fig-active-coefs.png"), p_coef, width = 8, height = 6)
+
+author: "Omar Lizardo"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    self-contained: true
+---
+
+# Setup
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(here)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sandwich)
+library(lmtest)
+library(knitr)
+library(kableExtra)
+library(network)
+library(ergm)
+
+# Set global ggplot theme
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+# Ensure output directories exist
+dir.create(here("Plots"), showWarnings = FALSE)
+dir.create(here("Tabs"), showWarnings = FALSE)
+```
+
+# Data Download and Preparation
+
+```{r}
+#| label: data-download
+#| message: false
+#| warning: false
+
+# URLs from the NetHealth data page
+basic_url <- "https://drive.google.com/uc?export=download&id=1pRHQOTXuCbZzTY1vm3imTwMVVIPZybJ_"
+network_url <- "https://drive.google.com/uc?export=download&id=1oDsK1C48BjcPTh4cfZXfug2WWb55pvy1"
+
+basic_file <- here("Data", "BasicSurvey.csv")
+network_file <- here("Data", "NetWorkSurvey.csv")
+
+# Download files if they do not exist
+if (!file.exists(basic_file)) {
+  download.file(basic_url, basic_file, mode = "wb")
+}
+if (!file.exists(network_file)) {
+  download.file(network_url, network_file, mode = "wb")
+}
+```
+
+# Data Cleaning and Imputation Pipeline
+
+```{r}
+#| label: data-cleaning
+#| message: false
+#| warning: false
+
+# 1. Load Raw Data
+df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
+df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
+
+# 2. Impute Alter Religion longitudinally
+df_all_waves_impute <- df_netsurv |>
+  left_join(df_basicsurv, by = "egoid") |>
+  filter(!is.na(yourelig_1)) |>
+  filter(altrelucat == "Student")
+
+df_all_waves_impute <- df_all_waves_impute %>% 
+  mutate(dupe_alter = duplicated(df_all_waves_impute["alterid"]))
+
+list_alter_dupes <- unique(df_all_waves_impute$alterid[df_all_waves_impute$dupe_alter == TRUE])
+
+df_alter_dupes <- df_all_waves_impute %>% 
+  filter(alterid %in% list_alter_dupes) %>%
+  group_by(alterid) %>%
+  mutate(n_rels = n_distinct(altrelig)) %>%
+  filter(n_rels == 2)
+
+list_na_alter <- df_alter_dupes %>% 
+  filter(is.na(altrelig)) %>%
+  pull(alterid)
+
+df_alter_dupes <- df_alter_dupes %>%
+  filter(alterid %in% list_na_alter) %>% 
+  group_by(alterid) %>%
+  mutate(altrelig = unique(altrelig[!is.na(altrelig)]))
+
+df_imputed_alts <- df_alter_dupes %>%
+  select(alterid, altrelig) %>%
+  distinct() %>%
+  rename(altrelig_i = altrelig)
+
+df_all_clean <- left_join(df_all_waves_impute, df_imputed_alts, by = "alterid")
+df_all_clean$altrelig <- ifelse(is.na(df_all_clean$altrelig), df_all_clean$altrelig_i, df_all_clean$altrelig)
+
+df_all_clean <- df_all_clean |> filter(!is.na(altrelig))
+
+# 3. Standardize Religious Labels
+df_all_clean <- df_all_clean |>
+  mutate(
+    ego_rel = as.character(yourelig_1),
+    alt_rel = case_when(
+      altrelig == "NoReligion" ~ "No Religion",
+      altrelig == "OtherReligion" ~ "Other Religion",
+      TRUE ~ altrelig
+    )
+  ) |>
+  filter(
+    ego_rel %in% c("Catholic", "No Religion", "Other Religion", "Protestant"),
+    alt_rel %in% c("Catholic", "No Religion", "Other Religion", "Protestant")
+  )
+
+# 4. Calculate wave-specific alter proportions (opportunity pool)
+wave_alter_props <- df_all_clean |>
+  group_by(wave, alt_rel) |>
+  count() |>
+  group_by(wave) |>
+  mutate(prop = n / sum(n)) |>
+  ungroup() |>
+  mutate(Wave_Num = as.numeric(gsub("Wave", "", wave)))
+
+# 5. Construct dyadic variables
+df_dyads <- df_all_clean |>
+  left_join(wave_alter_props |> select(wave, alt_rel, prop), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  mutate(
+    same_religion = ifelse(ego_rel == alt_rel, 1, 0),
+    opportunity_offset = log(prop / (1 - prop)),
+    same_gender = ifelse(gender_1 == altsex, 1, 0),
+    same_race = case_when(
+      race_1 == "White" & altwhite == TRUE ~ 1,
+      race_1 == "African-American" & altblack == TRUE ~ 1,
+      race_1 == "Asian-American" & altasian == TRUE ~ 1,
+      race_1 == "Latino/a" & althisla == TRUE ~ 1,
+      race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
+      TRUE ~ NA_real_
+    ),
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
+    ),
+    wave_num = as.numeric(gsub("Wave", "", wave)) - 3
+  )
+```
+
+# Longitudinal Trajectories of Religious Homophily (Yule's Q)
+
+```{r}
+#| label: yules-q
+#| message: false
+#| warning: false
+
+results_q <- list()
+for (w in paste0("Wave", 1:8)) {
+  df_w <- df_all_clean |> filter(wave == w)
+  groups <- c("Catholic", "No Religion", "Other Religion", "Protestant")
+  m <- matrix(0, nrow = 4, ncol = 4, dimnames = list(groups, groups))
+  counts <- df_w |> count(ego_rel, alt_rel)
+  for (i in seq_len(nrow(counts))) {
+    m[counts$ego_rel[i], counts$alt_rel[i]] <- counts$n[i]
+  }
+  for (g in groups) {
+    a <- m[g, g]
+    b <- sum(m[g, setdiff(groups, g)])
+    c <- sum(m[setdiff(groups, g), g])
+    d <- sum(m[setdiff(groups, g), setdiff(groups, g)])
+    q <- (a * d - b * c) / (a * d + b * c)
+    results_q[[length(results_q) + 1]] <- data.frame(Wave = w, Group = g, Yules_Q = q)
+  }
+}
+df_q_waves <- bind_rows(results_q) |>
+  mutate(Wave_Num = as.numeric(gsub("Wave", "", Wave)))
+
+p_q <- ggplot(df_q_waves, aes(x = Wave_Num, y = Yules_Q, color = Group, group = Group)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  scale_x_continuous(breaks = 1:8, labels = paste0("W", 1:8)) +
+  labs(color = NULL, 
+    x = "Study Wave",
+    y = "Yule's Q (Homophily)",
+    color = NULL
+  ) +
+  ylim(0, 1)
+
+ggsave(here("Plots", "fig-yules-q.png"), p_q, width = 7, height = 5)
+
+# Save Table
+df_wide_q <- df_q_waves |>
+  mutate(Wave_Label = paste0("W", Wave_Num)) |>
+  select(Wave_Label, Group, Yules_Q) |>
+  pivot_wider(names_from = Wave_Label, values_from = Yules_Q)
+
+kable(df_wide_q, digits = 3, format = "latex", booktabs = TRUE, caption = "Baseline-Adjusted Religious Homophily (Yule's Q) across Waves 1 to 8.") |>
+  cat(file = here("Tabs", "tbl-yules-q.tex"))
+```
+
+# Opportunity-Adjusted Cross-Sectional Regressions (Wave 3)
+
+```{r}
+#| label: wave3-reg
+#| message: false
+#| warning: false
+
+df_w3_clean <- df_dyads |> 
+  filter(wave == "Wave3") |>
+  filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
+
+# Fit models
+m1 <- glm(same_religion ~ ego_rel, family = binomial, offset = opportunity_offset, data = df_w3_clean)
+m2 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
+
+# Load Wave 2 religious discussion proxy
+df_w3_clean <- df_w3_clean |>
+  mutate(
+    discuss_num = case_when(
+      discussrelig_2 == "Not at all" ~ 1,
+      discussrelig_2 == "Less than 1-2 times a month" ~ 2,
+      discussrelig_2 == "1-2 times a month" ~ 3,
+      discussrelig_2 == "1-2 times a week" ~ 4,
+      discussrelig_2 == "Three times a week or more" ~ 5,
+      TRUE ~ NA_real_
+    )
+  )
+
+m3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num, family = binomial, offset = opportunity_offset, data = df_w3_clean)
+
+# Generate simple output summary
+c_m1 <- summary(m1)$coefficients
+c_m2 <- summary(m2)$coefficients
+c_m3 <- summary(m3)$coefficients
+
+format_est <- function(est, se, pval) {
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  sprintf("%.3f%s (%.3f)", est, stars, se)
+}
+
+# Build comparison matrix
+rows <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "discuss_num")
+row_labels <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "Religious Salience")
+
+res_mat <- matrix("---", nrow = length(rows), ncol = 3, dimnames = list(row_labels, c("Model 1", "Model 2", "Model 3")))
+
+for (i in seq_along(rows)) {
+  r <- rows[i]
+  r_lab <- row_labels[i]
+  if (r %in% rownames(c_m1)) res_mat[r_lab, 1] <- format_est(c_m1[r, 1], c_m1[r, 2], c_m1[r, 4])
+  if (r %in% rownames(c_m2)) res_mat[r_lab, 2] <- format_est(c_m2[r, 1], c_m2[r, 2], c_m2[r, 4])
+  if (r %in% rownames(c_m3)) res_mat[r_lab, 3] <- format_est(c_m3[r, 1], c_m3[r, 2], c_m3[r, 4])
+}
+
+# Add significance note
+note <- "\\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$"
+
+kable(res_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Nested Dyadic Logistic Regressions Predicting Same-Religion Ties (Wave 3).") |>
+  footnote(general = note, escape = FALSE) |>
+  cat(file = here("Tabs", "tbl-wave3-reg.tex"))
+```
+
+# Pooled Longitudinal Regressions with Robust Clustered Standard Errors
+
+```{r}
+#| label: pooled-reg
+#| message: false
+#| warning: false
+
+df_pooled_clean <- df_dyads |>
+  filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
+
+# Full Pooled Model
+model_full <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + wave_num, 
+                  family = binomial, offset = opportunity_offset, data = df_pooled_clean)
+vcov_full <- vcovCL(model_full, cluster = df_pooled_clean$egoid)
+se_full <- sqrt(diag(vcov_full))
+
+# Build Table
+terms_pooled <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "wave_num")
+labels_pooled <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "Wave Number")
+
+pooled_mat <- matrix("", nrow = length(terms_pooled), ncol = 1, dimnames = list(labels_pooled, c("Full Network")))
+
+p_vals <- 2 * (1 - pnorm(abs(coef(model_full) / se_full)))
+
+for (i in seq_along(terms_pooled)) {
+  t <- terms_pooled[i]
+  lab <- labels_pooled[i]
+  pval <- p_vals[t]
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  pooled_mat[lab, 1] <- sprintf("%.3f%s (%.3f)", coef(model_full)[t], stars, se_full[t])
+}
+
+note <- "\\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$"
+
+kable(pooled_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Pooled Longitudinal Logistic Models (Waves 3-8, Clustered SEs).") |>
+  footnote(general = note, escape = FALSE) |>
+  cat(file = here("Tabs", "tbl-pooled-reg.tex"))
+```
+
+# Temporal Stability of Homophily Boundaries (Interaction Models)
+
+```{r}
+#| label: interaction-reg
+#| message: false
+#| warning: false
+
+model_int <- glm(same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm + close_num, 
+                 family = binomial, offset = opportunity_offset, data = df_pooled_clean)
+vcov_int <- vcovCL(model_int, cluster = df_pooled_clean$egoid)
+clust_int <- coeftest(model_int, vcov = vcov_int)
+
+int_terms <- rownames(clust_int)
+int_labels <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Wave Number", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "No Religion x Wave", "Other Religion x Wave", "Protestant x Wave")
+
+int_mat <- matrix("", nrow = length(int_terms), ncol = 1, dimnames = list(int_labels, c("Time Interaction")))
+
+for (i in seq_along(int_terms)) {
+  t <- int_terms[i]
+  lab <- int_labels[i]
+  est <- clust_int[t, 1]
+  se <- clust_int[t, 2]
+  pval <- clust_int[t, 4]
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  int_mat[lab, 1] <- sprintf("%.3f%s (%.3f)", est, stars, se)
+}
+
+kable(int_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Longitudinal Interaction Model with Clustered Standard Errors.") |>
+  footnote(general = note, escape = FALSE) |>
+  cat(file = here("Tabs", "tbl-interaction-reg.tex"))
+```
+
+# Baseline Opportunity Structure Stability
+
+```{r}
+#| label: opportunity-stability
+#| message: false
+#| warning: false
+
+p_opp <- ggplot(wave_alter_props, aes(x = Wave_Num, y = prop, color = alt_rel, group = alt_rel)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  scale_x_continuous(breaks = 3:8, labels = paste0("W", 3:8)) +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+  labs(color = NULL, 
+    x = "Study Wave",
+    y = "Proportion of Alter Pool",
+    color = NULL
+  )
+
+ggsave(here("Plots", "fig-opportunity-stability.png"), p_opp, width = 7, height = 5)
+
+# Calculate coefficients AND standard errors for the plot
+coef_results <- list()
+for (w in paste0("Wave", 3:8)) {
+  df_w <- df_pooled_clean |> filter(wave == w)
+  m_w <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
+             family = binomial, offset = opportunity_offset, data = df_w)
+  vcov_w <- vcovCL(m_w, cluster = df_w$egoid)
+  se_w <- sqrt(diag(vcov_w))
+  cf <- coef(m_w)
+  
+  # Helper to compute CI
+  get_ci <- function(est, se) {
+    data.frame(Coefficient = est, Lower = est - 1.96 * se, Upper = est + 1.96 * se)
+  }
+  
+  coef_results[[w]] <- bind_rows(
+    data.frame(Wave = w, Group = "Catholic", get_ci(cf["(Intercept)"], se_w["(Intercept)"])),
+    data.frame(Wave = w, Group = "No Religion", get_ci(cf["(Intercept)"] + cf["ego_relNo Religion"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relNo Religion", "ego_relNo Religion"] + 2*vcov_w["(Intercept)", "ego_relNo Religion"]))),
+    data.frame(Wave = w, Group = "Other Religion", get_ci(cf["(Intercept)"] + cf["ego_relOther Religion"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relOther Religion", "ego_relOther Religion"] + 2*vcov_w["(Intercept)", "ego_relOther Religion"]))),
+    data.frame(Wave = w, Group = "Protestant", get_ci(cf["(Intercept)"] + cf["ego_relProtestant"], sqrt(vcov_w["(Intercept)", "(Intercept)"] + vcov_w["ego_relProtestant", "ego_relProtestant"] + 2*vcov_w["(Intercept)", "ego_relProtestant"])))
   )
 }
 df_coef_plot <- bind_rows(coef_results) |> mutate(Wave_Num = as.numeric(gsub("Wave", "", Wave)))
@@ -392,51 +813,15 @@ df_coef_plot <- bind_rows(coef_results) |> mutate(Wave_Num = as.numeric(gsub("Wa
 p_coef <- ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group, group = Group)) +
   geom_line(linewidth = 1.2) +
   geom_point(size = 3) +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.2) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey50") +
   scale_x_continuous(breaks = 3:8, labels = paste0("W", 3:8)) +
-  labs(
+  labs(color = NULL, 
     x = "Study Wave",
     y = "Active Homophily Coefficient (Log-Odds)",
-    color = "Religious Group"
+    color = NULL
   )
-  
-ggsave(here("Plots", "fig-active-coefs.png"), p_coef, width = 7, height = 5)
+
+
 ```
 
-# Advanced Network Modeling (ERGMs)
-
-```{r}
-#| label: ergms
-#| message: false
-#| warning: false
-
-# Construct ERGM results table dynamically since model objects are in workspace.
-# For the purpose of reproducible compilation without needing to run ERGMs which 
-# take a long time, we output the pre-compiled values based on the text. 
-# You can uncomment and run actual ERGM models here if needed.
-
-ergm_rows <- c(
-  "Baseline Density (edges)", "Reciprocity (mutual)", "Popularity Dispersion (gwidegree)",
-  "Activity Dispersion (gwodegree)", "Transitivity (gwnsp)", "Same Gender", "Same Race",
-  "Catholic Match", "No Religion Match", "Protestant Match", "Other Religion Match"
-)
-
-ergm_mat <- matrix("---", nrow = length(ergm_rows), ncol = 2, 
-                   dimnames = list(ergm_rows, c("Model A (Baseline)", "Model B (Structural Control)")))
-
-# Values taken from the original output expectations
-ergm_mat["Baseline Density (edges)", 1] <- "-6.353 (0.345)"
-ergm_mat["Reciprocity (mutual)", 1] <- "6.950 (0.421)"
-ergm_mat["Same Gender", 1] <- "0.852 (0.134)"
-ergm_mat["Same Race", 1] <- "0.260 (0.111)"
-
-ergm_mat["Baseline Density (edges)", 2] <- "-7.123 (0.412)"
-ergm_mat["Reciprocity (mutual)", 2] <- "6.957 (0.455)"
-ergm_mat["Popularity Dispersion (gwidegree)", 2] <- "0.863 (0.231)"
-ergm_mat["Transitivity (gwnsp)", 2] <- "0.540 (0.180)"
-ergm_mat["Same Gender", 2] <- "0.796 (0.145)"
-ergm_mat["Same Race", 2] <- "0.243 (0.122)"
-
-kable(ergm_mat, format = "latex", booktabs = TRUE, caption = "Exponential Random Graph Model (ERGM) Results for Wave 3 Within-Cohort Network.") |>
-  cat(file = here("Tabs", "tbl-ergm-results.tex"))
-```

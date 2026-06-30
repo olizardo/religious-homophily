@@ -3,47 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: paper.aux
 The style file: apalike.bst
 A level-1 auxiliary file: Tabs/tbl-wave3-reg.aux
-A level-1 auxiliary file: Tabs/tbl-pooled-reg.aux
-A level-1 auxiliary file: Tabs/tbl-interaction-reg.aux
+A level-1 auxiliary file: Tabs/tbl-pooled-interaction-reg.aux
 Database file #1: references.bib
-You've used 22 entries,
+You've used 23 entries,
             1935 wiz_defined-function locations,
-            617 strings with 7567 characters,
-and the built_in function-call counts, 9161 in all, are:
-= -- 919
-> -- 344
-< -- 15
-+ -- 123
-- -- 112
-* -- 794
-:= -- 1560
-add.period$ -- 67
-call.type$ -- 22
-change.case$ -- 162
-chr.to.int$ -- 21
-cite$ -- 22
-duplicate$ -- 337
-empty$ -- 656
-format.name$ -- 148
-if$ -- 1795
+            623 strings with 7704 characters,
+and the built_in function-call counts, 9510 in all, are:
+= -- 956
+> -- 351
+< -- 16
++ -- 125
+- -- 114
+* -- 821
+:= -- 1621
+add.period$ -- 70
+call.type$ -- 23
+change.case$ -- 168
+chr.to.int$ -- 22
+cite$ -- 23
+duplicate$ -- 351
+empty$ -- 684
+format.name$ -- 151
+if$ -- 1863
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 25
-newline$ -- 113
-num.names$ -- 68
-pop$ -- 133
+missing$ -- 26
+newline$ -- 118
+num.names$ -- 71
+pop$ -- 136
 preamble$ -- 1
-purify$ -- 165
+purify$ -- 171
 quote$ -- 0
-skip$ -- 262
+skip$ -- 273
 stack$ -- 0
-substring$ -- 747
-swap$ -- 47
+substring$ -- 781
+swap$ -- 48
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 126
+type$ -- 132
 warning$ -- 0
-while$ -- 86
+while$ -- 90
 width$ -- 0
-write$ -- 286
+write$ -- 299
