@@ -11,7 +11,9 @@ The project has been completely restructured to address and resolve severe metho
 2.  **Addressed Confounding Foci & Alternative Homophilies:** Shifted from aggregate, ego-level regressions to **dyadic (tie-level) logistic regressions**. This allows us to control for physical/social foci (same dorm, roommates) and demographic homophilies (gender, race).
 3.  **Formal Causal Mediation & Scaling Artifacts:** Conducted formal causal mediation analysis to show that physical foci (dorms/roommates) do *not* mediate secular ("No Religion") homophily, proving that earlier nested model coefficient drops were merely logit rescaling artifacts.
 4.  **Longitudinal & Intimacy Interactions via Marginal Effects:** Evaluated interactions of religious affiliation over time (Waves 3-8) and across friendship intensity (1-4 scale) using proper probability-scale marginal effects to avoid non-linear scaling issues. 
-5.  **Removed ERGMs:** Discarded whole-network Exponential Random Graph Models (ERGMs), as subsetting to within-cohort ties decimated the minority sample size, making the opportunity-adjusted dyadic regressions mathematically superior.
+5.  **Updated Dyadic Regression Scripts:**
+    *   Updated `Code/02_dyadic_models_pooled.R` to include `discuss_num` (Religious Salience) as a control in the pooled regression models.
+    *   Updated LaTeX tables (`Tabs/tbl-wave3-reg.tex`, `Tabs/tbl-pooled-interaction-reg.tex`) to standardize variable labeling (using "Tie: " prefix for non-ego variables) and confirmed Religious Salience as a predictor in pooled models.
 
 ---
 
