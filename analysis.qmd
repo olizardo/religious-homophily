@@ -294,13 +294,27 @@ se_full <- sqrt(diag(vcov_full))
 
 # Build Table
 terms_pooled <- c("(Intercept)", "ego_relNo Religion", "ego_relOther Religion", "ego_relProtestant", "same_gender", "same_race", "roommatesTRUE", "samedormTRUE", "close_num", "wave_num")
-pooled_mat <- matrix("", nrow = length(terms_pooled), ncol = 1, dimnames = list(terms_pooled, c("Full Network")))
+labels_pooled <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "Wave Number")
 
-for (t in terms_pooled) {
-  pooled_mat[t, 1] <- sprintf("%.3f (%.3f)", coef(model_full)[t], se_full[t])
+pooled_mat <- matrix("", nrow = length(terms_pooled), ncol = 1, dimnames = list(labels_pooled, c("Full Network")))
+
+p_vals <- 2 * (1 - pnorm(abs(coef(model_full) / se_full)))
+
+for (i in seq_along(terms_pooled)) {
+  t <- terms_pooled[i]
+  lab <- labels_pooled[i]
+  pval <- p_vals[t]
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  pooled_mat[lab, 1] <- sprintf("%.3f%s (%.3f)", coef(model_full)[t], stars, se_full[t])
 }
 
-kable(pooled_mat, format = "latex", booktabs = TRUE, caption = "Pooled Longitudinal Logistic Models (Waves 3-8, Clustered SEs).") |>
+note <- "\\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$"
+
+kable(pooled_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Pooled Longitudinal Logistic Models (Waves 3-8, Clustered SEs).") |>
+  footnote(general = note, escape = FALSE) |>
   cat(file = here("Tabs", "tbl-pooled-reg.tex"))
 ```
 
@@ -316,7 +330,26 @@ model_int <- glm(same_religion ~ ego_rel * wave_num + same_gender + same_race + 
 vcov_int <- vcovCL(model_int, cluster = df_pooled_clean$egoid)
 clust_int <- coeftest(model_int, vcov = vcov_int)
 
-kable(clust_int[, 1:4], digits = 3, format = "latex", booktabs = TRUE, caption = "Longitudinal Interaction Model with Clustered Standard Errors.") |>
+int_terms <- rownames(clust_int)
+int_labels <- c("Intercept", "Ego: No Religion", "Ego: Other Religion", "Ego: Protestant", "Wave Number", "Same Gender", "Same Race", "Roommates", "Same Dorm", "Friendship Closeness", "No Religion x Wave", "Other Religion x Wave", "Protestant x Wave")
+
+int_mat <- matrix("", nrow = length(int_terms), ncol = 1, dimnames = list(int_labels, c("Time Interaction")))
+
+for (i in seq_along(int_terms)) {
+  t <- int_terms[i]
+  lab <- int_labels[i]
+  est <- clust_int[t, 1]
+  se <- clust_int[t, 2]
+  pval <- clust_int[t, 4]
+  stars <- ""
+  if (pval < 0.001) stars <- "***"
+  else if (pval < 0.01) stars <- "**"
+  else if (pval < 0.05) stars <- "*"
+  int_mat[lab, 1] <- sprintf("%.3f%s (%.3f)", est, stars, se)
+}
+
+kable(int_mat, format = "latex", booktabs = TRUE, escape = FALSE, caption = "Longitudinal Interaction Model with Clustered Standard Errors.") |>
+  footnote(general = note, escape = FALSE) |>
   cat(file = here("Tabs", "tbl-interaction-reg.tex"))
 ```
 
