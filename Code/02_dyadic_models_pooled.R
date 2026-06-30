@@ -66,13 +66,22 @@ df_pooled <- df_all |>
       race_1 == "Latino/a" & althisla == TRUE ~ 1,
       race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
       TRUE ~ NA_real_
+    ),
+    # Discussion frequency as a proxy for individual religious salience
+    discuss_num = case_when(
+      discussrelig_2 == "Not at all" ~ 1,
+      discussrelig_2 == "Less than 1-2 times a month" ~ 2,
+      discussrelig_2 == "1-2 times a month" ~ 3,
+      discussrelig_2 == "1-2 times a week" ~ 4,
+      discussrelig_2 == "Three times a week or more" ~ 5,
+      TRUE ~ NA_real_
     )
   )
 
 # Filter to complete cases for modeling
 df_pooled_clean <- df_pooled |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(discuss_num))
 
 cat("Total pooled ties for regression (Waves 3-8):", nrow(df_pooled_clean), "\n")
 cat("Number of unique egos:", n_distinct(df_pooled_clean$egoid), "\n\n")
@@ -86,7 +95,7 @@ model1_pooled <- glm(same_religion ~ ego_rel,
                      data = df_pooled_clean)
 
 # Model 2: Adding Demographic and Physical Foci Controls (Pooled)
-model2_pooled <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm, 
+model2_pooled <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + discuss_num, 
                      family = binomial, 
                      offset = opportunity_offset, 
                      data = df_pooled_clean)
