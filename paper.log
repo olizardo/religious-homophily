@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  30 JUN 2026 12:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  30 JUN 2026 12:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -350,37 +350,38 @@ Package hyperref Info: Link coloring ON on input line 32.
 
 Package natbib Warning: Citation `borgatti2024analyzing' on page 7 undefined on input line 124.
 
-[7] [8] [9] (./paper.bbl [10] [11]) [12]
+[7] [8] [9] [10] (./paper.bbl [11]) [12]
 \openout2 = `Tabs/tbl-wave3-reg.aux'.
 
- (./Tabs/tbl-wave3-reg.tex) [13]
+ (./Tabs/tbl-wave3-reg.tex) [13
+
+]
 \openout2 = `Tabs/tbl-pooled-interaction-reg.aux'.
 
  (./Tabs/tbl-pooled-interaction-reg.tex) [14
 
 
 
-
 ]
-<Plots/fig-opportunity-stability.png, id=256, 722.7pt x 289.08pt>
+<Plots/fig-opportunity-stability.png, id=253, 722.7pt x 289.08pt>
 File: Plots/fig-opportunity-stability.png Graphic file (type png)
 <use Plots/fig-opportunity-stability.png>
-Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 176.
+Package pdftex.def Info: Plots/fig-opportunity-stability.png  used on input line 177.
 (pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
  [15
 
 
  <./Plots/fig-opportunity-stability.png>]
-<Plots/fig-yules-q.png, id=262, 722.7pt x 289.08pt>
+<Plots/fig-yules-q.png, id=258, 722.7pt x 289.08pt>
 File: Plots/fig-yules-q.png Graphic file (type png)
 <use Plots/fig-yules-q.png>
-Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 184.
+Package pdftex.def Info: Plots/fig-yules-q.png  used on input line 185.
 (pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
  [16 <./Plots/fig-yules-q.png>]
-<Plots/fig-active-coefs.png, id=267, 722.7pt x 289.08pt>
+<Plots/fig-active-coefs.png, id=264, 722.7pt x 289.08pt>
 File: Plots/fig-active-coefs.png Graphic file (type png)
 <use Plots/fig-active-coefs.png>
-Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 192.
+Package pdftex.def Info: Plots/fig-active-coefs.png  used on input line 193.
 (pdftex.def)             Requested size: 469.75502pt x 187.90417pt.
 
 
@@ -391,26 +392,22 @@ Package natbib Warning: There were undefined citations.
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 6CD66FC3613BBD2725F4A03450CA2521;4225.
  ) 
 Here is how much of TeX's memory you used:
  11377 strings out of 469097
  182889 string characters out of 5457857
- 607797 words of memory out of 5000000
+ 607806 words of memory out of 5000000
  40198 multiletter control sequences out of 15000+600000
  636949 words of font info for 72 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,9n,79p,1885b,591s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 74i,9n,79p,1885b,583s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (17 pages, 514415 bytes).
+Output written on paper.pdf (17 pages, 514929 bytes).
 PDF statistics:
- 361 PDF objects out of 1000 (max. 8388607)
- 301 compressed objects within 4 object streams
+ 357 PDF objects out of 1000 (max. 8388607)
+ 298 compressed objects within 3 object streams
  71 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 
