@@ -1,22 +1,26 @@
 \begin{table}
-
-\caption{\label{tab:pooled-reg}Pooled Longitudinal Logistic Models (Waves 3-8, Clustered SEs).}
+\caption{\label{tab:pooled-reg}Pooled Longitudinal Logistic Model with Friendship Intimacy Interaction (Waves 3-8, Clustered SEs).}
 \centering
-\begin{tabular}[t]{lll}
+\begin{tabular}[t]{ll}
 \toprule
-  & Full Network & Intimate Ties Only\\
+ Predictor & Estimate (SE)\\
 \midrule
-Intercept (Catholic Baseline) & 0.109 (0.134) & 0.095 (0.171)\\
-Respondent: No Religion & 0.590 (0.200)** & 0.567 (0.250)*\\
-Respondent: Other Religion & 1.686 (0.546)** & 1.301 (0.334)***\\
-Respondent: Protestant & 0.524 (0.187)** & 0.551 (0.179)**\\
-Same Gender & 0.130 (0.132) & 0.177 (0.168)\\
+Intercept (Catholic Baseline) & 0.059 (0.271) \\
+Respondent: No Religion & 0.629 (0.713) \\
+Respondent: Other Religion & 5.198 (1.914)** \\
+Respondent: Protestant & 0.633 (0.734) \\
+Friendship Closeness (1-4) & 0.017 (0.075) \\
 \addlinespace
-Same Race & 0.257 (0.115)* & 0.268 (0.132)*\\
-Are Roommates & -0.149 (0.105) & -0.041 (0.127)\\
-Live in Same Dorm & -0.250 (0.124)* & -0.305 (0.157)\\
-Survey Wave (Time) & 0.021 (0.022) & 0.004 (0.027)\\
+Same Gender & 0.108 (0.135) \\
+Same Race & 0.271 (0.116)* \\
+Are Roommates & -0.142 (0.107) \\
+Live in Same Dorm & -0.254 (0.124)* \\
+Survey Wave (Time) & 0.020 (0.023) \\
+\addlinespace
+No Religion $\times$ Closeness & -0.013 (0.212) \\
+Other Religion $\times$ Closeness & -1.028 (0.486)* \\
+Protestant $\times$ Closeness & -0.029 (0.185) \\
 \bottomrule
-\multicolumn{3}{l}{\footnotesize * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$}
+\multicolumn{2}{l}{\footnotesize * $p < 0.05$, ** $p < 0.01$, *** $p < 0.001$}
 \end{tabular}
 \end{table}

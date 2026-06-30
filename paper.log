@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 16:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.28)  29 JUN 2026 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -346,55 +346,72 @@ Package hyperref Info: Link coloring ON on input line 27.
 
  [1
 
-{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-<Plots/fig-opportunity-stability.pdf, id=182, 505.89pt x 361.35pt>
+{/home/omarlizardo/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5]
+
+LaTeX Warning: Reference `fig:marginal-effects-intimacy' on page 6 undefined on input line 136.
+
+[6] (./Tabs/tbl-wave3-reg.tex) (./Tabs/tbl-pooled-reg.tex) (./Tabs/tbl-interaction-reg.tex)
+<Plots/fig-opportunity-stability.pdf, id=186, 505.89pt x 361.35pt>
 File: Plots/fig-opportunity-stability.pdf Graphic file (type pdf)
 <use Plots/fig-opportunity-stability.pdf>
-Package pdftex.def Info: Plots/fig-opportunity-stability.pdf  used on input line 99.
+Package pdftex.def Info: Plots/fig-opportunity-stability.pdf  used on input line 166.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [5 <./Plots/fig-opportunity-stability.pdf>]
-<Plots/fig-yules-q.pdf, id=196, 505.89pt x 361.35pt>
+<Plots/fig-yules-q.pdf, id=187, 505.89pt x 361.35pt>
 File: Plots/fig-yules-q.pdf Graphic file (type pdf)
 <use Plots/fig-yules-q.pdf>
-Package pdftex.def Info: Plots/fig-yules-q.pdf  used on input line 120.
+Package pdftex.def Info: Plots/fig-yules-q.pdf  used on input line 173.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- (./Tabs/tbl-wave3-reg.tex) [6 <./Plots/fig-yules-q.pdf>] (./Tabs/tbl-pooled-reg.tex) [7] (./Tabs/tbl-interaction-reg.tex)
-<Plots/fig-marginal-effects.pdf, id=220, 505.89pt x 361.35pt>
-File: Plots/fig-marginal-effects.pdf Graphic file (type pdf)
-<use Plots/fig-marginal-effects.pdf>
-Package pdftex.def Info: Plots/fig-marginal-effects.pdf  used on input line 161.
+<Plots/fig-marginal-effects-intimacy.pdf, id=188, 505.89pt x 361.35pt>
+File: Plots/fig-marginal-effects-intimacy.pdf Graphic file (type pdf)
+<use Plots/fig-marginal-effects-intimacy.pdf>
+Package pdftex.def Info: Plots/fig-marginal-effects-intimacy.pdf  used on input line 180.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
-<Plots/fig-active-coefs.pdf, id=222, 505.89pt x 361.35pt>
+<Plots/fig-active-coefs.pdf, id=189, 505.89pt x 361.35pt>
 File: Plots/fig-active-coefs.pdf Graphic file (type pdf)
 <use Plots/fig-active-coefs.pdf>
-Package pdftex.def Info: Plots/fig-active-coefs.pdf  used on input line 170.
+Package pdftex.def Info: Plots/fig-active-coefs.pdf  used on input line 187.
 (pdftex.def)             Requested size: 352.31625pt x 251.65857pt.
- [8] [9 <./Plots/fig-marginal-effects.pdf> <./Plots/fig-active-coefs.pdf>]
-Overfull \hbox (2.76855pt too wide) in paragraph at lines 185--186
-\OT1/cmr/m/n/10.95 This study has re-solved the group-size ar-ti-fact in com-par-a-tive ho-mophily by uti-liz-ing an opportunity-
+ [7] [8] [9 <./Plots/fig-opportunity-stability.pdf>] [10 <./Plots/fig-yules-q.pdf> <./Plots/fig-marginal-effects-intimacy.pdf>] [11 <./Plots/fig-active-coefs.pdf>]
+Overfull \hbox (1.6145pt too wide) in paragraph at lines 208--208
+[][]\OT1/cmr/bx/n/12 B. Why Dyadic Clus-tered Re-gres-sion is Math-e-mat-i-cally and Con-cep-tu-ally Prefer-
  []
 
-[10] (./paper.bbl [11]) [12] (./paper.aux)
+[12
+
+] (./paper.bbl [13]) [14] (./paper.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
  ***********
-Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 1693DDB4B33F35730789908E8C9E0B30;5575.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `paper.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `paper.out':
+(rerunfilecheck)             Before: B8102808819340AF20FB9C20FF59E172;3772
+(rerunfilecheck)             After:  1BF1FF78008269F785AAC482BDF29E62;3766.
  ) 
 Here is how much of TeX's memory you used:
  11339 strings out of 469097
- 181442 string characters out of 5457857
- 607380 words of memory out of 5000000
- 40169 multiletter control sequences out of 15000+600000
+ 181475 string characters out of 5457857
+ 611382 words of memory out of 5000000
+ 40164 multiletter control sequences out of 15000+600000
  636943 words of font info for 72 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 74i,10n,79p,1531b,552s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 74i,10n,79p,1531b,563s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/omarlizardo/.TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/omarlizardo/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on paper.pdf (12 pages, 264477 bytes).
+Output written on paper.pdf (14 pages, 267279 bytes).
 PDF statistics:
- 354 PDF objects out of 1000 (max. 8388607)
- 296 compressed objects within 3 object streams
- 67 named destinations out of 1000 (max. 500000)
- 197 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 355 PDF objects out of 1000 (max. 8388607)
+ 295 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 157 words of extra memory for PDF output out of 10000 (max. 10000000)
 
