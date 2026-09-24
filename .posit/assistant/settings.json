@@ -10,7 +10,14 @@
     },
     "bash": {
       "mkdir *": "allow",
-      "mv *": "allow"
+      "mv *": "allow",
+      "cd *": "allow",
+      "set *": "allow",
+      "echo *": "allow",
+      "git rm *": "allow",
+      "git mv *": "allow",
+      "git status *": "allow",
+      "head *": "allow"
     }
   }
 }
