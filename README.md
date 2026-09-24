@@ -58,30 +58,40 @@ the [NetHealth Data Portal](https://sites.nd.edu/nethealth/data-2/).
 
 ## 4. Running the Pipeline
 
-Run the scripts in `Code/` in order. **The pooled longitudinal analysis (steps 4/6) is the paper's
-primary test of the Minority Distinctiveness vs. Majority Exclusiveness hypotheses; the Wave 3
-cross-section (step 3) is a robustness check, and Yule's Q / opportunity-stability (steps 2, 5) are
-preliminary checks, not direct hypothesis tests.**
+Run the scripts in `Code/` in order. **The pooled longitudinal analysis (steps 3/4) is the paper's
+sole test of the Minority Distinctiveness vs. Majority Exclusiveness hypotheses; Yule's Q /
+opportunity-stability (steps 2, 5) are preliminary checks, not direct hypothesis tests. There is no
+Wave 3 cross-sectional check in the current manuscript** (see the note below).
 
 1. `Code/prep_data20240603.R` — legacy cleaning script producing the analysis-ready data frames.
 2. `Code/01_longitudinal_descriptives.R` — preliminary check: group-level Yule's Q across all 8
    waves; saves `Plots/fig-yules-q.png` directly (matches the figure included in `paper.tex`).
-3. `Code/02_dyadic_models.R` — robustness check: Wave 3 nested dyadic logistic regressions with
-   opportunity offset; prints group-level ego/tie sample sizes (matches `Tabs/tbl-wave3-reg.tex`).
-4. `Code/02_dyadic_models_pooled.R` — **primary analysis**: pooled Waves 3–8 dyadic logistic
-   regressions with clustered SEs; prints group-level ego/tie sample sizes (matches
+3. `Code/02_dyadic_models_pooled.R` — **primary (and only) regression analysis**: pooled Waves 3–8
+   dyadic logistic regressions with clustered SEs; prints group-level ego/tie sample sizes (matches
    `Tabs/tbl-pooled-interaction-reg.tex`).
-5. `Code/02_dyadic_models_interaction.R` — Time × Religion and Intimacy × Religion interaction
+4. `Code/02_dyadic_models_interaction.R` — Time × Religion and Intimacy × Religion interaction
    models, feeding the interaction columns of `Tabs/tbl-pooled-interaction-reg.tex`.
-6. `Code/04_plot_opportunity_stability.R` (preliminary check figure), `Code/05_plot_active_coefficients.R`
+5. `Code/04_plot_opportunity_stability.R` (preliminary check figure), `Code/05_plot_active_coefficients.R`
    (primary analysis figure) — both now save directly to the `Plots/fig-*.png` filenames actually
    `\includegraphics`-ed in `paper.tex`, so re-running them regenerates the manuscript's figures.
-7. `Code/07_yules_q_permutation_test.R` — degree-preserving permutation null test for Yule's Q;
+6. `Code/07_yules_q_permutation_test.R` — degree-preserving permutation null test for Yule's Q;
    writes `Data/yules_q_permutation_null.csv` and `Tabs/tbl-yules-q-null.tex`.
 
 `Code/06_save_tables_html.R` generates standalone HTML supplementary tables (archived copies live
 in `Archive/supplementary_html_tables/`); it is **not** the source of the `.tex` tables included in
 `paper.tex` and can drift out of sync with them — regenerate before relying on it.
+
+**Wave 3 cross-section and wave-by-wave decomposition, removed 2026-09-24:** the manuscript
+previously included a Wave 3-only robustness check (`Tabs/tbl-wave3-reg.tex`) and a per-wave
+decomposition of the No Religion coefficient (`Plots/fig-wave-by-wave-norelig.png`), both centered
+on a divergence between the Wave 3 cross-section and the pooled result for the No Religion group.
+The user judged this added mostly qualification and repetition without changing the paper's
+conclusions, so both were dropped. `Code/02_dyadic_models.R` (produced the Wave 3 table),
+`Code/08_wave_by_wave_norelig.R`, and `Code/09_plot_wave_by_wave_norelig.R` (produced the
+decomposition) still run but are archived in `Archive/orphaned_scripts/` and are no longer part of
+the manuscript pipeline; their outputs were moved to `Archive/orphaned_tables/` and
+`Archive/orphaned_plots/`. See AGENTS.md for the full history of what these analyses found before
+removal.
 
 ### Compile the Manuscript
 
