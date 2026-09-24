@@ -1,38 +1,39 @@
-This is BibTeX, Version 0.99e (TeX Live 2026)
+This is BibTeX, Version 0.99d (TeX Live 2022/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: paper.aux
 The style file: apalike.bst
 A level-1 auxiliary file: Tabs/tbl-wave3-reg.aux
 A level-1 auxiliary file: Tabs/tbl-pooled-interaction-reg.aux
+A level-1 auxiliary file: Tabs/tbl-yules-q-null.aux
 Database file #1: references.bib
 You've used 23 entries,
             1935 wiz_defined-function locations,
-            623 strings with 7704 characters,
-and the built_in function-call counts, 9510 in all, are:
-= -- 956
-> -- 351
+            624 strings with 7726 characters,
+and the built_in function-call counts, 9541 in all, are:
+= -- 958
+> -- 356
 < -- 16
-+ -- 125
-- -- 114
-* -- 821
-:= -- 1621
++ -- 127
+- -- 116
+* -- 825
+:= -- 1627
 add.period$ -- 70
 call.type$ -- 23
-change.case$ -- 168
+change.case$ -- 169
 chr.to.int$ -- 22
 cite$ -- 23
 duplicate$ -- 351
 empty$ -- 684
-format.name$ -- 151
-if$ -- 1863
+format.name$ -- 153
+if$ -- 1868
 int.to.chr$ -- 2
 int.to.str$ -- 0
 missing$ -- 26
 newline$ -- 118
 num.names$ -- 71
-pop$ -- 136
+pop$ -- 137
 preamble$ -- 1
-purify$ -- 171
+purify$ -- 172
 quote$ -- 0
 skip$ -- 273
 stack$ -- 0
