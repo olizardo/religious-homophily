@@ -4,7 +4,10 @@
 # Created: 2026-06-23
 # Purpose: Fit dyadic (tie-level) logistic regression models predicting 
 #          same-religion friendship ties, controlling for alternative 
-#          homophilies (gender, race) and physical foci (roommates, dorms).
+#          homophilies (gender, race), physical foci (roommates, dorms), and
+#          (Model 4, added 2026-09-24 per Reviewer 1) ego activity level and
+#          alter popularity, to separate homophily from degree-based
+#          confounds.
 
 # Load libraries -----------------------------------------------------------
 library(here)
@@ -14,6 +17,19 @@ library(dplyr)
 # Load data ---------------------------------------------------------------
 df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
+
+# Degree Measures (Reviewer 1: activity/popularity confound) ---------------
+# Computed on the FULL Wave 3 nomination roster (before filtering to Student
+# alters with known religion), since ego activity and alter popularity are
+# properties of the underlying nomination behavior, not of the analytic
+# subsample used for the homophily regression.
+ego_degree_w3 <- df_netsurv |>
+  filter(wave == "Wave3") |>
+  count(egoid, name = "ego_out_degree")
+
+alter_pop_w3 <- df_netsurv |>
+  filter(wave == "Wave3") |>
+  count(alterid, name = "alter_popularity")
 
 # Prepare Dyadic (Tie-level) Dataset for Wave 3 ----------------------------
 df_w3 <- df_netsurv |> 
@@ -44,6 +60,8 @@ alter_props <- df_w3 |>
 # Merge proportions and construct dyadic variables
 df_w3_clean <- df_w3 |>
   left_join(alter_props |> select(alt_rel, prop), by = c("ego_rel" = "alt_rel")) |>
+  left_join(ego_degree_w3, by = "egoid") |>
+  left_join(alter_pop_w3, by = "alterid") |>
   mutate(
     # Outcome: whether tie is homophilous
     same_religion = ifelse(ego_rel == alt_rel, 1, 0),
@@ -79,7 +97,12 @@ df_w3_clean <- df_w3 |>
       discussrelig_2 == "1-2 times a week" ~ 4,
       discussrelig_2 == "Three times a week or more" ~ 5,
       TRUE ~ NA_real_
-    )
+    ),
+    
+    # Ego activity level (log out-degree) and alter popularity (log in-degree),
+    # to separate homophily from degree-based confounds (Reviewer 1)
+    log_ego_degree = log(ego_out_degree),
+    log_alter_pop = log1p(alter_popularity)
   )
 
 # Fit Nested Logistic Regression Models with Opportunity Offset -------------
@@ -102,6 +125,14 @@ model3 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + sa
               offset = opportunity_offset, 
               data = df_w3_clean)
 
+# Model 4: Adding Ego Activity (Out-Degree) and Alter Popularity (In-Degree)
+# Reviewer 1 asked that homophily be separated from "main effect" activity
+# differences by religion; these degree terms address that directly.
+model4 <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num + log_ego_degree + log_alter_pop, 
+              family = binomial, 
+              offset = opportunity_offset, 
+              data = df_w3_clean)
+
 # Summarize and Save Models ------------------------------------------------
 
 cat("\n======================================================\n")
@@ -118,6 +149,17 @@ cat("\n======================================================\n")
 cat("MODEL 3: Adding Religious Salience Proxy\n")
 cat("======================================================\n")
 print(summary(model3))
+
+cat("\n======================================================\n")
+cat("MODEL 4: Adding Ego Activity / Alter Popularity (Degree)\n")
+cat("======================================================\n")
+print(summary(model4))
+
+cat("\n--- Ego out-degree and alter popularity by religious group (Wave 3) ---\n")
+df_w3_clean |>
+  group_by(ego_rel) |>
+  summarise(mean_ego_out_degree = mean(ego_out_degree, na.rm = TRUE), .groups = "drop") |>
+  print()
 
 # Note on clustered standard errors:
 # If the sandwich and lmtest packages are installed, robust standard errors 
@@ -142,7 +184,11 @@ m2_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_off
 m3_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender),
                                     !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num),
                                     !is.na(discuss_num))
+m4_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender),
+                                    !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num),
+                                    !is.na(discuss_num), !is.na(log_ego_degree), !is.na(log_alter_pop))
 
 report_group_n(m1_sample, "Model 1 sample sizes")
 report_group_n(m2_sample, "Model 2 sample sizes")
 report_group_n(m3_sample, "Model 3 sample sizes")
+report_group_n(m4_sample, "Model 4 sample sizes")

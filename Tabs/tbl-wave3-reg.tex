@@ -1,36 +1,35 @@
 \begin{table}[htbp]
 \caption{\label{tab:wave3-reg}Nested Dyadic Logistic Regressions Predicting Same-Religion Ties (Wave 3).}
 \centering
-\begin{tabular}[t]{llll}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}[t]{lllll}
 \toprule
-  & Model 1 & Model 2 & Model 3\\
+  & Model 1 & Model 2 & Model 3 & Model 4\\
 \midrule
-Intercept & 0.148* (0.069) & -0.344 (0.320) & 0.289 (0.319)\\
+Intercept & 0.148* (0.069) & -0.057 (0.364) & 0.031 (0.454) & -0.220 (0.625)\\
  \\ 
-Ego: No Religion & 0.698** (0.210) & 0.660** (0.220) & 0.577* (0.227)\\
-Ego: Other Religion & 2.044*** (0.356) & 1.957*** (0.388) & 1.803*** (0.405)\\
-Ego: Protestant & 0.631** (0.193) & 0.615** (0.199) & 0.603** (0.201)\\
+Ego: No Religion & 0.698*** (0.210) & 0.164 (0.267) & 0.147 (0.269) & 0.128 (0.270)\\
+Ego: Other Religion & 2.044*** (0.356) & 2.076*** (0.361) & 2.062*** (0.361) & 2.087*** (0.362)\\
+Ego: Protestant & 0.631** (0.193) & 0.600** (0.199) & 0.589** (0.200) & 0.625** (0.201)\\
 
-Ego: Man & --- & -0.068 (0.127) & -0.082 (0.129)\\
-Ego: African-American & --- & 0.312 (0.350) & 0.636 (0.373)\\
-Ego: Asian-American & --- & -0.233 (0.226) & -0.260 (0.242)\\
-Ego: Foreign Student & --- & 0.208 (0.364) & -0.163 (0.374)\\
-Ego: Latino/a & --- & 0.223 (0.218) & 0.213 (0.234)\\
-Ego: Other & --- & 0.926 (0.893) & 1.015 (0.892)\\
-Tie: Gender Homophily & --- & 0.093 (0.185) & 0.088 (0.189)\\
-Tie: Race Homophily & --- & 0.257 (0.174) & 0.245 (0.176)\\
-Tie: Roommates & --- & -0.171 (0.167) & -0.200 (0.168)\\
-Tie: Same Dorm & --- & -0.220 (0.175) & -0.264 (0.178)\\
-Tie: Subjective Closeness & --- & -0.034 (0.064) & -0.037 (0.065)\\
-Ego: Religious Salience & --- & --- & -0.017 (0.046)\\
+Tie: Gender Homophily & --- & 0.073 (0.197) & 0.081 (0.200) & 0.060 (0.201)\\
+Tie: Race Homophily & --- & 0.184 (0.137) & 0.170 (0.140) & 0.176 (0.140)\\
+Tie: Roommates & --- & -0.245 (0.172) & -0.268 (0.173) & -0.255 (0.174)\\
+Tie: Same Dorm & --- & -0.275 (0.184) & -0.307 (0.186) & -0.292 (0.187)\\
+Tie: Subjective Closeness & --- & 0.080 (0.098) & 0.076 (0.099) & 0.092 (0.100)\\
+Ego: Religious Salience & --- & --- & -0.011 (0.068) & -0.019 (0.069)\\
+Ego: Activity (log out-deg.) & --- & --- & --- & 0.195 (0.140)\\
+Alter: Popularity (log in-deg.) & --- & --- & --- & -0.297 (0.178)\\
 \midrule
-\multicolumn{4}{l}{\textit{Group sample sizes (unique egos / dyadic ties)}}\\
-Catholic & 264 / 1,555 & 252 / 1,498 & 247 / 1,471\\
-No Religion & 35 / 192 & 25 / 166 & 25 / 166\\
-Other Religion & 16 / 55 & 15 / 54 & 15 / 54\\
-Protestant & 39 / 222 & 36 / 210 & 36 / 210\\
+\multicolumn{5}{l}{\textit{Group sample sizes (unique egos / dyadic ties)}}\\
+Catholic & 264 / 1,555 & 252 / 1,498 & 247 / 1,471 & 247 / 1,471\\
+No Religion & 35 / 192 & 25 / 166 & 25 / 166 & 25 / 166\\
+Other Religion & 16 / 55 & 15 / 54 & 15 / 54 & 15 / 54\\
+Protestant & 39 / 222 & 36 / 210 & 36 / 210 & 36 / 210\\
 \bottomrule
-\multicolumn{4}{l}{\rule{0pt}{1em}\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$}\\
-\multicolumn{4}{p{0.95\textwidth}}{\footnotesize Sample sizes decline slightly from Model 1 to Models 2--3 due to listwise deletion on structural and salience covariates. The Other Religion group's small N (15--16 egos) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis.}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$}\\
+\multicolumn{5}{p{0.98\textwidth}}{\footnotesize Sample sizes decline slightly from Model 1 to Models 2--4 due to listwise deletion on structural, salience, and degree covariates. The Other Religion group's small N (15--16 egos) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis. Model 4 adds each ego's log out-degree (number of alters nominated that wave, capturing overall gregariousness/activity) and each alter's log in-degree (number of times nominated that wave, capturing popularity), computed from the full Wave 3 nomination roster (Reviewer 1). Neither term meaningfully attenuates the Other Religion or Protestant coefficients, and No Religion is already statistically indistinguishable from the Catholic baseline once structural controls are added at Model 2, independent of degree.}\\
 \end{tabular}
+}
 \end{table}

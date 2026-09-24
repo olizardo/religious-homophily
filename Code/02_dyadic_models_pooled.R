@@ -19,6 +19,19 @@ library(lmtest)
 df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
+# Degree Measures (Reviewer 1: activity/popularity confound) ---------------
+# Computed per wave on the FULL nomination roster (before filtering to
+# Student alters with known religion), since ego activity and alter
+# popularity are properties of the underlying nomination behavior, not of
+# the analytic subsample used for the homophily regression.
+ego_degree_all <- df_netsurv |>
+  filter(wave %in% paste0("Wave", 3:8)) |>
+  count(wave, egoid, name = "ego_out_degree")
+
+alter_pop_all <- df_netsurv |>
+  filter(wave %in% paste0("Wave", 3:8)) |>
+  count(wave, alterid, name = "alter_popularity")
+
 # Prepare Pooled Long-Format Dyadic Dataset (Waves 3-8) -------------------
 df_all <- df_netsurv |> 
   filter(wave %in% paste0("Wave", 3:8)) |> # Focus on waves with complete controls
@@ -50,6 +63,8 @@ wave_alter_props <- df_all |>
 # Merge proportions and construct dyadic variables
 df_pooled <- df_all |>
   left_join(wave_alter_props |> select(wave, alt_rel, prop), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  left_join(ego_degree_all, by = c("wave", "egoid")) |>
+  left_join(alter_pop_all, by = c("wave", "alterid")) |>
   mutate(
     # Outcome: whether tie is homophilous
     same_religion = ifelse(ego_rel == alt_rel, 1, 0),
@@ -75,13 +90,29 @@ df_pooled <- df_all |>
       discussrelig_2 == "1-2 times a week" ~ 4,
       discussrelig_2 == "Three times a week or more" ~ 5,
       TRUE ~ NA_real_
+    ),
+    
+    # Ego activity level (log out-degree) and alter popularity (log in-degree),
+    # to separate homophily from degree-based confounds (Reviewer 1)
+    log_ego_degree = log(ego_out_degree),
+    log_alter_pop = log1p(alter_popularity),
+    
+    # Intimacy control (added 2026-09-24 for consistency with the Wave 3
+    # specification in 02_dyadic_models.R; previously omitted here)
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
     )
   )
 
 # Filter to complete cases for modeling
 df_pooled_clean <- df_pooled |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(discuss_num))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(discuss_num),
+         !is.na(log_ego_degree), !is.na(log_alter_pop), !is.na(close_num))
 
 cat("Total pooled ties for regression (Waves 3-8):", nrow(df_pooled_clean), "\n")
 cat("Number of unique egos:", n_distinct(df_pooled_clean$egoid), "\n\n")
@@ -95,7 +126,15 @@ model1_pooled <- glm(same_religion ~ ego_rel,
                      data = df_pooled_clean)
 
 # Model 2: Adding Demographic and Physical Foci Controls (Pooled)
-model2_pooled <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + discuss_num, 
+model2_pooled <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num, 
+                     family = binomial, 
+                     offset = opportunity_offset, 
+                     data = df_pooled_clean)
+
+# Model 3: Adding Ego Activity (Out-Degree) and Alter Popularity (In-Degree)
+# Reviewer 1 asked that homophily be separated from "main effect" activity
+# differences by religion; these degree terms address that directly.
+model3_pooled <- glm(same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + discuss_num + log_ego_degree + log_alter_pop, 
                      family = binomial, 
                      offset = opportunity_offset, 
                      data = df_pooled_clean)
@@ -116,9 +155,21 @@ cat("========================================================================\n"
 m2_clustered <- coeftest(model2_pooled, vcov = vcovCL(model2_pooled, cluster = df_pooled_clean$egoid))
 print(m2_clustered)
 
+cat("\n========================================================================\n")
+cat("POOLED MODEL 3: Adding Ego Activity / Alter Popularity (Clustered SE)\n")
+cat("========================================================================\n")
+m3_clustered <- coeftest(model3_pooled, vcov = vcovCL(model3_pooled, cluster = df_pooled_clean$egoid))
+print(m3_clustered)
+
+cat("\n--- Mean ego out-degree by religious group (pooled Waves 3-8) ---\n")
+df_pooled_clean |>
+  group_by(ego_rel) |>
+  summarise(mean_ego_out_degree = mean(ego_out_degree, na.rm = TRUE), .groups = "drop") |>
+  print()
+
 # Save Clustered Tables to disk for easy retrieval -----------------------
 # Save results to Rds
-saveRDS(list(model1 = m1_clustered, model2 = m2_clustered), here("Data", "pooled_clusted_models.RDS"))
+saveRDS(list(model1 = m1_clustered, model2 = m2_clustered, model3 = m3_clustered), here("Data", "pooled_clusted_models.RDS"))
 
 # Group Sample Sizes (Egos / Ties) -------------------------------------------
 # Reported alongside coefficients in Tabs/tbl-pooled-interaction-reg.tex so

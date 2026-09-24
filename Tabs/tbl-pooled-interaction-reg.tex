@@ -1,40 +1,39 @@
 \begin{table}[htbp]
 \caption{\label{tab:pooled-interaction-reg}Pooled Longitudinal and Interaction Models (Waves 3-8, Clustered SEs).}
 \centering
-\begin{tabular}[t]{lll}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}[t]{lllll}
 \toprule
-  & Pooled & Interaction\\
+  & Model 1 & Model 2 & Model 3 (+Degree) & Interaction (+Degree)\\
 \midrule
-Intercept & 0.043 (0.251) & -0.245* (0.130) \\
+Intercept & 0.274*** (0.065) & 0.154 (0.313) & -0.113 (0.417) & -0.080 (0.402) \\
  \\ 
-Ego: No Religion & 0.576** (0.199) & 0.582** (0.201) \\
-Ego: Other Religion & 1.778*** (0.531) & 1.388*** (0.248) \\
-Ego: Protestant & 0.526** (0.184) & 0.618** (0.188) \\
+Ego: No Religion & 0.570** (0.200) & 0.577** (0.198) & 0.570** (0.197) & 0.383 (0.231) \\
+Ego: Other Religion & 1.758** (0.536) & 1.775*** (0.525) & 1.765*** (0.526) & 1.734** (0.552) \\
+Ego: Protestant & 0.522** (0.182) & 0.525** (0.184) & 0.526** (0.185) & 0.648** (0.229) \\
 
-Ego: Man & 0.013 (0.055) & 0.015 (0.056) \\
-Ego: African-American & 0.948*** (0.157) & 0.943*** (0.158) \\
-Ego: Asian-American & 0.112 (0.106) & 0.108 (0.107) \\
-Ego: Foreign Student & 0.881*** (0.151) & 0.875*** (0.153) \\
-Ego: Latino/a & 0.304** (0.100) & 0.300** (0.102) \\
-Ego: Other & 0.171 (0.560) & 0.168 (0.562) \\
-Tie: Gender Homophily & 0.115 (0.135) & 0.112 (0.079) \\
-Tie: Race Homophily & 0.265* (0.118) & 0.431*** (0.075) \\
-Tie: Roommates & -0.147 (0.106) & -0.107 (0.075) \\
-Tie: Same Dorm & -0.259* (0.124) & -0.212** (0.076) \\
-Ego: Religious Salience & 0.036 (0.061) & 0.036 (0.061) \\
-Tie: Subjective Closeness & 0.048 (0.029) & 0.048 (0.029) \\
-Tie: Wave Number & 0.021 (0.019) & 0.021 (0.019) \\
-Ego: No Religion x Wave & --- & 0.076 (0.083) \\
-Ego: Other Religion x Wave & --- & 0.042 (0.112) \\
-Ego: Protestant x Wave & --- & -0.063 (0.076) \\
+Tie: Gender Homophily & --- & 0.118 (0.135) & 0.108 (0.134) & 0.106 (0.134) \\
+Tie: Race Homophily & --- & 0.266* (0.118) & 0.259* (0.117) & 0.257* (0.117) \\
+Tie: Roommates & --- & -0.142 (0.108) & -0.112 (0.109) & -0.113 (0.108) \\
+Tie: Same Dorm & --- & -0.259* (0.124) & -0.252* (0.124) & -0.253* (0.124) \\
+Tie: Subjective Closeness & --- & -0.033 (0.075) & -0.017 (0.075) & -0.009 (0.075) \\
+Ego: Religious Salience & --- & 0.037 (0.061) & 0.039 (0.060) & --- \\
+Ego: Activity (log out-deg.) & --- & --- & 0.165 (0.093) & 0.175 (0.091) \\
+Alter: Popularity (log in-deg.) & --- & --- & -0.226 (0.126) & -0.212 (0.128) \\
+Tie: Wave Number & --- & --- & --- & 0.016 (0.027) \\
+Ego: No Religion x Wave & --- & --- & --- & 0.083 (0.079) \\
+Ego: Other Religion x Wave & --- & --- & --- & 0.016 (0.105) \\
+Ego: Protestant x Wave & --- & --- & --- & -0.054 (0.072) \\
 \midrule
-\multicolumn{3}{l}{\textit{Group sample sizes (unique egos / dyadic ties), Waves 3--8 pooled}}\\
-Catholic & \multicolumn{2}{l}{328 / 7,585} \\
-No Religion & \multicolumn{2}{l}{37 / 676} \\
-Other Religion & \multicolumn{2}{l}{19 / 350} \\
-Protestant & \multicolumn{2}{l}{46 / 1,114} \\
+\multicolumn{5}{l}{\textit{Group sample sizes (unique egos / dyadic ties), Waves 3--8 pooled, fully-adjusted sample}}\\
+Catholic & \multicolumn{4}{l}{327 / 7,580} \\
+No Religion & \multicolumn{4}{l}{37 / 676} \\
+Other Religion & \multicolumn{4}{l}{19 / 350} \\
+Protestant & \multicolumn{4}{l}{46 / 1,114} \\
 \bottomrule
-\multicolumn{3}{l}{\rule{0pt}{1em}\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$}\\
-\multicolumn{3}{p{0.9\textwidth}}{\footnotesize Egos are counted once even if they contribute ties across multiple waves. The Other Religion group's small N (19 egos across the entire six-wave panel) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis.}\\
+\multicolumn{5}{l}{\rule{0pt}{1em}\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$}\\
+\multicolumn{5}{p{1.0\textwidth}}{\footnotesize Egos are counted once even if they contribute ties across multiple waves; standard errors clustered by egoid throughout. Model 3 and the Interaction model add each ego's log out-degree (nominations made that wave) and each alter's log in-degree (nominations received that wave), computed from the full wave-specific nomination roster, to test whether opportunity-adjusted homophily reflects a degree/activity confound rather than affiliation itself (Reviewer 1). Neither degree term meaningfully attenuates the three group coefficients, though ego activity and alter popularity are themselves marginally associated with same-religion tie formation ($p \approx 0.07$--$0.10$). The Other Religion group's small N (19 egos across the entire six-wave panel) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis.}\\
 \end{tabular}
+}
 \end{table}

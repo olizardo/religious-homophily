@@ -19,6 +19,15 @@ library(lmtest)
 df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
+# Degree Measures (Reviewer 1: activity/popularity confound) ---------------
+ego_degree_all <- df_netsurv |>
+  filter(wave %in% paste0("Wave", 3:8)) |>
+  count(wave, egoid, name = "ego_out_degree")
+
+alter_pop_all <- df_netsurv |>
+  filter(wave %in% paste0("Wave", 3:8)) |>
+  count(wave, alterid, name = "alter_popularity")
+
 # Prepare Pooled Dataset (Waves 3-8) --------------------------------------
 df_all <- df_netsurv |> 
   filter(wave %in% paste0("Wave", 3:8)) |>
@@ -50,6 +59,8 @@ wave_alter_props <- df_all |>
 # Merge proportions and construct centered wave variable
 df_pooled <- df_all |>
   left_join(wave_alter_props |> select(wave, alt_rel, prop), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  left_join(ego_degree_all, by = c("wave", "egoid")) |>
+  left_join(alter_pop_all, by = c("wave", "alterid")) |>
   mutate(
     # Outcome: whether tie is homophilous
     same_religion = ifelse(ego_rel == alt_rel, 1, 0),
@@ -70,16 +81,32 @@ df_pooled <- df_all |>
     
     # Continuous centered wave (Wave 3 = 0)
     # This centers interpretation of main effects directly at Wave 3 (Sophomore baseline)
-    wave_num = as.numeric(gsub("Wave", "", wave)) - 3
+    wave_num = as.numeric(gsub("Wave", "", wave)) - 3,
+    
+    # Ego activity level (log out-degree) and alter popularity (log in-degree),
+    # to separate homophily from degree-based confounds (Reviewer 1)
+    log_ego_degree = log(ego_out_degree),
+    log_alter_pop = log1p(alter_popularity),
+    
+    # Intimacy control (added 2026-09-24 for consistency with the Wave 3
+    # and pooled specifications; previously omitted here)
+    close_num = case_when(
+      close == "Distant" ~ 1,
+      close == "LessThanClose" ~ 2,
+      close == "MerelyClose" ~ 3,
+      close == "EspeciallyClose" ~ 4,
+      TRUE ~ NA_real_
+    )
   ) |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
-         !is.na(same_race), !is.na(roommates), !is.na(samedorm))
+         !is.na(same_race), !is.na(roommates), !is.na(samedorm),
+         !is.na(log_ego_degree), !is.na(log_alter_pop), !is.na(close_num))
 
 # Fit Interaction Model ---------------------------------------------------
 cat("Fitting interaction model on", nrow(df_pooled), "ties across", n_distinct(df_pooled$egoid), "unique egos...\n")
 
 model_interaction <- glm(
-  same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm, 
+  same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm + close_num + log_ego_degree + log_alter_pop, 
   family = binomial, 
   offset = opportunity_offset, 
   data = df_pooled
