@@ -17,7 +17,10 @@
       "git rm *": "allow",
       "git mv *": "allow",
       "git status *": "allow",
-      "head *": "allow"
+      "head *": "allow",
+      "git push *": "allow",
+      "git add *": "allow",
+      "git commit *": "allow"
     }
   }
 }
