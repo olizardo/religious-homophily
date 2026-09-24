@@ -123,5 +123,5 @@ ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group, group = G
   )
 
 # Save Plot
-ggsave(here("Plots", "plot_active_homophily_coefficients.png"), width = 7, height = 4.5, dpi = 300)
-cat("Active homophily coefficients plot successfully generated and saved to Plots/plot_active_homophily_coefficients.png\n")
+ggsave(here("Plots", "fig-active-coefs.png"), width = 7, height = 4.5, dpi = 300)
+cat("Active homophily coefficients plot successfully generated and saved to Plots/fig-active-coefs.png\n")
