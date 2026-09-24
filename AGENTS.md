@@ -1,19 +1,33 @@
+
 # Memory File: NetHealth Religion Project Revival
 This file serves as a comprehensive memory log to help resume work, understand the analytical pipeline, and maintain historical context for future sessions.
 
 ---
 
-## 1. Project Context & Objectives
-This project analyzes **religious homophily and friendship formation** among college students using the **NetHealth longitudinal dataset** (from the University of Notre Dame). 
+## 0. Repository State — READ FIRST (as of 2026-09-23)
 
-The project has been completely restructured to address and resolve severe methodological flaws identified by journal reviewers:
-1.  **Resolved the Group Size Artifact:** Corrected a calculation in the original draft that aggregated individual-level "normalized EI" indices. By shifting to group-level, baseline-adjusted **Yule's Q**, we demonstrated that **all religious groups exhibit robust homophily** in every wave.
+**The repository is currently mid-merge with unresolved git conflicts.** Before doing any further work, check `git status`. Context:
+
+- A remote named `overleaf` was added, pointing at `https://git.overleaf.com/6a42df9dfd3533afd9ecc38d` (the project's Overleaf git bridge). It requires no additional auth setup on this machine — `git fetch overleaf` and `git ls-remote overleaf` both worked without a credential prompt.
+- The Overleaf project has **no shared git history** with this repo ("unrelated histories") — it was likely created by uploading a zip rather than cloning via git. Its content is close to, but not identical to, this repo's pre-session baseline.
+- We ran `git merge overleaf/main --allow-unrelated-histories`, which produced conflicts (all "both added") in: `AGENTS.md` (this file), `Code/02_dyadic_models.R`, `Code/02_dyadic_models_pooled.R`, `Tabs/tbl-interaction-reg.tex`, `Tabs/tbl-pooled-reg.tex`, `Tabs/tbl-wave3-reg.tex`, `Tabs/tbl-pooled-interaction-reg.tex`, plus build artifacts `paper.tex`, `paper.aux`, `paper.log`, `paper.pdf`, `Tabs/tbl-wave3-reg.aux`, `Tabs/tbl-pooled-interaction-reg.aux`.
+- **This file's conflict has been resolved** by replacing it with this consolidated version (reflecting both branches' history) — it still needs `git add AGENTS.md` to mark it resolved if that hasn't been done yet.
+- **The remaining conflicts (especially `paper.tex`, the two `Code/02_dyadic_models*.R` scripts, and the `Tabs/*.tex` regression tables) are NOT yet resolved.** Diff sizes were checked and are modest (e.g., `Code/02_dyadic_models.R` differs by 23 deleted lines; `Tabs/tbl-interaction-reg.tex` by ~13 lines), suggesting Overleaf's version is close to this repo's pre-session baseline rather than containing large independent edits — but this has not been fully verified paragraph-by-paragraph the way `AGENTS.md` was. **Do not blindly resolve these by taking one side** — inspect `git diff HEAD:<file> overleaf/main:<file>` for each and reconcile deliberately, since Overleaf may contain edits made directly in the web editor that never existed locally. Build-artifact conflicts (`.aux`, `.log`, `.pdf`) can simply be resolved by taking `--ours` and recompiling with `latexmk -pdf paper.tex`.
+- Once all conflicts are resolved, finish with `git add -A && git commit`. Only push back to `overleaf` (via `git push overleaf HEAD:main`) or to `origin`/`upstream` (GitHub) after the user explicitly confirms — these are destructive/consequential actions on shared resources.
+- Local branch is `my-new-branch`, currently 1 commit ahead of `origin/my-new-branch` (not yet pushed to GitHub either).
+
+---
+
+## 1. Project Context & Objectives
+This project analyzes **religious homophily and friendship formation** among college students using the **NetHealth longitudinal dataset** (from the University of Notre Dame).
+
+The project has been completely restructured to address and resolve severe methodological flaws identified by two journal reviewers:
+1.  **Resolved the Group Size Artifact:** Corrected a calculation in the original draft that aggregated individual-level "normalized EI" indices. By shifting to group-level, baseline-adjusted **Yule's Q**, we demonstrated that **all religious groups exhibit robust homophily** in every wave — though see Section 3 below on the limits of this claim.
 2.  **Addressed Confounding Foci & Alternative Homophilies:** Shifted from aggregate, ego-level regressions to **dyadic (tie-level) logistic regressions**. This allows us to control for physical/social foci (same dorm, roommates) and demographic homophilies (gender, race).
 3.  **Formal Causal Mediation & Scaling Artifacts:** Conducted formal causal mediation analysis to show that physical foci (dorms/roommates) do *not* mediate secular ("No Religion") homophily, proving that earlier nested model coefficient drops were merely logit rescaling artifacts.
-4.  **Longitudinal & Intimacy Interactions via Marginal Effects:** Evaluated interactions of religious affiliation over time (Waves 3-8) and across friendship intensity (1-4 scale) using proper probability-scale marginal effects to avoid non-linear scaling issues. 
-5.  **Updated Dyadic Regression Scripts:**
-    *   Updated `Code/02_dyadic_models_pooled.R` to include `discuss_num` (Religious Salience) as a control in the pooled regression models.
-    *   Updated LaTeX tables (`Tabs/tbl-wave3-reg.tex`, `Tabs/tbl-pooled-interaction-reg.tex`) to standardize variable labeling (using "Tie: " prefix for non-ego variables) and confirmed Religious Salience as a predictor in pooled models.
+4.  **Longitudinal & Intimacy Interactions via Marginal Effects:** Evaluated interactions of religious affiliation over time (Waves 3-8) and across friendship intensity (1-4 scale) using proper probability-scale marginal effects to avoid non-linear scaling issues.
+5.  **Removed ERGMs, then confirmed why:** Discarded whole-network Exponential Random Graph Models. This was originally done because subsetting to within-cohort ties decimated the minority sample size. A 2026-09-23 session independently confirmed ERGMs are infeasible for a different, more fundamental reason: only ~32% of nominated alter IDs in the network survey resolve to actual surveyed egos, so there is no valid closed sociomatrix to fit a whole-network model on.
+6.  **Updated Dyadic Regression Scripts (earlier revision):** Added `discuss_num` (Religious Salience) as a control in the pooled regression models, and standardized LaTeX table variable labeling (using "Tie: " prefix for non-ego variables).
 
 ---
 
@@ -28,7 +42,7 @@ The project has been completely restructured to address and resolve severe metho
         *   `race_1`: Ego race (White, African-American, Asian-American, Latino/a, Foreign Student, Other).
         *   `discussrelig_2`: Frequency of discussing religion (used as religious salience proxy).
 *   **`NetWorkSurvey(2-28-20).csv`:** Longitudinal ego-network survey detailing nominated ties.
-    *   *Keys:* `egoid` (the nominator), `alterid` (the nominated friend).
+    *   *Keys:* `egoid` (the nominator), `alterid` (the nominated friend). **Note:** only ~32% of `alterid` values in a given wave resolve to a known `egoid` in the Basic Survey — most nominated alters are not themselves study participants. This rules out whole-network models (ERGMs) that require a closed node set.
     *   *Key Variables:*
         *   `wave`: Wave indicator (`Wave1` to `Wave8`).
         *   `altrelucat`: Nominator-nominee relationship context (`Student` denotes on-campus peers).
@@ -39,40 +53,57 @@ The project has been completely restructured to address and resolve severe metho
         *   `samedorm`: Logical variable indicating if the alter lives in the same dorm.
         *   `close`: Friendship intimacy, modeled as an ordered 1-4 scale (Distant, Less Than Close, Merely Close, Especially Close).
 
+### B. Known group sizes (baseline, N=722, denominator includes <1% missing)
+Catholic 72.7%, No Religion 12.3%, Protestant 9.8%, Other Religion 4.6%. (An earlier draft inconsistently reported 73%/12.4%/9.9% in one section using a different denominator — this was reconciled on 2026-09-23; use the percentages above going forward.)
+
 ---
 
 ## 3. Mathematical & Statistical Architecture
 
 ### A. Group-Level Yule's Q (Longitudinal Trajectory)
-Yule's Q is a margin-free metric computed from the $4 \times 4$ mixing matrix $M$. It captures active sorting dynamics independent of the severe group size imbalances in our sample (range: -1 to +1, where 0 is random mixing).
+Yule's Q is a margin-free metric computed from the $4 \times 4$ mixing matrix $M$. Its *expected value* under random mixing is 0 regardless of group size (unlike the E-I index, whose expectation is $1-2p$). This makes it valid for testing, **within each group**, whether observed mixing departs from that group's own chance baseline.
+
+**Important limitation confirmed by simulation (2026-09-23):** Yule's Q's *magnitude* is NOT comparable across groups of very different sizes, even when the true underlying preference is identical. A simulation with an identical true excess-preference parameter across two groups showed mean Q rising mechanically from 0.55 (50/50 split) to 0.86 (5% minority) purely from group-size composition. Separately, a degree-preserving permutation-null test (fixed ego degree/religion, alters resampled from the wave's opportunity pool, 1,000 reps) showed that for small groups (e.g., Other Religion), the null distribution of Q is itself biased away from zero (null means around -0.09 to -0.38 across waves) and much wider than for large groups. **Do not use raw Q, or even permutation z-scores, to rank groups against each other.** Use Q only to establish that each group individually exceeds its own chance baseline (see `Code/07_yules_q_permutation_test.R` and `Tabs/tbl-yules-q-null.tex`).
 
 ### B. Dyadic Logistic Regression with Opportunity Offset
 To model the likelihood of a tie being homophilous (`same_religion` $= 1$) while adjusting for baseline group proportions, we use a logistic regression on the tie-level dataset with a **mathematical opportunity offset**:
 $$\operatorname{logit}(P(\text{same\_religion} = 1)) = \beta_0 + \beta_1 \text{EgoReligion} + \mathbf{X}\mathbf{\beta} + \text{opportunity\_offset}$$
 Where the `opportunity_offset` $= \log\left(\frac{p}{1 - p}\right)$.
 
+**Important limitation confirmed by bootstrap analysis (2026-09-23):** the offset corrects *bias* in the point estimate, but does not equalize *precision* across groups of very different sizes. A bootstrap resampling analysis (resampling egos with replacement within each religious group) at Wave 3, and again pooled across Waves 3-8, showed the ranking implied by the logit coefficients (Other Religion ≫ Protestant ≈ No Religion) is **not statistically distinguishable** — all pairwise minority-vs-minority 95% CIs for excess in-group tie rate include zero. Other Religion has only 16 egos at Wave 3 and 19-22 pooled across all 6 waves; pooling more waves does not fix this because the constraint is the number of distinct people in the group, not the number of observed ties. **Report ego/tie counts alongside every regression table** (now done in `Tabs/tbl-wave3-reg.tex` and `Tabs/tbl-pooled-interaction-reg.tex`) so readers can judge precision themselves.
+
 ### C. Mediation & Marginal Effects
-*   **Mediation (`mediation` package):** Used to formally test and reject the hypothesis that structural foci mediate the homophily of the secular group. 
-*   **Marginal Effects (`marginaleffects` package):** Used to correctly evaluate interaction terms (Time $\times$ Religion and Intimacy $\times$ Religion) in logistic regression by computing excess probabilities while holding the opportunity offset at 0 (analytically simulating an equal-opportunity scenario).
+*   **Mediation (`mediation` package):** Used to formally test and reject the hypothesis that structural foci mediate the homophily of the No Religion group. The ACME estimates for dorm co-residence and race homophily are statistically indistinguishable from zero, meaning the No Religion group's homophily coefficient (significant across all three Wave 3 models and the pooled model) is a genuine, unmediated association — not an artifact of physical/demographic sorting. (An earlier paper draft had an internal contradiction claiming both that No Religion "does not exhibit significant active homophily" and that it does; this was resolved on 2026-09-23 — No Religion IS significant everywhere it's tested.)
+*   **Marginal Effects (`marginaleffects` package):** Used to correctly evaluate interaction terms (Time × Religion and Intimacy × Religion) in logistic regression by computing excess probabilities while holding the opportunity offset at 0.
 
 ---
 
 ## 4. Code Pipeline & Script Executions (Located in `Code/`)
 
-1.  **`Code/prep_data20240603.R`**
-    *   Legacy cleaning script. Fixed case-sensitivity path loader to point to capital `Data/`.
-2.  **`Code/01_longitudinal_descriptives.R`**
-    *   Computes group-level Yule's Q across 8 waves.
-3.  **`Code/02_dyadic_models.R`**
-    *   Prepares a stacked dyadic dataset. Fits nested logistic regressions, longitudinal pooled regressions, and formal interaction models for Time and Friendship Intimacy.
-    *   Integrates `marginaleffects` calculations to generate properly scaled plots (`fig-marginal-effects.pdf` and `fig-marginal-effects-intimacy.pdf`) and the `mediation` package test to rule out structural mediation for the No Religion group.
+1.  **`Code/prep_data20240603.R`** — Legacy cleaning script.
+2.  **`Code/01_longitudinal_descriptives.R`** — Computes group-level Yule's Q across 8 waves.
+3.  **`Code/02_dyadic_models.R`** — Wave 3 nested dyadic logistic regressions (opportunity offset). Now also computes and prints group-level ego/tie sample sizes for Models 1-3 (added 2026-09-23), matching the counts reported in `Tabs/tbl-wave3-reg.tex`.
+4.  **`Code/02_dyadic_models_pooled.R`** — Pooled Waves 3-8 dyadic logistic regressions with clustered SEs. Now also computes and prints group-level ego/tie sample sizes for the fully-adjusted analytic sample (added 2026-09-23), matching `Tabs/tbl-pooled-interaction-reg.tex`.
+5.  **`Code/02_dyadic_models_interaction.R`** — Time × Religion and Intimacy × Religion interaction models.
+6.  **`Code/04_plot_opportunity_stability.R`**, **`Code/05_plot_active_coefficients.R`**, **`Code/06_save_tables_html.R`** — Plotting/table utilities (note: `06_save_tables_html.R` writes standalone HTML supplementary tables with hardcoded numbers; it is not the source of the `.tex` tables included in `paper.tex` and may drift out of sync — check before trusting its output).
+7.  **`Code/07_yules_q_permutation_test.R`** (new, 2026-09-23) — Degree-preserving permutation null test for Yule's Q across all 8 waves; writes `Data/yules_q_permutation_null.csv` and `Tabs/tbl-yules-q-null.tex`.
 
-*(Note: The previous ERGM script `03_whole_network_ergms.R` has been deprecated and its findings removed from the manuscript).*
+*(ERGM script deprecated — see Section 1, item 5, for why this has been independently reconfirmed as the right call.)*
 
 ---
 
-## 5. Current Manuscript Status (`paper.tex`)
-*   **Fully updated:** Technical variable names replaced with standard prose. Changed "Female/Male" to "Woman/Man". Overly strong causal language (e.g., "prove", "solve") replaced with measured scientific terminology.
-*   **Structure:** Reorganized to emphasize baseline opportunity structure stability first. Nested models, pooled models, and interaction models feature intuitive labels and significance asterisks.
-*   **Theoretical additions:** Causal mediation analysis integrated into the Results/Discussion. Justifications for Yule's Q and Offset terms added. Formal Appendix created for mathematical justifications (e.g., offset benefits, avoiding scaling artifacts). 
-*   **Formatting:** Tables and Figures centralized at the end in an unnumbered section with dedicated page breaks. ERGM sections removed entirely. Discussion and Conclusion merged.
+## 5. Manuscript Status (`paper.tex`) — as of 2026-09-23
+
+A full reviewer-response audit was conducted this session (see conversation history for the two reviewers' original comments in `reviewer_comments_dump.txt` / `reviewer-comments.docx`). Key outcome: the prior revision (Yule's Q + opportunity-offset dyadic regressions) genuinely fixed some issues but **oversold what the new methods could establish** — specifically, Reviewer 2's core objection (baseline-adjusted homophily measures mechanically favor smaller groups regardless of true preference) was not actually resolved by switching from EI to Yule's Q; this was confirmed by simulation. The manuscript has been revised accordingly:
+
+- **Abstract, Wave 3 regression section, pooled regression section, marginal-effects paragraph, Discussion:** all reframed from "minorities show a ranked hierarchy of active homophily (Other Religion > Protestant ≈ No Religion), supporting MDH" to **"non-Catholic groups collectively exceed the Catholic baseline; the specific ordering among non-Catholic subgroups is not statistically reliable, given Other Religion's small N."**
+- **Methods (§3.5.1, Yule's Q definition):** corrected claims that these methods provide "unbiased, comparative" cross-group comparisons — added explicit caveats distinguishing point-estimate bias (which is corrected) from cross-group estimation precision (which is not equalized).
+- **"Universal inbreeding homophily" claim:** now anchored to a formal permutation test (`Tabs/tbl-yules-q-null.tex`) rather than eyeballed Q magnitudes.
+- **No Religion internal contradiction:** resolved — the manuscript now consistently states No Religion shows a stable, significant, unmediated homophily effect in every specification (Wave 3 Models 1-3, pooled model).
+- **Language:** softened several unsupported "preference"/"actively prefer"/"driven by identity salience" phrasings in the Introduction, Study Setting, and Yule's Q definition, per Reviewer 2's objection that preference cannot be inferred from observational tie-formation data. Established field terminology ("choice homophily" / "induced homophily" as a taxonomy from cited literature) was left intact.
+- **Minor fix:** reconciled a 12.3%/12.4% rounding inconsistency for the No Religion group's population share (see Section 2B above).
+- **Compiled successfully** via `latexmk -pdf paper.tex` (20 pages, no errors, no undefined refs) as of the last check before the merge — note the merge in Section 0 may have reverted `paper.tex`/`paper.pdf` to a conflicted state; recompile after resolving.
+
+### Still open / not yet addressed
+- **Reviewer 1's activity/popularity (degree) confound:** the dyadic regression models still do not include ego in/out-degree or alter popularity terms. Reviewer 1 specifically wanted homophily separated from "main effect" activity differences by religion; this remains unresolved. A degree-corrected ERGM was explored as a fix and found infeasible (see Section 2A note on alterid match rate) — an alternative (e.g., adding degree as a covariate to the existing dyadic logistic regression) has not yet been tried.
+- A handful of "preference"/"choice" instances remain in the Methods section framing (e.g., §3.3 Opportunity Offset Formulation) that are technical/hypothetical framing rather than assertions about this paper's own findings — lower priority than the Introduction/Discussion instances already fixed, but worth a final pass.
