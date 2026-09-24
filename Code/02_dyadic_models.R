@@ -123,3 +123,26 @@ print(summary(model3))
 # If the sandwich and lmtest packages are installed, robust standard errors 
 # clustered by ego (egoid) can be calculated as follows:
 # coeftest(model3, vcov = vcovCL(model3, cluster = df_w3_clean$egoid))
+
+# Group Sample Sizes (Egos / Ties) by Model ---------------------------------
+# Reported alongside coefficients in Tabs/tbl-wave3-reg.tex so readers can
+# judge the precision behind each group's coefficient (the Other Religion
+# group in particular has very few unique egos).
+report_group_n <- function(dat, label) {
+  cat("\n---", label, "---\n")
+  dat |>
+    group_by(ego_rel) |>
+    summarise(n_egos = n_distinct(egoid), n_ties = n(), .groups = "drop") |>
+    print()
+}
+
+m1_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_offset))
+m2_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender),
+                                    !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
+m3_sample <- df_w3_clean |> filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender),
+                                    !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num),
+                                    !is.na(discuss_num))
+
+report_group_n(m1_sample, "Model 1 sample sizes")
+report_group_n(m2_sample, "Model 2 sample sizes")
+report_group_n(m3_sample, "Model 3 sample sizes")

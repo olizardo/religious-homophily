@@ -119,3 +119,13 @@ print(m2_clustered)
 # Save Clustered Tables to disk for easy retrieval -----------------------
 # Save results to Rds
 saveRDS(list(model1 = m1_clustered, model2 = m2_clustered), here("Data", "pooled_clusted_models.RDS"))
+
+# Group Sample Sizes (Egos / Ties) -------------------------------------------
+# Reported alongside coefficients in Tabs/tbl-pooled-interaction-reg.tex so
+# readers can judge the precision behind each group's coefficient (the Other
+# Religion group has very few unique egos even pooled across all six waves).
+cat("\n--- Group sample sizes, Model 2 (fully-adjusted) analytic sample ---\n")
+df_pooled_clean |>
+  group_by(ego_rel) |>
+  summarise(n_egos = n_distinct(egoid), n_ties = n(), .groups = "drop") |>
+  print()
