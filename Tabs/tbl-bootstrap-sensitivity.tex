@@ -30,4 +30,16 @@ Other Religion & Protestant & 0.031 & (-0.086, 0.192) & No \\
 \bottomrule
 \multicolumn{5}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\
 \end{tabular}
+\\[8pt]
+\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (non-Catholic groups)}\\[2pt]
+\begin{tabular}{llrrrrr}
+\toprule
+Group 1 & Group 2 & Log-Odds Diff. & SE & $\chi^2$ & $p$ & Holm $p$ \\
+\midrule
+No Religion & Other Religion & -0.818 & 0.543 & 2.265 & 0.132 & 0.265 \\
+No Religion & Protestant & 0.271 & 0.245 & 1.231 & 0.267 & 0.267 \\
+Other Religion & Protestant & 1.089 & 0.541 & 4.054 & 0.044 & 0.132 \\
+\bottomrule
+\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Wald tests of the equality of pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \texttt{egoid}) as the pooled regression tables. $p$-values are Holm-adjusted across the three non-Catholic pairwise contrasts to account for testing multiple comparisons. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\
+\end{tabular}
 \end{table}
