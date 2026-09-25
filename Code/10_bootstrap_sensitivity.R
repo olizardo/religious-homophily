@@ -159,39 +159,36 @@ print(pairwise_ci, n = Inf)
 # Wald tests: pairwise equality of the pooled logit coefficients -----------
 # A complementary approach to the bootstrap comparisons above: rather than
 # comparing baseline-adjusted excess PROBABILITY-scale rates, test equality
-# of the LOG-ODDS coefficients themselves from the pooled Model 1 (baseline,
-# opportunity-offset only) specification, on this same analytic sample,
+# of the LOG-ODDS coefficients themselves from the pooled dyadic models,
 # using the same ego-clustered variance structure as the pooled regression
-# tables (Code/02_dyadic_models_pooled.R). Restricted to the three
-# non-Catholic groups, since the Catholic-vs-non-Catholic distinction is
-# already well established elsewhere and is not the ambiguous comparison.
+# tables (Code/02_dyadic_models_pooled.R). All six pairwise contrasts among
+# the four groups are tested (including Catholic vs. each non-Catholic
+# group, as a sanity check that the Catholic/non-Catholic distinction the
+# rest of the paper treats as reliable is itself Wald-significant) alongside
+# the three non-Catholic-vs-non-Catholic contrasts that are the ambiguous
+# comparison of substantive interest.
+#
+# A "Catholic vs. X" contrast reduces to testing X's own coefficient against
+# zero (since Catholic is the reference level with no estimated coefficient
+# of its own), which is algebraically identical to the z-test already
+# reported for that coefficient; it is included here only as a diagnostic
+# sanity check, not as new information.
 #
 # Implemented as a manual contrast (L'b, L'Vb L) rather than
 # car::linearHypothesis()'s formula-string interface, because the religion
 # factor's levels contain spaces ("No Religion", "Other Religion") which
 # car cannot parse as bare coefficient names in a hypothesis string.
-model1_wald <- glm(
-  same_religion ~ ego_rel,
-  family = binomial,
-  offset = log(prop / (1 - prop)),
-  data = df_pooled
-)
-vcov_wald <- vcovCL(model1_wald, cluster = df_pooled$egoid)
-
-cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
-print(coeftest(model1_wald, vcov = vcov_wald))
-
-wald_contrast <- function(model, vcov_mat, term1, term2) {
+wald_contrast <- function(model, vcov_mat, term1, term2 = NULL) {
   b <- coef(model)
   L <- setNames(rep(0, length(b)), names(b))
   L[term1] <- 1
-  L[term2] <- -1
+  if (!is.null(term2)) L[term2] <- -1
   est <- sum(L * b)
   se <- sqrt(as.numeric(t(L) %*% vcov_mat %*% L))
   chisq <- (est / se)^2
   tibble::tibble(
-    group1 = sub("^ego_rel", "", term1),
-    group2 = sub("^ego_rel", "", term2),
+    group1 = if (is.null(term2)) "Catholic" else sub("^ego_rel", "", term1),
+    group2 = if (is.null(term2)) sub("^ego_rel", "", term1) else sub("^ego_rel", "", term2),
     log_odds_diff = est,
     se = se,
     chisq = chisq,
@@ -199,21 +196,65 @@ wald_contrast <- function(model, vcov_mat, term1, term2) {
   )
 }
 
-non_catholic_pairs <- list(
-  c("ego_relNo Religion", "ego_relOther Religion"),
-  c("ego_relNo Religion", "ego_relProtestant"),
-  c("ego_relOther Religion", "ego_relProtestant")
+# All six pairwise contrasts among the four groups. `term2 = NULL` encodes
+# a "Catholic vs. X" contrast (X's coefficient tested against the implicit
+# zero of the reference level).
+all_group_pairs <- list(
+  list(term1 = "ego_relNo Religion", term2 = NULL),
+  list(term1 = "ego_relOther Religion", term2 = NULL),
+  list(term1 = "ego_relProtestant", term2 = NULL),
+  list(term1 = "ego_relNo Religion", term2 = "ego_relOther Religion"),
+  list(term1 = "ego_relNo Religion", term2 = "ego_relProtestant"),
+  list(term1 = "ego_relOther Religion", term2 = "ego_relProtestant")
 )
 
-wald_results <- bind_rows(lapply(non_catholic_pairs, function(p) {
-  wald_contrast(model1_wald, vcov_wald, p[1], p[2])
-}))
-# Holm correction for testing all three pairwise contrasts
-wald_results$p_holm <- p.adjust(wald_results$p_value, method = "holm")
+## Model 1 (baseline, opportunity-offset only) -----------------------------
+# Fit on the same analytic sample used for the bootstrap above.
+model1_wald <- glm(
+  same_religion ~ ego_rel,
+  family = binomial,
+  offset = log(prop / (1 - prop)),
+  data = df_pooled
+)
+vcov_wald_m1 <- vcovCL(model1_wald, cluster = df_pooled$egoid)
 
-cat("\n--- Wald tests: pairwise equality of pooled log-odds coefficients ---\n")
-cat("(non-Catholic groups only; Holm-adjusted across the 3 contrasts)\n")
-print(wald_results, n = Inf)
+cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
+print(coeftest(model1_wald, vcov = vcov_wald_m1))
+
+wald_results_m1 <- bind_rows(lapply(all_group_pairs, function(p) {
+  wald_contrast(model1_wald, vcov_wald_m1, p$term1, p$term2)
+}))
+# Holm correction for testing all six pairwise contrasts
+wald_results_m1$p_holm <- p.adjust(wald_results_m1$p_value, method = "holm")
+
+cat("\n--- Wald tests (Model 1, baseline): all 6 pairwise contrasts ---\n")
+cat("(Holm-adjusted across the 6 contrasts)\n")
+print(wald_results_m1, n = Inf)
+
+## Model 3 (fully-adjusted: structural, salience, and degree controls) -----
+# Re-run the same six Wald contrasts on the fully-adjusted specification
+# (Table 1's Model 3 column) to see whether the conclusion holds once
+# structural foci, religious salience, and ego/alter degree are controlled
+# for. Rather than re-implementing that data prep and model spec a third
+# time (risking drift from the canonical script, per the lesson in
+# AGENTS.md Section 13), source Code/02_dyadic_models_pooled.R directly and
+# reuse its fitted `model3_pooled` object and analytic sample. This
+# overwrites this script's own `df_all`/`df_pooled`/`wave_alter_props`
+# objects, but only after the bootstrap and Model 1 Wald test above have
+# already used them, so nothing upstream is affected.
+cat("\n--- Sourcing Code/02_dyadic_models_pooled.R for the fully-adjusted Model 3 fit ---\n")
+source(here("Code", "02_dyadic_models_pooled.R"))
+
+vcov_wald_m3 <- vcovCL(model3_pooled, cluster = df_pooled_clean$egoid)
+
+wald_results_m3 <- bind_rows(lapply(all_group_pairs, function(p) {
+  wald_contrast(model3_pooled, vcov_wald_m3, p$term1, p$term2)
+}))
+wald_results_m3$p_holm <- p.adjust(wald_results_m3$p_value, method = "holm")
+
+cat("\n--- Wald tests (Model 3, fully-adjusted): all 6 pairwise contrasts ---\n")
+cat("(Holm-adjusted across the 6 contrasts)\n")
+print(wald_results_m3, n = Inf)
 
 # Save results --------------------------------------------------------------
 saveRDS(
@@ -222,7 +263,8 @@ saveRDS(
     boot_results = boot_results,
     group_ci = group_ci,
     pairwise_ci = pairwise_ci,
-    wald_results = wald_results,
+    wald_results_m1 = wald_results_m1,
+    wald_results_m3 = wald_results_m3,
     n_reps = n_reps
   ),
   here("Data", "bootstrap_sensitivity_results.RDS")
@@ -232,6 +274,7 @@ cat("\nBootstrap sensitivity analysis complete. Results saved to Data/bootstrap_
 
 # Generate LaTeX Supplementary Table ---------------------------------------
 fmt_ci <- function(lo, hi) sprintf("(%.3f, %.3f)", lo, hi)
+fmt_p <- function(p) ifelse(p < 0.001, "$<$0.001", sprintf("%.3f", p))
 
 group_table <- observed_summary |>
   left_join(group_ci, by = "ego_rel") |>
@@ -288,25 +331,46 @@ tex <- c(
   "\\multicolumn{5}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\\\",
   "\\end{tabular}",
   "\\\\[8pt]",
-  "\\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (non-Catholic groups)}\\\\[2pt]",
+  "\\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1, baseline)}\\\\[2pt]",
   "\\begin{tabular}{llrrrrr}",
   "\\toprule",
   "Group 1 & Group 2 & Log-Odds Diff. & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
   "\\midrule"
 )
 
-for (i in seq_len(nrow(wald_results))) {
-  r <- wald_results[i, ]
+for (i in seq_len(nrow(wald_results_m1))) {
+  r <- wald_results_m1[i, ]
   tex <- c(tex, sprintf(
-    "%s & %s & %.3f & %.3f & %.3f & %.3f & %.3f \\\\",
-    r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, r$p_value, r$p_holm
+    "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
+    r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
   ))
 }
 
 tex <- c(
   tex,
   "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Wald tests of the equality of pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \\texttt{egoid}) as the pooled regression tables. $p$-values are Holm-adjusted across the three non-Catholic pairwise contrasts to account for testing multiple comparisons. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\\\",
+  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \\texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\\\",
+  "\\end{tabular}",
+  "\\\\[8pt]",
+  "\\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\\\[2pt]",
+  "\\begin{tabular}{llrrrrr}",
+  "\\toprule",
+  "Group 1 & Group 2 & Log-Odds Diff. & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
+  "\\midrule"
+)
+
+for (i in seq_len(nrow(wald_results_m3))) {
+  r <- wald_results_m3[i, ]
+  tex <- c(tex, sprintf(
+    "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
+    r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
+  ))
+}
+
+tex <- c(
+  tex,
+  "\\bottomrule",
+  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Identical contrasts to Panel C, but on the fully-adjusted Model 3 specification (Table~\\ref{tab:pooled-interaction-reg}: structural foci, demographic homophily, religious salience, and ego/alter log-degree controls), to check whether the pairwise conclusions are sensitive to adding these covariates. $p$-values are Holm-adjusted across all six contrasts.} \\\\",
   "\\end{tabular}",
   "\\end{table}"
 )

@@ -31,15 +31,33 @@ Other Religion & Protestant & 0.031 & (-0.086, 0.192) & No \\
 \multicolumn{5}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\
 \end{tabular}
 \\[8pt]
-\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (non-Catholic groups)}\\[2pt]
+\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1, baseline)}\\[2pt]
 \begin{tabular}{llrrrrr}
 \toprule
 Group 1 & Group 2 & Log-Odds Diff. & SE & $\chi^2$ & $p$ & Holm $p$ \\
 \midrule
+Catholic & No Religion & 0.844 & 0.188 & 20.172 & $<$0.001 & $<$0.001 \\
+Catholic & Other Religion & 1.662 & 0.518 & 10.301 & 0.001 & 0.007 \\
+Catholic & Protestant & 0.573 & 0.181 & 10.025 & 0.002 & 0.007 \\
 No Religion & Other Religion & -0.818 & 0.543 & 2.265 & 0.132 & 0.265 \\
 No Religion & Protestant & 0.271 & 0.245 & 1.231 & 0.267 & 0.267 \\
 Other Religion & Protestant & 1.089 & 0.541 & 4.054 & 0.044 & 0.132 \\
 \bottomrule
-\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Wald tests of the equality of pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \texttt{egoid}) as the pooled regression tables. $p$-values are Holm-adjusted across the three non-Catholic pairwise contrasts to account for testing multiple comparisons. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\
+\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\
+\end{tabular}
+\\[8pt]
+\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\[2pt]
+\begin{tabular}{llrrrrr}
+\toprule
+Group 1 & Group 2 & Log-Odds Diff. & SE & $\chi^2$ & $p$ & Holm $p$ \\
+\midrule
+Catholic & No Religion & 0.550 & 0.195 & 7.974 & 0.005 & 0.024 \\
+Catholic & Other Religion & 1.718 & 0.524 & 10.733 & 0.001 & 0.006 \\
+Catholic & Protestant & 0.496 & 0.185 & 7.153 & 0.007 & 0.030 \\
+No Religion & Other Religion & -1.168 & 0.549 & 4.532 & 0.033 & 0.082 \\
+No Religion & Protestant & 0.053 & 0.251 & 0.045 & 0.831 & 0.831 \\
+Other Religion & Protestant & 1.222 & 0.553 & 4.877 & 0.027 & 0.082 \\
+\bottomrule
+\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Identical contrasts to Panel C, but on the fully-adjusted Model 3 specification (Table~\ref{tab:pooled-interaction-reg}: structural foci, demographic homophily, religious salience, and ego/alter log-degree controls), to check whether the pairwise conclusions are sensitive to adding these covariates. $p$-values are Holm-adjusted across all six contrasts.} \\
 \end{tabular}
 \end{table}
