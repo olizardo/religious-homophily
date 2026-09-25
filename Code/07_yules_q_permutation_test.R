@@ -19,8 +19,8 @@
 #          wider null distributions), not necessarily differences in the
 #          underlying tendency to homophily. Cross-group comparisons are
 #          addressed separately, and more carefully, in the bootstrap
-#          sensitivity analysis reported alongside the dyadic regression
-#          tables (Tabs/tbl-wave3-reg.tex, Tabs/tbl-pooled-interaction-reg.tex).
+#          sensitivity analysis reported alongside the pooled dyadic
+#          regression table (Tabs/tbl-pooled-interaction-reg.tex).
 
 library(here)
 library(readr)
@@ -35,7 +35,8 @@ prep_wave <- function(w) {
   df_netsurv |>
     filter(wave == w) |>
     left_join(df_basicsurv, by = "egoid") |>
-    filter(!is.na(yourelig_1), altrelucat == "Student", !is.na(altrelig)) |>
+    # family == FALSE excludes on-campus family ties (e.g. siblings), keeping only non-family student ties
+    filter(!is.na(yourelig_1), altrelucat == "Student", family == FALSE, !is.na(altrelig)) |>
     mutate(
       ego_rel = as.character(yourelig_1),
       alt_rel = case_when(
@@ -96,7 +97,7 @@ fmt_p <- function(p) ifelse(p < 0.001, "$<$0.001", sprintf("%.3f", p))
 
 tex <- c(
   "\\begin{table}[htbp]",
-  "\\caption{Degree-Preserving Permutation Test of Yule's $Q$ (Waves 1--8).}",
+  "\\caption{Robustness Check: Degree-Preserving Permutation Test of Yule's $Q$ (Waves 1--8).}",
   "\\label{tab:yules-q-null}",
   "\\centering",
   "\\small",
@@ -122,7 +123,7 @@ for (w in paste0("Wave", 1:8)) {
 tex <- c(
   tex,
   "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Null distributions (1,000 permutations per wave) hold each ego's degree and own religion fixed and redraw nominated alters' religion from that wave's observed opportunity pool. $z$-scores confirm that each group, individually, departs from its own chance baseline in every wave (supporting universal inbreeding homophily). Because null variance itself scales with group size, $z$-scores should not be compared across groups to infer a ranking of homophily strength -- differences partly reflect differential statistical power rather than differential preference. Cross-group comparisons are addressed separately via the bootstrap sensitivity analysis reported with the dyadic regression tables (Tables~\\ref{tab:wave3-reg} and \\ref{tab:pooled-interaction-reg}).} \\\\",
+  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Null distributions (1,000 permutations per wave) hold each ego's degree and own religion fixed and redraw nominated alters' religion from that wave's observed opportunity pool. $z$-scores confirm that each group, individually, departs from its own chance baseline in every wave (supporting universal inbreeding homophily). Because null variance itself scales with group size, $z$-scores should not be compared across groups to infer a ranking of homophily strength -- differences partly reflect differential statistical power rather than differential preference. Cross-group comparisons are addressed separately via the bootstrap sensitivity analysis reported with the pooled dyadic regression table (Table~\\ref{tab:pooled-interaction-reg}).} \\\\",
   "\\end{tabular}",
   "\\end{table}"
 )

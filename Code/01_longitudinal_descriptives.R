@@ -31,6 +31,7 @@ calc_all_waves_q <- function() {
       left_join(df_basicsurv, by = "egoid") |>
       filter(!is.na(yourelig_1)) |>
       filter(altrelucat == "Student") |>
+      filter(family == FALSE) |> # exclude on-campus family ties (e.g. siblings), keep only non-family student ties
       filter(!is.na(altrelig)) |>
       mutate(
         ego_rel = as.character(yourelig_1),

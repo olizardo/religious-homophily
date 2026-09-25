@@ -1,0 +1,33 @@
+\begin{table}[htbp]
+\caption{Robustness Check: Ego-Level Cluster Bootstrap Sensitivity Analysis of Excess In-Group Tie Rates (Waves 3--8, 2,000 replicates).}
+\label{tab:bootstrap-sensitivity}
+\centering
+\small
+\textit{Panel A: Group-level excess in-group tie rate}\\[2pt]
+\begin{tabular}{lrrrrr}
+\toprule
+Group & $n$ Egos & $n$ Ties & Observed Rate & Baseline Rate & Excess (95\% CI) \\
+\midrule
+Catholic & 348 & 7630 & 0.835 & 0.797 & 0.038 (0.021, 0.055) \\
+No Religion & 52 & 850 & 0.226 & 0.089 & 0.138 (0.083, 0.199) \\
+Other Religion & 22 & 381 & 0.155 & 0.026 & 0.125 (0.027, 0.275) \\
+Protestant & 50 & 1185 & 0.181 & 0.088 & 0.094 (0.049, 0.146) \\
+\bottomrule
+\multicolumn{6}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Catholic's own excess (95\% CI excludes zero) indicates that even the religious majority exhibits some in-group tie preference beyond pure chance mixing; the substantive question of interest is not whether any group departs from chance (all four do, per Table~\ref{tab:yules-q-null} and here), but the \textit{relative magnitude} of that departure across groups, which Panel B addresses directly.} \\
+\end{tabular}
+\\[8pt]
+\textit{Panel B: Pairwise differences in excess rate}\\[2pt]
+\begin{tabular}{llrrc}
+\toprule
+Group 1 & Group 2 & Mean Diff. & 95\% CI & Excludes 0 \\
+\midrule
+Catholic & No Religion & -0.100 & (-0.163, -0.042) & Yes \\
+Catholic & Other Religion & -0.087 & (-0.239, 0.013) & No \\
+Catholic & Protestant & -0.056 & (-0.109, -0.007) & Yes \\
+No Religion & Other Religion & 0.013 & (-0.150, 0.138) & No \\
+No Religion & Protestant & 0.044 & (-0.030, 0.126) & No \\
+Other Religion & Protestant & 0.031 & (-0.086, 0.192) & No \\
+\bottomrule
+\multicolumn{5}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\
+\end{tabular}
+\end{table}
