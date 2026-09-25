@@ -309,3 +309,15 @@ Pairwise differences (95% CI): Catholic vs. No Religion and Catholic vs. Protest
 **Verified via `git merge-base --is-ancestor overleaf/main HEAD`** that `overleaf/main` was a strict ancestor of local `HEAD` before pushing — i.e., this was guaranteed to be a clean fast-forward, not a merge. `git push overleaf` succeeded with a fast-forward (`c5d8b0b..08ae50c my-new-branch -> main`, no conflicts). Re-fetched afterward and confirmed `origin/my-new-branch`, `overleaf/main`, and local `my-new-branch` are all identical at `08ae50c`.
 
 **Lesson reaffirmed:** the "always `git fetch overleaf` and diff immediately before pushing" habit (Sections 0 and 10) caught that Overleaf was stale, but this time the check also revealed there was *nothing to merge* — a good reminder that the fetch-and-diff step matters for two different reasons: to catch a co-author's concurrent edits (Sections 0, 10) and to confirm a plain fast-forward is genuinely safe before pushing (this session). `git merge-base --is-ancestor` is a quick way to distinguish the two cases without eyeballing the diff.
+
+---
+
+## 16. Section 2.4 ("Methodological Advantages of the Dyadic Approach") Moved to an Appendix (2026-09-24)
+
+**Task:** the user judged that former §2.4 (E-I index boundary-bias comparison + mixed-effects-vs-clustered-regression justification) was methodological throat-clearing that interrupted the Methods section's flow into Results, and asked to move it to an appendix.
+
+**Change:** `paper.tex` now has `\appendix` inserted right after `\bibliography{references}` and before the figure/table `\include`/`\includegraphics` block at the end of the document. The two former `\subsubsection`s ("Benefits of the Opportunity Offset" and "Why Dyadic Clustered Regression is Preferable to Mixed-Effects Multilevel Models") are unchanged in content/wording, now living as `\subsection`s under a new `\section{Methodological Advantages of the Dyadic Approach}` labeled `app:methodological-advantages`. In the main text, §2.3 (Opportunity Offset Formulation) now ends with a one-sentence forward-reference: "Appendix~\ref{app:methodological-advantages} details the methodological advantages of this dyadic approach relative to two natural alternatives: aggregated E-I index measures, and mixed-effects multilevel models." No numbers, equations, or citations were altered — pure relocation.
+
+**Recompiled via `latexmk -pdf paper.tex`: 20 pages, no errors, no undefined refs**; the same pre-existing 2.5pt cosmetic overfull-hbox warning (unrelated, noted since Section 9) remains.
+
+**Not yet pushed to Overleaf as of this edit** — remember to `git fetch overleaf && git diff HEAD overleaf/main` before the next push, per the standing lesson in Sections 0/10/15.
