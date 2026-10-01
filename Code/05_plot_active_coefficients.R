@@ -2,10 +2,21 @@
 # Title: 05_plot_active_coefficients
 # Author: Posit Assistant (Omar Lizardo)
 # Created: 2026-06-23
-# Purpose: Generate a grouped line plot tracking the wave-specific 
-#          active (opportunity-adjusted) religious homophily coefficients 
-#          across Waves 3 to 8 of the NetHealth cohort, demonstrating 
-#          the durability and relative heights of the social boundaries.
+# Revised: 2026-10-01 - switched from plotting raw wave-specific log-odds
+#          coefficients to genuine probability-scale marginal effects
+#          (marginaleffects::avg_comparisons, opportunity offset held at 0),
+#          to match the methodological description in paper.tex's Primary
+#          Analysis section (the "equal-opportunity" marginal-effects
+#          paragraph). Each estimate is the excess probability of a
+#          same-religion tie for a given non-Catholic group vs. the
+#          Catholic baseline, under a counterfactual in which the
+#          opportunity offset is fixed at 0 (i.e., as if every religious
+#          group had equal representation in the opportunity pool that
+#          wave), computed separately in cross-section for each wave.
+# Purpose: Generate a plot tracking the wave-specific marginal effects of
+#          non-Catholic religious affiliation on active homophily across
+#          Waves 3 to 8 of the NetHealth cohort, demonstrating the
+#          durability and relative heights of the social boundaries.
 
 # Load libraries -----------------------------------------------------------
 library(here)
@@ -13,6 +24,7 @@ library(readr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(marginaleffects)
 
 # Load data ---------------------------------------------------------------
 df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
@@ -53,6 +65,9 @@ df_pooled <- df_all |>
   mutate(
     same_religion = ifelse(ego_rel == alt_rel, 1, 0),
     opportunity_offset = log(prop / (1 - prop)),
+    # Catholic as the reference level, so marginaleffects' "reference"
+    # contrasts are always each non-Catholic group vs. Catholic.
+    ego_rel = factor(ego_rel, levels = c("Catholic", "No Religion", "Other Religion", "Protestant")),
     same_gender = ifelse(gender_1 == altsex, 1, 0),
     same_race = case_when(
       race_1 == "White" & altwhite == TRUE ~ 1,
@@ -73,8 +88,15 @@ df_pooled <- df_all |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
          !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
 
-# Extract active homophily coefficients wave-by-wave
-coef_results <- list()
+# Compute wave-by-wave probability-scale marginal effects ------------------
+# For each wave, fit the same cross-sectional opportunity-adjusted logistic
+# regression used in Table tab:pooled-interaction-reg's Model 1 structure,
+# then use marginaleffects::avg_comparisons() to compute each non-Catholic
+# group's average marginal effect relative to Catholic, evaluated at a
+# counterfactual opportunity_offset of 0 (the "equal-opportunity" scenario
+# described in the surrounding text) while other covariates are held at
+# their observed sample values (datagrid's default "mean/mode" grid).
+me_results <- list()
 
 for (w in paste0("Wave", 3:8)) {
   df_w <- df_pooled |> filter(wave == w)
@@ -86,34 +108,39 @@ for (w in paste0("Wave", 3:8)) {
     data = df_w
   )
   
-  coefs <- coef(model)
-  b0 <- coefs["(Intercept)"]
-  b_none <- coefs["ego_relNo Religion"]
-  b_other <- coefs["ego_relOther Religion"]
-  b_prot <- coefs["ego_relProtestant"]
+  cmp <- avg_comparisons(
+    model,
+    variables = list(ego_rel = "reference"),
+    newdata = datagrid(model = model, opportunity_offset = 0)
+  ) |>
+    as.data.frame() |>
+    mutate(Group = gsub(" - Catholic", "", contrast))
   
-  coef_results[[w]] <- bind_rows(
-    data.frame(Wave = w, Group = "Catholic", Coefficient = b0),
-    data.frame(Wave = w, Group = "No Religion", Coefficient = b0 + b_none),
-    data.frame(Wave = w, Group = "Other Religion", Coefficient = b0 + b_other),
-    data.frame(Wave = w, Group = "Protestant", Coefficient = b0 + b_prot)
+  me_results[[w]] <- data.frame(
+    Wave = w,
+    Group = cmp$Group,
+    Estimate = cmp$estimate,
+    conf.low = cmp$conf.low,
+    conf.high = cmp$conf.high
   )
 }
 
-df_coef_plot <- bind_rows(coef_results) |>
+df_me_plot <- bind_rows(me_results) |>
   mutate(Wave_Num = as.numeric(gsub("Wave", "", Wave)))
 
-# Generate Plot
-ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group, group = Group)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(size = 3) +
+# Generate Plot -------------------------------------------------------------
+ggplot(df_me_plot, aes(x = Wave_Num, y = Estimate, color = Group, group = Group)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey50") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.15,
+                position = position_dodge(width = 0.3)) +
+  geom_line(linewidth = 1, position = position_dodge(width = 0.3)) +
+  geom_point(size = 2.5, position = position_dodge(width = 0.3)) +
   scale_x_continuous(breaks = 3:8, labels = paste0("W", 3:8)) +
   labs(
-    title = "Active (Opportunity-Adjusted) Religious Homophily Coefficients",
-    subtitle = "Wave-specific log-odds ratios of ingroup friendship choices (Waves 3-8)",
+    title = "Marginal Effects of Religious Affiliation on Active Homophily",
+    subtitle = "Excess probability of a same-religion tie vs. Catholic baseline,\nequal-opportunity scenario (Waves 3-8)",
     x = "Study Wave",
-    y = "Active Homophily Coefficient (Log-Odds)",
+    y = "Marginal Effect\n(Excess Probability vs. Catholic)",
     color = "Religious Group"
   ) +
   theme_minimal() +
@@ -125,4 +152,4 @@ ggplot(df_coef_plot, aes(x = Wave_Num, y = Coefficient, color = Group, group = G
 
 # Save Plot
 ggsave(here("Plots", "fig-active-coefs.png"), width = 7, height = 4.5, dpi = 300)
-cat("Active homophily coefficients plot successfully generated and saved to Plots/fig-active-coefs.png\n")
+cat("Marginal-effects active homophily plot successfully generated and saved to Plots/fig-active-coefs.png\n")
