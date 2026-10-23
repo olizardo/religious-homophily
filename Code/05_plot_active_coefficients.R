@@ -2,6 +2,9 @@
 # Title: 05_plot_active_coefficients
 # Author: Posit Assistant (Omar Lizardo)
 # Created: 2026-06-23
+# Revised: 2026-10-22 - Figure 3 now plots true average marginal effects (avg over
+#          all observed ties per wave, offset fixed at 0; covariates = Model 2 minus
+#          religious salience) and the offset is written as offset() in the formula.
 # Revised: 2026-10-01 - switched from plotting raw wave-specific log-odds
 #          coefficients to genuine probability-scale marginal effects
 #          (marginaleffects::avg_comparisons, opportunity offset held at 0),
@@ -88,30 +91,31 @@ df_pooled <- df_all |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
          !is.na(same_race), !is.na(roommates), !is.na(samedorm), !is.na(close_num))
 
-# Compute wave-by-wave probability-scale marginal effects ------------------
-# For each wave, fit the same cross-sectional opportunity-adjusted logistic
-# regression used in Table tab:pooled-interaction-reg's Model 1 structure,
-# then use marginaleffects::avg_comparisons() to compute each non-Catholic
-# group's average marginal effect relative to Catholic, evaluated at a
-# counterfactual opportunity_offset of 0 (the "equal-opportunity" scenario
-# described in the surrounding text) while other covariates are held at
-# their observed sample values (datagrid's default "mean/mode" grid).
+# Compute wave-by-wave probability-scale average marginal effects -----------
+# For each wave, fit a cross-sectional opportunity-adjusted logistic regression
+# with the Model 2 covariates excluding religious salience (discuss_num), then
+# use marginaleffects::avg_comparisons() to average each non-Catholic group's
+# contrast with Catholic over all observed ties in that wave. The opportunity
+# offset is set to 0 in the prediction grid (the "equal-opportunity" scenario:
+# each group has a 50% share), and the other covariates keep their observed
+# values for each tie.
 me_results <- list()
 
 for (w in paste0("Wave", 3:8)) {
   df_w <- df_pooled |> filter(wave == w)
   
   model <- glm(
-    same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num, 
-    family = binomial, 
-    offset = opportunity_offset, 
+    same_religion ~ ego_rel + same_gender + same_race + roommates + samedorm + close_num + offset(opportunity_offset),
+    family = binomial,
     data = df_w
   )
   
   cmp <- avg_comparisons(
     model,
     variables = list(ego_rel = "reference"),
-    newdata = datagrid(model = model, opportunity_offset = 0)
+    newdata = df_w |>
+      select(ego_rel, same_gender, same_race, roommates, samedorm, close_num) |>
+      mutate(opportunity_offset = 0)
   ) |>
     as.data.frame() |>
     mutate(Group = gsub(" - Catholic", "", contrast))

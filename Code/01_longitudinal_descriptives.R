@@ -4,7 +4,7 @@
 # Created: 2026-06-23
 # Purpose: Calculate group-level Yule's Q baseline-adjusted homophily 
 #          across all 8 waves of NetHealth, tracing its trajectory.
-#          Outputs tables formatted for LaTeX and Markdown.
+#          Writes Data/longitudinal_yules_q.csv and Plots/fig-yules-q.png.
 
 # Load libraries -----------------------------------------------------------
 library(here)
@@ -91,51 +91,7 @@ df_q_waves <- calc_all_waves_q()
 # Save results
 write_csv(df_q_waves, here("Data", "longitudinal_yules_q.csv"))
 
-# Create Wide Format ------------------------------------------------------
-df_wide <- df_q_waves |>
-  mutate(Wave_Label = paste0("W", gsub("Wave", "", Wave))) |>
-  select(Wave_Label, Group, Yules_Q) |>
-  pivot_wider(names_from = Wave_Label, values_from = Yules_Q)
-
-# Generate Markdown Table --------------------------------------------------
-mk_table <- "| Religious Group | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 |\n"
-mk_table <- paste0(mk_table, "|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n")
-for (i in seq_len(nrow(df_wide))) {
-  row_vals <- df_wide[i, ]
-  mk_table <- paste0(
-    mk_table,
-    sprintf(
-      "| %s | %.3f | %.3f | %.3f | %.3f | %.3f | %.3f | %.3f | %.3f |\n",
-      row_vals$Group, row_vals$W1, row_vals$W2, row_vals$W3, row_vals$W4, row_vals$W5, row_vals$W6, row_vals$W7, row_vals$W8
-    )
-  )
-}
-
-# Save Markdown Table
-writeLines(mk_table, here("Data", "yules_q_markdown.md"))
-
-# Generate LaTeX Table ----------------------------------------------------
-tex_table <- "\\begin{table}[ht]\n\\centering\n"
-tex_table <- paste0(tex_table, "\\caption{Longitudinal Trajectory of Baseline-Adjusted Religious Homophily (Yule's Q)}\n")
-tex_table <- paste0(tex_table, "\\label{tab:yules_q}\n")
-tex_table <- paste0(tex_table, "\\begin{tabular}{lcccccccc}\n\\hline\n")
-tex_table <- paste0(tex_table, "Religious Group & W1 & W2 & W3 & W4 & W5 & W6 & W7 & W8 \\\\\n\\hline\n")
-for (i in seq_len(nrow(df_wide))) {
-  row_vals <- df_wide[i, ]
-  tex_table <- paste0(
-    tex_table,
-    sprintf(
-      "%s & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f \\\\\n",
-      row_vals$Group, row_vals$W1, row_vals$W2, row_vals$W3, row_vals$W4, row_vals$W5, row_vals$W6, row_vals$W7, row_vals$W8
-    )
-  )
-}
-tex_table <- paste0(tex_table, "\\hline\n\\end{tabular}\n\\end{table}\n")
-
-# Save LaTeX Table
-writeLines(tex_table, here("Data", "yules_q_latex.tex"))
-
-cat("\nLongitudinal Yule's Q trajectories successfully calculated and tables saved.\n")
+cat("\nLongitudinal Yule's Q trajectories successfully calculated and saved to Data/longitudinal_yules_q.csv.\n")
 
 # Create Plot -------------------------------------------------------------
 df_plot <- df_q_waves |>

@@ -20,7 +20,7 @@
 #          underlying tendency to homophily. Cross-group comparisons are
 #          addressed separately, and more carefully, in the bootstrap
 #          sensitivity analysis reported alongside the pooled dyadic
-#          regression table (Tabs/tbl-pooled-interaction-reg.tex).
+#          table (Tabs/tbl-bootstrap-sensitivity.tex).
 
 library(here)
 library(readr)
@@ -95,6 +95,14 @@ write_csv(res_null, here("Data", "yules_q_permutation_null.csv"))
 # Generate LaTeX Appendix Table ---------------------------------------------
 fmt_p <- function(p) ifelse(p < 0.001, "$<$0.001", sprintf("%.3f", p))
 
+nonsig <- res_null |> filter(p_value >= 0.05)
+nonsig_label <- if (nrow(nonsig) == 0) {
+  "none"
+} else {
+  paste0(nonsig$Group, " (", gsub("Wave", "Wave ", nonsig$Wave), ", $p = ",
+         sprintf("%.3f", nonsig$p_value), "$)", collapse = "; ")
+}
+
 tex <- c(
   "\\begin{table}[htbp]",
   "\\caption{Robustness Check: Degree-Preserving Permutation Test of Yule's $Q$ (Waves 1--8).}",
@@ -123,7 +131,11 @@ for (w in paste0("Wave", 1:8)) {
 tex <- c(
   tex,
   "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Null distributions (1,000 permutations per wave) hold each ego's degree and own religion fixed and redraw nominated alters' religion from that wave's observed opportunity pool. $z$-scores confirm that each group, individually, departs from its own chance baseline in every wave (supporting universal inbreeding homophily). Because null variance itself scales with group size, $z$-scores should not be compared across groups to infer a ranking of homophily strength -- differences partly reflect differential statistical power rather than differential preference. Cross-group comparisons are addressed separately via the bootstrap sensitivity analysis reported with the pooled dyadic regression table (Table~\\ref{tab:pooled-interaction-reg}).} \\\\",
+  sprintf(
+    "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Null distributions (1,000 permutations per wave) hold each ego's degree and own religion fixed and redraw nominated alters' religion from that wave's observed opportunity pool. Observed $Q$ lies above its null mean in %d of %d group-waves. The standardized difference is significant at $p<0.05$ in %d of %d group-waves; the exception(s): %s. Because null variance itself scales with group size, $z$-scores should not be compared across groups to infer a ranking of homophily strength -- differences partly reflect differential statistical power rather than differential preference. Cross-group comparisons are addressed separately via the bootstrap sensitivity analysis (Table~\\ref{tab:bootstrap-sensitivity}).} \\\\",
+    sum(res_null$Observed_Q > res_null$Null_Mean), nrow(res_null),
+    sum(res_null$p_value < 0.05), nrow(res_null), nonsig_label
+  ),
   "\\end{tabular}",
   "\\end{table}"
 )

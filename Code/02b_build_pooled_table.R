@@ -5,7 +5,7 @@
 # Purpose: Close the manuscript's last reproducibility gap. Fits the pooled
 #          dyadic models (Code/02_dyadic_models_pooled.R) and the Time x
 #          Religion interaction model (Code/02_dyadic_models_interaction.R),
-#          then builds Tabs/tbl-pooled-interaction-reg.tex (Table 2 in
+#          then builds Tabs/tbl-pooled-interaction-reg.tex (Table 1 in
 #          paper.tex) directly from the fitted model objects. Previously
 #          this table was hand-assembled from console output and could
 #          silently drift out of sync with the scripts that "produced" it
@@ -25,8 +25,8 @@ library(dplyr)
 # model3_pooled/m1_clustered/m2_clustered/m3_clustered/df_pooled_clean come
 # from 02_dyadic_models_pooled.R; model_interaction/clustered_results come
 # from 02_dyadic_models_interaction.R.
-source(here("Code", "02_dyadic_models_pooled.R"))
-source(here("Code", "02_dyadic_models_interaction.R"))
+source(here("Code", "02_dyadic_models_pooled.R"), local = TRUE)
+source(here("Code", "02_dyadic_models_interaction.R"), local = TRUE)
 
 models <- list(
   "Model 1" = m1_clustered,
@@ -130,7 +130,7 @@ tex <- c(
   "\\bottomrule",
   "\\multicolumn{5}{l}{\\rule{0pt}{1em}\\textit{Note:} $^{*} p < 0.05$; $^{**} p < 0.01$; $^{***} p < 0.001$}\\\\",
   sprintf(
-    "\\multicolumn{5}{p{1.0\\textwidth}}{\\footnotesize Egos are counted once even if they contribute ties across multiple waves; standard errors clustered by egoid throughout. On-campus family ties (e.g., siblings both enrolled and nominating each other) are excluded from the analytic sample throughout, so all reported ties are nominations coded as student (non-family) relationships. Model 3 and the Interaction model add each ego's log out-degree (nominations made that wave) and each alter's log in-degree (nominations received that wave), computed from the full wave-specific nomination roster, to test whether opportunity-adjusted homophily reflects a degree/activity confound rather than affiliation itself (Reviewer 1). Neither degree term meaningfully attenuates the three group coefficients, though ego activity is itself marginally associated with same-religion tie formation ($p \\approx %s$--$%s$). The Other Religion group's small N (%d egos across the entire six-wave panel) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis.}\\\\",
+    "\\multicolumn{5}{p{1.0\\textwidth}}{\\footnotesize Egos are counted once even if they contribute ties across multiple waves; standard errors clustered by egoid throughout. On-campus family ties (e.g., siblings both enrolled and nominating each other) are excluded from the analytic sample throughout, so all reported ties are nominations coded as student (non-family) relationships. Model 3 and the Interaction model add each ego's log out-degree (nominations made that wave) and each alter's log in-degree (nominations received that wave), computed from the full wave-specific nomination roster, to test whether opportunity-adjusted homophily reflects a degree/activity confound rather than affiliation itself (Reviewer 1). Neither degree term meaningfully attenuates the three group coefficients, though ego activity is itself marginally associated with same-religion tie formation ($p \\approx %s$--$%s$). The Other Religion group's small N (%d egos in this analytic sample, across the six-wave panel) implies substantially lower precision for its coefficient than for the other groups; see Results for a bootstrap sensitivity analysis.}\\\\",
     p_degree_lo, p_degree_hi, n_other_relig
   ),
   "\\end{tabular}",

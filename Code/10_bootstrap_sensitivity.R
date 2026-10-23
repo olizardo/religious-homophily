@@ -208,29 +208,6 @@ all_group_pairs <- list(
   list(term1 = "ego_relOther Religion", term2 = "ego_relProtestant")
 )
 
-## Model 1 (baseline, opportunity-offset only) -----------------------------
-# Fit on the same analytic sample used for the bootstrap above.
-model1_wald <- glm(
-  same_religion ~ ego_rel,
-  family = binomial,
-  offset = log(prop / (1 - prop)),
-  data = df_pooled
-)
-vcov_wald_m1 <- vcovCL(model1_wald, cluster = df_pooled$egoid)
-
-cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
-print(coeftest(model1_wald, vcov = vcov_wald_m1))
-
-wald_results_m1 <- bind_rows(lapply(all_group_pairs, function(p) {
-  wald_contrast(model1_wald, vcov_wald_m1, p$term1, p$term2)
-}))
-# Holm correction for testing all six pairwise contrasts
-wald_results_m1$p_holm <- p.adjust(wald_results_m1$p_value, method = "holm")
-
-cat("\n--- Wald tests (Model 1, baseline): all 6 pairwise contrasts ---\n")
-cat("(Holm-adjusted across the 6 contrasts)\n")
-print(wald_results_m1, n = Inf)
-
 ## Model 3 (fully-adjusted: structural, salience, and degree controls) -----
 # Re-run the same six Wald contrasts on the fully-adjusted specification
 # (Table 1's Model 3 column) to see whether the conclusion holds once
@@ -243,7 +220,24 @@ print(wald_results_m1, n = Inf)
 # objects, but only after the bootstrap and Model 1 Wald test above have
 # already used them, so nothing upstream is affected.
 cat("\n--- Sourcing Code/02_dyadic_models_pooled.R for the fully-adjusted Model 3 fit ---\n")
-source(here("Code", "02_dyadic_models_pooled.R"))
+source(here("Code", "02_dyadic_models_pooled.R"), local = TRUE)
+
+## Model 1 (baseline, opportunity-offset only) -----------------------------
+# Uses model1_pooled from the sourced pooled script, so the Model 1 Wald
+# tests are on the same fully adjusted analytic sample as Table 1.
+vcov_wald_m1 <- vcovCL(model1_pooled, cluster = df_pooled_clean$egoid)
+
+cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
+print(coeftest(model1_pooled, vcov = vcov_wald_m1))
+
+wald_results_m1 <- bind_rows(lapply(all_group_pairs, function(p) {
+  wald_contrast(model1_pooled, vcov_wald_m1, p$term1, p$term2)
+}))
+wald_results_m1$p_holm <- p.adjust(wald_results_m1$p_value, method = "holm")
+
+cat("\n--- Wald tests (Model 1, baseline): all 6 pairwise contrasts ---\n")
+cat("(Holm-adjusted across the 6 contrasts)\n")
+print(wald_results_m1, n = Inf)
 
 vcov_wald_m3 <- vcovCL(model3_pooled, cluster = df_pooled_clean$egoid)
 
@@ -286,7 +280,7 @@ tex <- c(
   "\\caption{Robustness Check: Ego-Level Cluster Bootstrap Sensitivity Analysis of Excess In-Group Tie Rates (Waves 3--8, 2,000 replicates).}",
   "\\label{tab:bootstrap-sensitivity}",
   "\\centering",
-  "\\small",
+  "\\scriptsize",
   "\\textit{Panel A: Group-level excess in-group tie rate}\\\\[2pt]",
   "\\begin{tabular}{lrrrrr}",
   "\\toprule",
@@ -297,8 +291,8 @@ tex <- c(
 for (i in seq_len(nrow(group_table))) {
   r <- group_table[i, ]
   tex <- c(tex, sprintf(
-    "%s & %d & %d & %.3f & %.3f & %.3f %s \\\\",
-    r$ego_rel, r$n_egos, r$n_ties, r$observed_rate, r$baseline_rate,
+    "%s & %d & %s & %.3f & %.3f & %.3f %s \\\\",
+    r$ego_rel, r$n_egos, format(r$n_ties, big.mark = ","), r$observed_rate, r$baseline_rate,
     r$boot_mean_excess, fmt_ci(r$ci_lo, r$ci_hi)
   ))
 }
@@ -306,7 +300,7 @@ for (i in seq_len(nrow(group_table))) {
 tex <- c(
   tex,
   "\\bottomrule",
-  "\\multicolumn{6}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Catholic's own excess (95\\% CI excludes zero) indicates that even the religious majority exhibits some in-group tie preference beyond pure chance mixing; the substantive question of interest is not whether any group departs from chance (all four do, per Table~\\ref{tab:yules-q-null} and here), but the \\textit{relative magnitude} of that departure across groups, which Panel B addresses directly.} \\\\",
+  "\\multicolumn{6}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Catholic's own excess (95\\% CI excludes zero) indicates that even the religious majority exhibits some in-group tie preference beyond pure chance mixing; the substantive question of interest is not whether any group departs from chance (all four do, per Table~\\ref{tab:yules-q-null} and here), but the \\textit{relative magnitude} of that departure across groups, which Panel B addresses directly. The bootstrap uses the baseline sample (no covariate filtering), which is larger than the fully adjusted sample used for Table~\\ref{tab:pooled-interaction-reg}.} \\\\",
   "\\end{tabular}",
   "\\\\[8pt]",
   "\\textit{Panel B: Pairwise differences in excess rate}\\\\[2pt]",
@@ -349,7 +343,7 @@ for (i in seq_len(nrow(wald_results_m1))) {
 tex <- c(
   tex,
   "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates, matching the bootstrap analytic sample above), using the same ego-clustered variance-covariance matrix (clustered on \\texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\\\",
+  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates; same fully adjusted analytic sample as the Model 1 column of Table~\\ref{tab:pooled-interaction-reg}), using the same ego-clustered variance-covariance matrix (clustered on \\texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\\\",
   "\\end{tabular}",
   "\\\\[8pt]",
   "\\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\\\[2pt]",

@@ -89,6 +89,17 @@ df_pooled <- df_all |>
     log_ego_degree = log(ego_out_degree),
     log_alter_pop = log1p(alter_popularity),
     
+    # Discussion frequency as a proxy for individual religious salience
+    # (same definition as Code/02_dyadic_models_pooled.R)
+    discuss_num = case_when(
+      discussrelig_2 == "Not at all" ~ 1,
+      discussrelig_2 == "Less than 1-2 times a month" ~ 2,
+      discussrelig_2 == "1-2 times a month" ~ 3,
+      discussrelig_2 == "1-2 times a week" ~ 4,
+      discussrelig_2 == "Three times a week or more" ~ 5,
+      TRUE ~ NA_real_
+    ),
+    
     # Intimacy control (added 2026-09-24 for consistency with the Wave 3
     # and pooled specifications; previously omitted here)
     close_num = case_when(
@@ -101,13 +112,13 @@ df_pooled <- df_all |>
   ) |>
   filter(!is.na(same_religion), !is.na(opportunity_offset), !is.na(same_gender), 
          !is.na(same_race), !is.na(roommates), !is.na(samedorm),
-         !is.na(log_ego_degree), !is.na(log_alter_pop), !is.na(close_num))
+         !is.na(discuss_num), !is.na(log_ego_degree), !is.na(log_alter_pop), !is.na(close_num))
 
 # Fit Interaction Model ---------------------------------------------------
 cat("Fitting interaction model on", nrow(df_pooled), "ties across", n_distinct(df_pooled$egoid), "unique egos...\n")
 
 model_interaction <- glm(
-  same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm + close_num + log_ego_degree + log_alter_pop, 
+  same_religion ~ ego_rel * wave_num + same_gender + same_race + roommates + samedorm + close_num + discuss_num + log_ego_degree + log_alter_pop, 
   family = binomial, 
   offset = opportunity_offset, 
   data = df_pooled

@@ -1,0 +1,45 @@
+section,variable,level,n,pct,denominator,denominator_label
+Sample flow,Egos,Egos in Basic Survey,722,NA,NA,NA
+Sample flow,Nominations,All nominations (all waves),35912,NA,NA,NA
+Sample flow,Nominations,Student nominations,17452,48.596569391846735,NA,NA
+Sample flow,Nominations,Family student nominations removed,312,NA,NA,NA
+Sample flow,Nominations,Non-family student ties (analytic sample),17140,NA,NA,NA
+Sample flow,Nominations,Analytic ties with alter religion reported,14364,NA,NA,NA
+Ego,Baseline religion (yourelig_1),Catholic,525,72.71468144044321,722,all egos
+Ego,Baseline religion (yourelig_1),No Religion,89,12.326869806094184,722,all egos
+Ego,Baseline religion (yourelig_1),Other Religion,33,4.570637119113574,722,all egos
+Ego,Baseline religion (yourelig_1),Protestant,71,9.833795013850416,722,all egos
+Ego,Baseline religion (yourelig_1),Missing,4,0.554016620498615,722,all egos
+Ego,Gender (gender_1),Female,369,51.10803324099723,722,all egos
+Ego,Gender (gender_1),Male,346,47.9224376731302,722,all egos
+Ego,Gender (gender_1),Missing,7,0.9695290858725761,722,all egos
+Ego,Race (race_1),White,469,64.9584487534626,722,all egos
+Ego,Race (race_1),Latino/a,89,12.326869806094184,722,all egos
+Ego,Race (race_1),Asian-American,63,8.725761772853186,722,all egos
+Ego,Race (race_1),Foreign Student,51,7.06371191135734,722,all egos
+Ego,Race (race_1),African-American,41,5.678670360110804,722,all egos
+Ego,Race (race_1),Other,1,0.13850415512465375,722,all egos
+Ego,Race (race_1),Missing,8,1.10803324099723,722,all egos
+Ego,Discussion frequency (discussrelig_2),Not at all,33,4.570637119113574,722,all egos
+Ego,Discussion frequency (discussrelig_2),Less than 1-2 times a month,85,11.772853185595569,722,all egos
+Ego,Discussion frequency (discussrelig_2),1-2 times a month,230,31.85595567867036,722,all egos
+Ego,Discussion frequency (discussrelig_2),1-2 times a week,198,27.42382271468144,722,all egos
+Ego,Discussion frequency (discussrelig_2),Three times a week or more,91,12.60387811634349,722,all egos
+Ego,Discussion frequency (discussrelig_2),Missing,85,11.772853185595569,722,all egos
+Tie,Alter religion (altrelig),Catholic,11558,67.43290548424737,17140,non-family student ties
+Tie,Alter religion (altrelig),Protestant,1183,6.901983663943991,17140,non-family student ties
+Tie,Alter religion (altrelig),NoReligion,1236,7.21120186697783,17140,non-family student ties
+Tie,Alter religion (altrelig),OtherReligion,387,2.2578763127187864,17140,non-family student ties
+Tie,Alter religion (altrelig),Missing,2776,16.19603267211202,17140,non-family student ties
+Tie,Alter gender (altsex),Female,8942,52.17036172695449,17140,non-family student ties
+Tie,Alter gender (altsex),Male,8192,47.79463243873979,17140,non-family student ties
+Tie,Alter gender (altsex),Missing,6,0.03500583430571762,17140,non-family student ties
+Tie,Alter white (altwhite),TRUE,13329,77.76546091015169,17140,non-family student ties
+Tie,Alter white (altwhite),FALSE,2522,14.71411901983664,17140,non-family student ties
+Tie,Alter white (altwhite),Missing,1289,7.520420070011669,17140,non-family student ties
+Tie,Roommates,TRUE,2356,13.745624270711785,17140,non-family student ties
+Tie,Roommates,FALSE,9430,55.01750291715286,17140,non-family student ties
+Tie,Roommates,Missing,5354,31.236872812135356,17140,non-family student ties
+Tie,Same dorm,TRUE,6052,35.309218203033836,17140,non-family student ties
+Tie,Same dorm,FALSE,5734,33.453908984830804,17140,non-family student ties
+Tie,Same dorm,Missing,5354,31.236872812135356,17140,non-family student ties
