@@ -2,33 +2,24 @@
 # Title: 10_bootstrap_sensitivity
 # Author: Posit Assistant (Omar Lizardo)
 # Created: 2026-09-24
-# Purpose: Formalize, as a reproducible script, the pooled bootstrap
-#          sensitivity analysis cited in the Discussion (paper.tex) as
-#          evidence that the ranking implied by the pooled logit
-#          coefficients (Other Religion > Protestant approx No Religion)
-#          is not statistically reliable, while the Catholic/non-Catholic
-#          distinction is. This analysis previously existed only as an
-#          ad hoc, unscripted result typed directly into the manuscript;
-#          this script reproduces it from scratch on the current
-#          family-tie-excluded analytic sample (Section 11, AGENTS.md).
+# Revised: 2026-10-23 - every quantity is computed under two opportunity baselines:
+#          the ego-cohort composition (primary) and the nominated-alter pool
+#          (sensitivity). The header note on "directly comparable" excess rates is
+#          withdrawn: an excess probability depends on the group's baseline share
+#          by construction, so Panels A-B are descriptive. Log-odds contrasts
+#          (Panels C-D) are the basis for group comparisons.
+# Purpose: Ego-level cluster bootstrap of the excess in-group tie rate and
+#          Wald tests of pairwise equality of the pooled log-odds coefficients.
 #
-#          Method: an ego-level cluster bootstrap, resampling unique egos
-#          WITH REPLACEMENT separately within each religious group
-#          (so that all of an ego's ties, across whatever waves they
-#          appear in, are resampled as a single block -- respecting
-#          within-ego clustering across waves). For each replicate, we
-#          recompute, per group, the "excess in-group tie rate": the
-#          observed same-religion tie rate minus the wave-specific
-#          opportunity/chance baseline (the same `prop` used to build the
-#          logit offset in Code/02_dyadic_models_pooled.R). This excess
-#          statistic is directly comparable across groups of different
-#          sizes because it is already baseline-adjusted, unlike a raw
-#          in-group tie rate.
+#          Bootstrap: resample egos WITH REPLACEMENT, separately within each group,
+#          so each resampled ego's ties (all waves) move together. Statistic per
+#          group = observed same-religion rate minus the mean opportunity baseline.
+#          Pairwise CIs use independent group bootstraps.
 #
-#          We report each group's excess rate with a percentile bootstrap
-#          95% CI, and the pairwise-difference 95% CI between every pair
-#          of groups (valid because the group-level bootstraps are drawn
-#          independently of one another).
+#          Wald: pairwise contrasts L'b with the ego-clustered vcov from the
+#          Code/02_dyadic_models_pooled.R fits (Model 1 and Model 3, both baselines).
+#          Manual contrasts are used because car::linearHypothesis() cannot parse
+#          level names containing spaces.
 
 # Load libraries -----------------------------------------------------------
 library(here)
@@ -37,8 +28,6 @@ library(dplyr)
 library(sandwich)
 library(lmtest)
 
-set.seed(6284)
-
 groups <- c("Catholic", "No Religion", "Other Religion", "Protestant")
 n_reps <- 2000
 
@@ -46,10 +35,8 @@ n_reps <- 2000
 df_netsurv <- read_csv(here('Data', 'NetWorkSurvey.csv'))
 df_basicsurv <- read_csv(here('Data', 'BasicSurvey.csv'))
 
-# Prepare Pooled Long-Format Dyadic Dataset (Waves 3-8) -------------------
-# Identical to the Model 1 (baseline) data-prep block in
-# Code/02_dyadic_models_pooled.R -- no structural/degree covariates are
-# needed here, only the outcome and the opportunity-offset baseline.
+# Prepare pooled long-format dyadic dataset (Waves 3-8) -------------------
+# Baseline sample (no covariate filtering), as in the committed version.
 df_all <- df_netsurv |>
   filter(wave %in% paste0("Wave", 3:8)) |>
   left_join(df_basicsurv, by = "egoid") |>
@@ -70,119 +57,113 @@ df_all <- df_netsurv |>
     alt_rel %in% groups
   )
 
-# Wave-specific alter religious proportions (opportunity/chance baseline)
+# Baselines (same definitions as Code/02_dyadic_models_pooled.R)
+cohort_props <- df_basicsurv |>
+  mutate(ego_rel = as.character(yourelig_1)) |>
+  filter(ego_rel %in% groups) |>
+  count(ego_rel, name = "n_cohort") |>
+  mutate(prop_cohort = n_cohort / sum(n_cohort)) |>
+  select(ego_rel, prop_cohort)
+
 wave_alter_props <- df_all |>
   group_by(wave, alt_rel) |>
   count() |>
   group_by(wave) |>
-  mutate(prop = n / sum(n)) |>
+  mutate(prop_pool = n / sum(n)) |>
   ungroup()
 
 df_pooled <- df_all |>
-  left_join(wave_alter_props |> select(wave, alt_rel, prop), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  left_join(wave_alter_props |> select(wave, alt_rel, prop_pool), by = c("wave" = "wave", "ego_rel" = "alt_rel")) |>
+  left_join(cohort_props, by = "ego_rel") |>
   mutate(same_religion = ifelse(ego_rel == alt_rel, 1, 0)) |>
-  select(egoid, ego_rel, same_religion, prop)
+  select(egoid, ego_rel, same_religion, prop_pool, prop_cohort)
 
 cat("Total pooled ties for bootstrap (Waves 3-8):", nrow(df_pooled), "\n")
 cat("Total unique egos who contribute ties:", n_distinct(df_pooled$egoid), "\n\n")
 
-# Observed (point estimate) excess in-group tie rate by group -------------
-observed_summary <- df_pooled |>
-  group_by(ego_rel) |>
-  summarise(
-    n_egos = n_distinct(egoid),
-    n_ties = n(),
-    observed_rate = mean(same_religion),
-    baseline_rate = mean(prop),
-    excess = observed_rate - baseline_rate,
-    .groups = "drop"
+baselines <- list(
+  pool = list(prop_col = "prop_pool", seed = 6284),
+  cohort = list(prop_col = "prop_cohort", seed = 6285)
+)
+
+# Bootstrap of the excess rate under one baseline -----------------------------
+run_excess_bootstrap <- function(prop_col, seed) {
+  set.seed(seed)
+
+  observed_summary <- df_pooled |>
+    group_by(ego_rel) |>
+    summarise(
+      n_egos = n_distinct(egoid),
+      n_ties = n(),
+      observed_rate = mean(same_religion),
+      baseline_rate = mean(.data[[prop_col]]),
+      excess = observed_rate - baseline_rate,
+      .groups = "drop"
+    )
+
+  boot_excess <- function(g) {
+    dat_g <- df_pooled |> filter(ego_rel == g)
+    egos_g <- unique(dat_g$egoid)
+    same_by_ego <- split(dat_g$same_religion, dat_g$egoid)
+    prop_by_ego <- split(dat_g[[prop_col]], dat_g$egoid)
+
+    replicate(n_reps, {
+      boot_ids <- sample(egos_g, length(egos_g), replace = TRUE)
+      same_vec <- unlist(same_by_ego[as.character(boot_ids)], use.names = FALSE)
+      prop_vec <- unlist(prop_by_ego[as.character(boot_ids)], use.names = FALSE)
+      mean(same_vec) - mean(prop_vec)
+    })
+  }
+
+  boot_results <- lapply(groups, boot_excess)
+  names(boot_results) <- groups
+
+  group_ci <- bind_rows(lapply(groups, function(g) {
+    b <- boot_results[[g]]
+    tibble::tibble(
+      ego_rel = g,
+      boot_mean_excess = mean(b),
+      ci_lo = quantile(b, 0.025),
+      ci_hi = quantile(b, 0.975)
+    )
+  }))
+
+  pairs <- combn(groups, 2, simplify = FALSE)
+  pairwise_ci <- bind_rows(lapply(pairs, function(p) {
+    diff_vec <- boot_results[[p[1]]] - boot_results[[p[2]]]
+    tibble::tibble(
+      group1 = p[1],
+      group2 = p[2],
+      mean_diff = mean(diff_vec),
+      ci_lo = quantile(diff_vec, 0.025),
+      ci_hi = quantile(diff_vec, 0.975),
+      excludes_zero = (quantile(diff_vec, 0.025) > 0) | (quantile(diff_vec, 0.975) < 0)
+    )
+  }))
+
+  list(
+    observed_summary = observed_summary,
+    boot_results = boot_results,
+    group_ci = group_ci,
+    pairwise_ci = pairwise_ci
   )
-
-cat("--- Observed excess in-group tie rate by group ---\n")
-print(observed_summary)
-
-# Ego-level cluster bootstrap ----------------------------------------------
-# For each group, pre-split ties into a list keyed by egoid so that a
-# resampled ego contributes ALL of their ties (across all waves) as one
-# block, respecting within-ego clustering.
-boot_excess <- function(g) {
-  dat_g <- df_pooled |> filter(ego_rel == g)
-  egos_g <- unique(dat_g$egoid)
-  same_by_ego <- split(dat_g$same_religion, dat_g$egoid)
-  prop_by_ego <- split(dat_g$prop, dat_g$egoid)
-
-  replicate(n_reps, {
-    boot_ids <- sample(egos_g, length(egos_g), replace = TRUE)
-    same_vec <- unlist(same_by_ego[as.character(boot_ids)], use.names = FALSE)
-    prop_vec <- unlist(prop_by_ego[as.character(boot_ids)], use.names = FALSE)
-    mean(same_vec) - mean(prop_vec)
-  })
 }
 
-boot_results <- lapply(groups, boot_excess)
-names(boot_results) <- groups
+excess <- lapply(baselines, function(b) run_excess_bootstrap(b$prop_col, b$seed))
 
-# Per-group bootstrap point estimate + 95% percentile CI -------------------
-group_ci <- lapply(groups, function(g) {
-  b <- boot_results[[g]]
-  tibble::tibble(
-    ego_rel = g,
-    boot_mean_excess = mean(b),
-    ci_lo = quantile(b, 0.025),
-    ci_hi = quantile(b, 0.975)
-  )
-})
-group_ci <- bind_rows(group_ci)
+for (nm in names(excess)) {
+  cat("\n=== Excess in-group tie rate, baseline:", nm, "===\n")
+  print(excess[[nm]]$observed_summary)
+  print(excess[[nm]]$group_ci)
+  print(excess[[nm]]$pairwise_ci, n = Inf)
+}
 
-cat("\n--- Bootstrap excess-rate estimate and 95% CI by group ---\n")
-print(group_ci)
-
-# Pairwise differences between groups' excess rates ------------------------
-# Valid because each group's bootstrap replicates are drawn independently.
-pairs <- combn(groups, 2, simplify = FALSE)
-pairwise_ci <- lapply(pairs, function(p) {
-  diff_vec <- boot_results[[p[1]]] - boot_results[[p[2]]]
-  tibble::tibble(
-    group1 = p[1],
-    group2 = p[2],
-    mean_diff = mean(diff_vec),
-    ci_lo = quantile(diff_vec, 0.025),
-    ci_hi = quantile(diff_vec, 0.975),
-    excludes_zero = (quantile(diff_vec, 0.025) > 0) | (quantile(diff_vec, 0.975) < 0)
-  )
-})
-pairwise_ci <- bind_rows(pairwise_ci)
-
-cat("\n--- Pairwise differences in excess rate (95% CI) ---\n")
-print(pairwise_ci, n = Inf)
-
-# Wald tests: pairwise equality of the pooled logit coefficients -----------
-# A complementary approach to the bootstrap comparisons above: rather than
-# comparing baseline-adjusted excess PROBABILITY-scale rates, test equality
-# of the LOG-ODDS coefficients themselves from the pooled dyadic models,
-# using the same ego-clustered variance structure as the pooled regression
-# tables (Code/02_dyadic_models_pooled.R). All six pairwise contrasts among
-# the four groups are tested (including Catholic vs. each non-Catholic
-# group, as a sanity check that the Catholic/non-Catholic distinction the
-# rest of the paper treats as reliable is itself Wald-significant) alongside
-# the three non-Catholic-vs-non-Catholic contrasts that are the ambiguous
-# comparison of substantive interest.
-#
-# A "Catholic vs. X" contrast reduces to testing X's own coefficient against
-# zero (since Catholic is the reference level with no estimated coefficient
-# of its own), which is algebraically identical to the z-test already
-# reported for that coefficient; it is included here only as a diagnostic
-# sanity check, not as new information.
-#
-# Implemented as a manual contrast (L'b, L'Vb L) rather than
-# car::linearHypothesis()'s formula-string interface, because the religion
-# factor's levels contain spaces ("No Religion", "Other Religion") which
-# car cannot parse as bare coefficient names in a hypothesis string.
+# Wald tests ------------------------------------------------------------------
+# A "Catholic vs. X" contrast reduces to testing X's coefficient against zero
+# (Catholic is the reference level). The estimate is Catholic minus X.
 wald_contrast <- function(model, vcov_mat, term1, term2 = NULL) {
   b <- coef(model)
   L <- setNames(rep(0, length(b)), names(b))
-  # Contrast is always group1 minus group2 as labelled. For a Catholic-vs-X
-  # contrast the estimate must be Catholic minus X, i.e. -b_X.
   L[term1] <- if (is.null(term2)) -1 else 1
   if (!is.null(term2)) L[term2] <- -1
   est <- sum(L * b)
@@ -198,9 +179,6 @@ wald_contrast <- function(model, vcov_mat, term1, term2 = NULL) {
   )
 }
 
-# All six pairwise contrasts among the four groups. `term2 = NULL` encodes
-# a "Catholic vs. X" contrast (X's coefficient tested against the implicit
-# zero of the reference level).
 all_group_pairs <- list(
   list(term1 = "ego_relNo Religion", term2 = NULL),
   list(term1 = "ego_relOther Religion", term2 = NULL),
@@ -210,166 +188,162 @@ all_group_pairs <- list(
   list(term1 = "ego_relOther Religion", term2 = "ego_relProtestant")
 )
 
-## Model 3 (fully-adjusted: structural, salience, and degree controls) -----
-# Re-run the same six Wald contrasts on the fully-adjusted specification
-# (Table 1's Model 3 column) to see whether the conclusion holds once
-# structural foci, religious salience, and ego/alter degree are controlled
-# for. Rather than re-implementing that data prep and model spec a third
-# time (risking drift from the canonical script, per the lesson in
-# AGENTS.md Section 13), source Code/02_dyadic_models_pooled.R into its own
-# environment (`pooled_env`) and reuse its fitted `model3_pooled` object and
-# analytic sample. A dedicated environment keeps the sourced objects out of the
-# global workspace (local = TRUE would assign them there at top level).
-cat("\n--- Sourcing Code/02_dyadic_models_pooled.R for the fully-adjusted Model 3 fit ---\n")
+# Source Code 02 into its own environment (not the global environment)
 pooled_env <- new.env()
 source(here("Code", "02_dyadic_models_pooled.R"), local = pooled_env)
 
-## Model 1 (baseline, opportunity-offset only) -----------------------------
-# Uses model1_pooled from the sourced pooled script, so the Model 1 Wald
-# tests are on the same fully adjusted analytic sample as Table 1.
-vcov_wald_m1 <- vcovCL(pooled_env$model1_pooled, cluster = pooled_env$df_pooled_clean$egoid)
+wald_for <- function(model_name) {
+  model <- pooled_env[[model_name]]
+  vc <- vcovCL(model, cluster = pooled_env$df_pooled_clean$egoid)
+  res <- bind_rows(lapply(all_group_pairs, function(p) {
+    wald_contrast(model, vc, p$term1, p$term2)
+  }))
+  res$p_holm <- p.adjust(res$p_value, method = "holm")
+  res
+}
 
-cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
-print(coeftest(pooled_env$model1_pooled, vcov = vcov_wald_m1))
+wald <- list(
+  cohort_m1 = wald_for("model1_pooled"),
+  cohort_m3 = wald_for("model3_pooled"),
+  pool_m1 = wald_for("model1_pool"),
+  pool_m3 = wald_for("model3_pool")
+)
 
-wald_results_m1 <- bind_rows(lapply(all_group_pairs, function(p) {
-  wald_contrast(pooled_env$model1_pooled, vcov_wald_m1, p$term1, p$term2)
-}))
-wald_results_m1$p_holm <- p.adjust(wald_results_m1$p_value, method = "holm")
+for (nm in names(wald)) {
+  cat("\n--- Wald tests:", nm, "(Holm across 6 contrasts) ---\n")
+  print(wald[[nm]], n = Inf)
+}
 
-cat("\n--- Wald tests (Model 1, baseline): all 6 pairwise contrasts ---\n")
-cat("(Holm-adjusted across the 6 contrasts)\n")
-print(wald_results_m1, n = Inf)
-
-vcov_wald_m3 <- vcovCL(pooled_env$model3_pooled, cluster = pooled_env$df_pooled_clean$egoid)
-
-wald_results_m3 <- bind_rows(lapply(all_group_pairs, function(p) {
-  wald_contrast(pooled_env$model3_pooled, vcov_wald_m3, p$term1, p$term2)
-}))
-wald_results_m3$p_holm <- p.adjust(wald_results_m3$p_value, method = "holm")
-
-cat("\n--- Wald tests (Model 3, fully-adjusted): all 6 pairwise contrasts ---\n")
-cat("(Holm-adjusted across the 6 contrasts)\n")
-print(wald_results_m3, n = Inf)
-
-# Save results --------------------------------------------------------------
+# Save results ----------------------------------------------------------------
 saveRDS(
   list(
-    observed_summary = observed_summary,
-    boot_results = boot_results,
-    group_ci = group_ci,
-    pairwise_ci = pairwise_ci,
-    wald_results_m1 = wald_results_m1,
-    wald_results_m3 = wald_results_m3,
+    excess = excess,
+    wald = wald,
     n_reps = n_reps
   ),
   here("Data", "bootstrap_sensitivity_results.RDS")
 )
-
 cat("\nBootstrap sensitivity analysis complete. Results saved to Data/bootstrap_sensitivity_results.RDS\n")
 
-# Generate LaTeX Supplementary Table ---------------------------------------
+# LaTeX tables ---------------------------------------------------------------
 fmt_ci <- function(lo, hi) sprintf("(%.3f, %.3f)", lo, hi)
 fmt_p <- function(p) ifelse(p < 0.001, "$<$0.001", sprintf("%.3f", p))
 
-group_table <- observed_summary |>
-  left_join(group_ci, by = "ego_rel") |>
-  mutate(ego_rel = factor(ego_rel, levels = groups)) |>
-  arrange(ego_rel)
+build_bs_table <- function(baseline_key, baseline_label, label, caption) {
+  ex <- excess[[baseline_key]]
+  w1 <- wald[[paste0(baseline_key, "_m1")]]
+  w3 <- wald[[paste0(baseline_key, "_m3")]]
 
-tex <- c(
-  "\\begin{table}[htbp]",
-  "\\caption{Robustness Check: Ego-Level Cluster Bootstrap Sensitivity Analysis of Excess In-Group Tie Rates (Waves 3--8, 2,000 replicates).}",
-  "\\label{tab:bootstrap-sensitivity}",
-  "\\centering",
-  "\\scriptsize",
-  "\\textit{Panel A: Group-level excess in-group tie rate}\\\\[2pt]",
-  "\\begin{tabular}{lrrrrr}",
-  "\\toprule",
-  "Group & $n$ Egos & $n$ Ties & Observed Rate & Baseline Rate & Excess (95\\% CI) \\\\",
-  "\\midrule"
-)
+  group_table <- ex$observed_summary |>
+    left_join(ex$group_ci, by = "ego_rel") |>
+    mutate(ego_rel = factor(ego_rel, levels = groups)) |>
+    arrange(ego_rel)
 
-for (i in seq_len(nrow(group_table))) {
-  r <- group_table[i, ]
-  tex <- c(tex, sprintf(
-    "%s & %d & %s & %.3f & %.3f & %.3f %s \\\\",
-    r$ego_rel, r$n_egos, format(r$n_ties, big.mark = ","), r$observed_rate, r$baseline_rate,
-    r$boot_mean_excess, fmt_ci(r$ci_lo, r$ci_hi)
-  ))
+  tex <- c(
+    "\\begin{table}[htbp]",
+    sprintf("\\caption{\\label{%s}%s}", label, caption),
+    "\\centering",
+    "\\scriptsize",
+    "\\textit{Panel A: Group-level excess in-group tie rate (descriptive)}\\\\[2pt]",
+    "\\begin{tabular}{lrrrrr}",
+    "\\toprule",
+    sprintf("Group & $n$ Egos & $n$ Ties & Observed Rate & Baseline Rate & Excess (95\\%% CI) \\\\"),
+    "\\midrule"
+  )
+  for (i in seq_len(nrow(group_table))) {
+    r <- group_table[i, ]
+    tex <- c(tex, sprintf(
+      "%s & %d & %s & %.3f & %.3f & %.3f %s \\\\",
+      r$ego_rel, r$n_egos, format(r$n_ties, big.mark = ","), r$observed_rate, r$baseline_rate,
+      r$boot_mean_excess, fmt_ci(r$ci_lo, r$ci_hi)
+    ))
+  }
+  tex <- c(
+    tex,
+    "\\bottomrule",
+    sprintf(
+      "\\multicolumn{6}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Baseline: %s. The excess is a descriptive quantity: for a fixed in-group odds ratio it varies with the group's baseline share, so it should not be compared across groups of different sizes. Panels C--D (log-odds) are the basis for group contrasts. The bootstrap uses the baseline sample (no covariate filtering).} \\\\",
+      baseline_label
+    ),
+    "\\end{tabular}",
+    "\\\\[8pt]",
+    "\\textit{Panel B: Pairwise differences in excess rate (descriptive)}\\\\[2pt]",
+    "\\begin{tabular}{llrrc}",
+    "\\toprule",
+    "Group 1 & Group 2 & Mean Diff. & 95\\% CI & Excludes 0 \\\\",
+    "\\midrule"
+  )
+  for (i in seq_len(nrow(ex$pairwise_ci))) {
+    r <- ex$pairwise_ci[i, ]
+    tex <- c(tex, sprintf(
+      "%s & %s & %.3f & %s & %s \\\\",
+      r$group1, r$group2, r$mean_diff, fmt_ci(r$ci_lo, r$ci_hi),
+      ifelse(r$excludes_zero, "Yes", "No")
+    ))
+  }
+  tex <- c(
+    tex,
+    "\\bottomrule",
+    "\\multicolumn{5}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Unique egos are resampled with replacement, separately within each group, so that each resampled ego's ties move together. Panel B differences are valid because each group's replicates are drawn independently.} \\\\",
+    "\\end{tabular}",
+    "\\\\[8pt]",
+    "\\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1)}\\\\[2pt]",
+    "\\begin{tabular}{llrrrrr}",
+    "\\toprule",
+    "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
+    "\\midrule"
+  )
+  for (i in seq_len(nrow(w1))) {
+    r <- w1[i, ]
+    tex <- c(tex, sprintf(
+      "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
+      r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
+    ))
+  }
+  tex <- c(
+    tex,
+    "\\bottomrule",
+    "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Model 1 (offset only), same analytic sample as Table~\\ref{tab:pooled-interaction-reg}, ego-clustered vcov. Catholic-vs-X rows are Catholic minus X. Holm-adjusted across all six contrasts.} \\\\",
+    "\\end{tabular}",
+    "\\\\[8pt]",
+    "\\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3)}\\\\[2pt]",
+    "\\begin{tabular}{llrrrrr}",
+    "\\toprule",
+    "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
+    "\\midrule"
+  )
+  for (i in seq_len(nrow(w3))) {
+    r <- w3[i, ]
+    tex <- c(tex, sprintf(
+      "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
+      r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
+    ))
+  }
+  c(
+    tex,
+    "\\bottomrule",
+    "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Identical contrasts to Panel C, on the Model 3 specification (structural foci, demographic homophily, salience, and ego/alter degree controls). Holm-adjusted across all six contrasts.} \\\\",
+    "\\end{tabular}",
+    "\\end{table}"
+  )
 }
 
-tex <- c(
-  tex,
-  "\\bottomrule",
-  "\\multicolumn{6}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Catholic's own excess (95\\% CI excludes zero) indicates that even the religious majority exhibits some in-group tie preference beyond pure chance mixing; the substantive question of interest is not whether any group departs from chance (all four do, per Table~\\ref{tab:yules-q-null} and here), but the \\textit{relative magnitude} of that departure across groups, which Panel B addresses directly. The bootstrap uses the baseline sample (no covariate filtering), which is larger than the fully adjusted sample used for Table~\\ref{tab:pooled-interaction-reg}.} \\\\",
-  "\\end{tabular}",
-  "\\\\[8pt]",
-  "\\textit{Panel B: Pairwise differences in excess rate}\\\\[2pt]",
-  "\\begin{tabular}{llrrc}",
-  "\\toprule",
-  "Group 1 & Group 2 & Mean Diff. & 95\\% CI & Excludes 0 \\\\",
-  "\\midrule"
+writeLines(
+  build_bs_table(
+    "cohort",
+    "ego-cohort composition (primary)",
+    "tab:bootstrap-sensitivity",
+    "Robustness Check: Ego-Level Cluster Bootstrap and Wald Tests, Ego-Cohort Opportunity Baseline (Waves 3--8, 2,000 replicates)."
+  ),
+  here("Tabs", "tbl-bootstrap-sensitivity.tex")
 )
-
-for (i in seq_len(nrow(pairwise_ci))) {
-  r <- pairwise_ci[i, ]
-  tex <- c(tex, sprintf(
-    "%s & %s & %.3f & %s & %s \\\\",
-    r$group1, r$group2, r$mean_diff, fmt_ci(r$ci_lo, r$ci_hi),
-    ifelse(r$excludes_zero, "Yes", "No")
-  ))
-}
-
-tex <- c(
-  tex,
-  "\\bottomrule",
-  "\\multicolumn{5}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\\\",
-  "\\end{tabular}",
-  "\\\\[8pt]",
-  "\\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1, baseline)}\\\\[2pt]",
-  "\\begin{tabular}{llrrrrr}",
-  "\\toprule",
-  "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
-  "\\midrule"
+writeLines(
+  build_bs_table(
+    "pool",
+    "nominated-alter pool (sensitivity)",
+    "tab:bootstrap-sensitivity-pool",
+    "Sensitivity Analysis: Ego-Level Cluster Bootstrap and Wald Tests, Nominated-Alter Pool Opportunity Baseline (Waves 3--8, 2,000 replicates)."
+  ),
+  here("Tabs", "tbl-bootstrap-sensitivity-pool.tex")
 )
-
-for (i in seq_len(nrow(wald_results_m1))) {
-  r <- wald_results_m1[i, ]
-  tex <- c(tex, sprintf(
-    "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
-    r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
-  ))
-}
-
-tex <- c(
-  tex,
-  "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates; same fully adjusted analytic sample as the Model 1 column of Table~\\ref{tab:pooled-interaction-reg}), using the same ego-clustered variance-covariance matrix (clustered on \\texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\\\",
-  "\\end{tabular}",
-  "\\\\[8pt]",
-  "\\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\\\[2pt]",
-  "\\begin{tabular}{llrrrrr}",
-  "\\toprule",
-  "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
-  "\\midrule"
-)
-
-for (i in seq_len(nrow(wald_results_m3))) {
-  r <- wald_results_m3[i, ]
-  tex <- c(tex, sprintf(
-    "%s & %s & %.3f & %.3f & %.3f & %s & %s \\\\",
-    r$group1, r$group2, r$log_odds_diff, r$se, r$chisq, fmt_p(r$p_value), fmt_p(r$p_holm)
-  ))
-}
-
-tex <- c(
-  tex,
-  "\\bottomrule",
-  "\\multicolumn{7}{p{0.95\\textwidth}}{\\footnotesize \\textit{Note:} Identical contrasts to Panel C, but on the fully-adjusted Model 3 specification (Table~\\ref{tab:pooled-interaction-reg}: structural foci, demographic homophily, religious salience, and ego/alter log-degree controls), to check whether the pairwise conclusions are sensitive to adding these covariates. $p$-values are Holm-adjusted across all six contrasts.} \\\\",
-  "\\end{tabular}",
-  "\\end{table}"
-)
-
-writeLines(tex, here("Tabs", "tbl-bootstrap-sensitivity.tex"))
-cat("Supplementary table (now including Wald test Panel C) saved to Tabs/tbl-bootstrap-sensitivity.tex\n")
+cat("Tables saved to Tabs/tbl-bootstrap-sensitivity.tex and Tabs/tbl-bootstrap-sensitivity-pool.tex\n")

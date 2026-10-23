@@ -1,0 +1,70 @@
+\begin{table}[htbp]
+\caption{\label{tab:missingness}Missingness, Sample Composition, and Missing-Indicator Sensitivity (Waves 3--8).}
+\centering
+\scriptsize
+\textit{Panel A: Missingness by ego group (student, non-family ties, Waves 3--8)}\\[2pt]
+\begin{tabular}{lrrrrrr}
+\toprule
+Ego group & Egos & Ties & Alter religion missing (\%) & Roommate missing (\%) & Same dorm missing (\%) & Alter race missing (\%) \\
+\midrule
+Catholic & 351 & 8,898 & 14.3 & 0.0 & 0.0 & 35.5 \\
+No Religion & 52 & 1,065 & 20.2 & 0.0 & 0.0 & 40.4 \\
+Other Religion & 22 &   487 & 21.8 & 0.0 & 0.0 & 34.7 \\
+Protestant & 50 & 1,308 & 9.4 & 0.0 & 0.0 & 35.9 \\
+\bottomrule
+\end{tabular}
+\\[6pt]
+\begin{tabular}{lrr}
+\toprule
+Ego group & Egos with discussion frequency missing (\%) & Egos with race outside the four coded categories (\%) \\
+\midrule
+Catholic & 10.7 & 5.3 \\
+No Religion & 14.6 & 24.7 \\
+Other Religion & 18.2 & 9.1 \\
+Protestant & 11.3 & 7.0 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel B: Tie composition by ego group (\%)}\\[2pt]
+\begin{tabular}{lrr}
+\toprule
+Ego group & Baseline sample (10,046 ties) & Complete-case analytic sample \\
+\midrule
+Catholic & 76.0 & 78.7 \\
+No Religion & 8.5 & 6.7 \\
+Other Religion & 3.8 & 3.4 \\
+Protestant & 11.8 & 11.2 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel C: Model 1 coefficients (log-odds vs.\ Catholic), baseline sample vs.\ complete-case sample}\\[2pt]
+\begin{tabular}{llrrrr}
+\toprule
+Baseline & Group & \multicolumn{2}{c}{Baseline sample} & \multicolumn{2}{c}{Complete-case} \\
+ & & Est. (SE) & $p$ & Est. (SE) & $p$ \\
+\midrule
+Cohort & No Religion & 0.104 (0.188) & 0.581 & -0.170 (0.222) & 0.443 \\
+ & Other Religion & 0.716 (0.516) & 0.165 & 0.769 (0.515) & 0.136 \\
+ & Protestant & 0.083 (0.181) & 0.646 & 0.006 (0.200) & 0.975 \\
+Pool & No Religion & 0.844 (0.188) & $<$0.001 & 0.553 (0.221) & 0.012 \\
+ & Other Religion & 1.662 (0.518) & 0.001 & 1.694 (0.518) & 0.001 \\
+ & Protestant & 0.573 (0.181) & 0.002 & 0.479 (0.199) & 0.016 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel D: Missing-indicator models (roommate, dorm, and race missingness coded with indicators; race-not-coded egos retained)}\\[2pt]
+\begin{tabular}{llcc}
+\toprule
+Baseline & Group & Model 2 & Model 3 \\
+\midrule
+Cohort & No Religion & 0.059 (0.184) & 0.055 (0.183) \\
+ & Other Religion & 0.690 (0.524) & 0.674 (0.528) \\
+ & Protestant & 0.072 (0.182) & 0.073 (0.183) \\
+Pool & No Religion & 0.801*** (0.184) & 0.795*** (0.183) \\
+ & Other Religion & 1.640** (0.524) & 1.625** (0.527) \\
+ & Protestant & 0.562** (0.182) & 0.563** (0.183) \\
+\bottomrule
+\end{tabular}
+\\[4pt]
+\begin{minipage}{0.95\textwidth}\footnotesize \textit{Note:} The baseline sample has 10046 ties and the complete-case analytic sample has 8562. The missing-indicator sample (9961 ties) keeps ties with missing roommate, dorm, or alter-race information and egos whose race is not one of the four coded categories; each missing item enters with an indicator, and the item is set to 0. Ego-clustered SEs. $^{*}p<0.05$; $^{**}p<0.01$; $^{***}p<0.001$.\end{minipage}
+\end{table}

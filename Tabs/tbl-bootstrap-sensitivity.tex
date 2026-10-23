@@ -1,63 +1,62 @@
 \begin{table}[htbp]
-\caption{Robustness Check: Ego-Level Cluster Bootstrap Sensitivity Analysis of Excess In-Group Tie Rates (Waves 3--8, 2,000 replicates).}
-\label{tab:bootstrap-sensitivity}
+\caption{\label{tab:bootstrap-sensitivity}Robustness Check: Ego-Level Cluster Bootstrap and Wald Tests, Ego-Cohort Opportunity Baseline (Waves 3--8, 2,000 replicates).}
 \centering
 \scriptsize
-\textit{Panel A: Group-level excess in-group tie rate}\\[2pt]
+\textit{Panel A: Group-level excess in-group tie rate (descriptive)}\\[2pt]
 \begin{tabular}{lrrrrr}
 \toprule
 Group & $n$ Egos & $n$ Ties & Observed Rate & Baseline Rate & Excess (95\% CI) \\
 \midrule
-Catholic & 348 & 7,630 & 0.835 & 0.797 & 0.038 (0.021, 0.055) \\
-No Religion & 52 & 850 & 0.226 & 0.089 & 0.138 (0.083, 0.199) \\
-Other Religion & 22 & 381 & 0.155 & 0.026 & 0.125 (0.027, 0.275) \\
-Protestant & 50 & 1,185 & 0.181 & 0.088 & 0.094 (0.049, 0.146) \\
+Catholic & 348 & 7,630 & 0.835 & 0.731 & 0.104 (0.086, 0.120) \\
+No Religion & 52 & 850 & 0.226 & 0.124 & 0.101 (0.045, 0.165) \\
+Other Religion & 22 & 381 & 0.155 & 0.046 & 0.107 (0.007, 0.252) \\
+Protestant & 50 & 1,185 & 0.181 & 0.099 & 0.084 (0.037, 0.134) \\
 \bottomrule
-\multicolumn{6}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Catholic's own excess (95\% CI excludes zero) indicates that even the religious majority exhibits some in-group tie preference beyond pure chance mixing; the substantive question of interest is not whether any group departs from chance (all four do, per Table~\ref{tab:yules-q-null} and here), but the \textit{relative magnitude} of that departure across groups, which Panel B addresses directly. The bootstrap uses the baseline sample (no covariate filtering), which is larger than the fully adjusted sample used for Table~\ref{tab:pooled-interaction-reg}.} \\
+\multicolumn{6}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Baseline: ego-cohort composition (primary). The excess is a descriptive quantity: for a fixed in-group odds ratio it varies with the group's baseline share, so it should not be compared across groups of different sizes. Panels C--D (log-odds) are the basis for group contrasts. The bootstrap uses the baseline sample (no covariate filtering).} \\
 \end{tabular}
 \\[8pt]
-\textit{Panel B: Pairwise differences in excess rate}\\[2pt]
+\textit{Panel B: Pairwise differences in excess rate (descriptive)}\\[2pt]
 \begin{tabular}{llrrc}
 \toprule
 Group 1 & Group 2 & Mean Diff. & 95\% CI & Excludes 0 \\
 \midrule
-Catholic & No Religion & -0.100 & (-0.163, -0.042) & Yes \\
-Catholic & Other Religion & -0.087 & (-0.239, 0.013) & No \\
-Catholic & Protestant & -0.056 & (-0.109, -0.007) & Yes \\
-No Religion & Other Religion & 0.013 & (-0.150, 0.138) & No \\
-No Religion & Protestant & 0.044 & (-0.030, 0.126) & No \\
-Other Religion & Protestant & 0.031 & (-0.086, 0.192) & No \\
+Catholic & No Religion & 0.002 & (-0.062, 0.062) & No \\
+Catholic & Other Religion & -0.003 & (-0.147, 0.099) & No \\
+Catholic & Protestant & 0.020 & (-0.034, 0.070) & No \\
+No Religion & Other Religion & -0.006 & (-0.159, 0.116) & No \\
+No Religion & Protestant & 0.017 & (-0.058, 0.098) & No \\
+Other Religion & Protestant & 0.023 & (-0.094, 0.174) & No \\
 \bottomrule
-\multicolumn{5}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Unique egos are resampled with replacement, separately within each religious group, so that all of a resampled ego's ties (across whatever waves they contribute to) move together as a single block. Excess rate is the observed same-religion tie rate minus the wave-specific opportunity/chance baseline used to construct the logit offset in the pooled dyadic regressions (Table~\ref{tab:pooled-interaction-reg}); this baseline-adjusted quantity is comparable across groups of unequal size, unlike a raw tie rate or a log-odds coefficient. Panel B differences are valid because each group's bootstrap replicates are drawn independently of the other groups'.} \\
+\multicolumn{5}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Unique egos are resampled with replacement, separately within each group, so that each resampled ego's ties move together. Panel B differences are valid because each group's replicates are drawn independently.} \\
 \end{tabular}
 \\[8pt]
-\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1, baseline)}\\[2pt]
+\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1)}\\[2pt]
 \begin{tabular}{llrrrrr}
 \toprule
-Group 1 & Group 2 & Log-Odds Diff. & SE & $\chi^2$ & $p$ & Holm $p$ \\
+Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\chi^2$ & $p$ & Holm $p$ \\
 \midrule
-Catholic & No Religion & 0.549 & 0.197 & 7.766 & 0.005 & 0.027 \\
-Catholic & Other Religion & 1.718 & 0.536 & 10.291 & 0.001 & 0.008 \\
-Catholic & Protestant & 0.497 & 0.182 & 7.452 & 0.006 & 0.027 \\
-No Religion & Other Religion & -1.169 & 0.563 & 4.307 & 0.038 & 0.086 \\
-No Religion & Protestant & 0.052 & 0.252 & 0.043 & 0.836 & 0.836 \\
-Other Religion & Protestant & 1.221 & 0.558 & 4.786 & 0.029 & 0.086 \\
+Catholic & No Religion & 0.170 & 0.222 & 0.589 & 0.443 & 1.000 \\
+Catholic & Other Religion & -0.769 & 0.515 & 2.224 & 0.136 & 0.680 \\
+Catholic & Protestant & -0.006 & 0.200 & 0.001 & 0.975 & 1.000 \\
+No Religion & Other Religion & -0.939 & 0.553 & 2.883 & 0.090 & 0.537 \\
+No Religion & Protestant & -0.176 & 0.283 & 0.388 & 0.533 & 1.000 \\
+Other Religion & Protestant & 0.762 & 0.544 & 1.961 & 0.161 & 0.680 \\
 \bottomrule
-\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Wald tests of the equality of all six pairwise pooled Model 1 log-odds coefficients (opportunity-offset only, no structural/degree covariates; same fully adjusted analytic sample as the Model 1 column of Table~\ref{tab:pooled-interaction-reg}), using the same ego-clustered variance-covariance matrix (clustered on \texttt{egoid}) as the pooled regression tables. The three Catholic-vs.-X contrasts are algebraically equivalent to testing each coefficient against zero and are included as a diagnostic sanity check, not new information. $p$-values are Holm-adjusted across all six contrasts. This is a complementary check to Panels A-B: it compares coefficients directly on the log-odds scale rather than baseline-adjusted probability-scale excess rates.} \\
+\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Model 1 (offset only), same analytic sample as Table~\ref{tab:pooled-interaction-reg}, ego-clustered vcov. Catholic-vs-X rows are Catholic minus X. Holm-adjusted across all six contrasts.} \\
 \end{tabular}
 \\[8pt]
-\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\[2pt]
+\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3)}\\[2pt]
 \begin{tabular}{llrrrrr}
 \toprule
-Group 1 & Group 2 & Log-Odds Diff. & SE & $\chi^2$ & $p$ & Holm $p$ \\
+Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\chi^2$ & $p$ & Holm $p$ \\
 \midrule
-Catholic & No Religion & 0.550 & 0.195 & 7.974 & 0.005 & 0.024 \\
-Catholic & Other Religion & 1.718 & 0.524 & 10.733 & 0.001 & 0.006 \\
-Catholic & Protestant & 0.496 & 0.185 & 7.153 & 0.007 & 0.030 \\
-No Religion & Other Religion & -1.168 & 0.549 & 4.532 & 0.033 & 0.082 \\
-No Religion & Protestant & 0.053 & 0.251 & 0.045 & 0.831 & 0.831 \\
-Other Religion & Protestant & 1.222 & 0.553 & 4.877 & 0.027 & 0.082 \\
+Catholic & No Religion & 0.166 & 0.215 & 0.597 & 0.440 & 1.000 \\
+Catholic & Other Religion & -0.757 & 0.510 & 2.205 & 0.138 & 0.688 \\
+Catholic & Protestant & -0.007 & 0.202 & 0.001 & 0.973 & 1.000 \\
+No Religion & Other Religion & -0.923 & 0.540 & 2.918 & 0.088 & 0.526 \\
+No Religion & Protestant & -0.173 & 0.279 & 0.384 & 0.535 & 1.000 \\
+Other Religion & Protestant & 0.750 & 0.543 & 1.909 & 0.167 & 0.688 \\
 \bottomrule
-\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Identical contrasts to Panel C, but on the fully-adjusted Model 3 specification (Table~\ref{tab:pooled-interaction-reg}: structural foci, demographic homophily, religious salience, and ego/alter log-degree controls), to check whether the pairwise conclusions are sensitive to adding these covariates. $p$-values are Holm-adjusted across all six contrasts.} \\
+\multicolumn{7}{p{0.95\textwidth}}{\footnotesize \textit{Note:} Identical contrasts to Panel C, on the Model 3 specification (structural foci, demographic homophily, salience, and ego/alter degree controls). Holm-adjusted across all six contrasts.} \\
 \end{tabular}
 \end{table}

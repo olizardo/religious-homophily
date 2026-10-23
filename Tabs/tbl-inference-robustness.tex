@@ -1,0 +1,74 @@
+\begin{table}[htbp]
+\caption{\label{tab:inference-robustness}Inference Robustness for the Pooled Group Coefficients under Both Opportunity Baselines (Waves 3--8).}
+\centering
+\scriptsize
+\textit{Panel A: Model 1 group coefficients (log-odds vs.\ Catholic)}\\[2pt]
+\begin{tabular}{llrrrrrr}
+\toprule
+Baseline & Group & Est. & SE (ego) & SE (two-way) & Boot 95\% CI & $p$ (ego) & $p$ (two-way) \\
+\midrule
+Cohort & No Religion & -0.170 & 0.222 & 0.234 & (-0.645, 0.240) & 0.443 & 0.466 \\
+ & Other Religion & 0.769 & 0.515 & 0.518 & (-0.439, 1.685) & 0.136 & 0.138 \\
+ & Protestant & 0.006 & 0.200 & 0.221 & (-0.413, 0.387) & 0.975 & 0.978 \\
+Pool & No Religion & 0.553 & 0.221 & 0.232 & (0.088, 0.979) & 0.012 & 0.017 \\
+ & Other Religion & 1.694 & 0.518 & 0.520 & (0.375, 2.557) & 0.001 & 0.001 \\
+ & Protestant & 0.479 & 0.199 & 0.220 & (0.095, 0.847) & 0.016 & 0.030 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel B: Model 3 group coefficients (log-odds vs.\ Catholic)}\\[2pt]
+\begin{tabular}{llrrrrrr}
+\toprule
+Baseline & Group & Est. & SE (ego) & SE (two-way) & Boot 95\% CI & $p$ (ego) & $p$ (two-way) \\
+\midrule
+Cohort & No Religion & -0.166 & 0.215 & 0.227 & (-0.669, 0.232) & 0.440 & 0.465 \\
+ & Other Religion & 0.757 & 0.510 & 0.512 & (-0.527, 1.596) & 0.138 & 0.139 \\
+ & Protestant & 0.007 & 0.202 & 0.224 & (-0.422, 0.367) & 0.973 & 0.976 \\
+Pool & No Religion & 0.553 & 0.214 & 0.227 & (0.120, 0.965) & 0.010 & 0.015 \\
+ & Other Religion & 1.684 & 0.509 & 0.512 & (0.453, 2.509) & $<$0.001 & $<$0.001 \\
+ & Protestant & 0.479 & 0.201 & 0.223 & (0.083, 0.846) & 0.017 & 0.031 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel C: Pairwise non-Catholic contrasts (log-odds difference)}\\[2pt]
+\begin{tabular}{llllrrrr}
+\toprule
+Baseline & Model & Contrast & Diff. & Boot 95\% CI & $p$ (ego) & $p$ (two-way) \\
+\midrule
+Cohort & Model 1 & No Religion vs Other Religion & -0.939 & (-1.926, 0.424) & 0.090 & 0.090 \\
+Cohort & Model 1 & No Religion vs Protestant & -0.176 & (-0.725, 0.388) & 0.533 & 0.546 \\
+Cohort & Model 1 & Other Religion vs Protestant & 0.762 & (-0.537, 1.739) & 0.161 & 0.162 \\
+Cohort & Model 3 & No Religion vs Other Religion & -0.923 & (-1.805, 0.382) & 0.088 & 0.089 \\
+Cohort & Model 3 & No Religion vs Protestant & -0.173 & (-0.751, 0.376) & 0.535 & 0.548 \\
+Cohort & Model 3 & Other Religion vs Protestant & 0.750 & (-0.576, 1.663) & 0.167 & 0.168 \\
+Pool & Model 1 & No Religion vs Other Religion & -1.141 & (-2.123, 0.251) & 0.040 & 0.040 \\
+Pool & Model 1 & No Religion vs Protestant & 0.074 & (-0.506, 0.617) & 0.793 & 0.799 \\
+Pool & Model 1 & Other Religion vs Protestant & 1.215 & (-0.187, 2.168) & 0.026 & 0.026 \\
+Pool & Model 3 & No Religion vs Other Religion & -1.131 & (-2.027, 0.169) & 0.036 & 0.037 \\
+Pool & Model 3 & No Religion vs Protestant & 0.074 & (-0.467, 0.613) & 0.791 & 0.798 \\
+Pool & Model 3 & Other Religion vs Protestant & 1.204 & (-0.058, 2.083) & 0.026 & 0.027 \\
+\bottomrule
+\end{tabular}
+\\[8pt]
+\textit{Panel D: Leave-one-ego-out influence on group coefficients}\\[2pt]
+\begin{tabular}{lllll}
+\toprule
+Baseline and model & Group & Full estimate & Range over ego deletions & Most influential ego \\
+\midrule
+Cohort Model 1 & No Religion & -0.170 & -0.317 to -0.095 & 93699 (No Religion, 36 ties) \\
+Cohort Model 1 & Other Religion & 0.769 & 0.075 to 0.886 & 63904 (Other Religion, 35 ties) \\
+Cohort Model 1 & Protestant & 0.006 & -0.104 to 0.059 & 44927 (Protestant, 34 ties) \\
+Cohort Model 3 & No Religion & -0.166 & -0.295 to -0.090 & 93699 (No Religion, 36 ties) \\
+Cohort Model 3 & Other Religion & 0.757 & 0.052 to 0.877 & 63904 (Other Religion, 35 ties) \\
+Cohort Model 3 & Protestant & 0.007 & -0.106 to 0.071 & 44927 (Protestant, 34 ties) \\
+Pool Model 1 & No Religion & 0.553 & 0.410 to 0.629 & 93699 (No Religion, 36 ties) \\
+Pool Model 1 & Other Religion & 1.694 & 0.997 to 1.802 & 63904 (Other Religion, 35 ties) \\
+Pool Model 1 & Protestant & 0.479 & 0.368 to 0.532 & 44927 (Protestant, 34 ties) \\
+Pool Model 3 & No Religion & 0.553 & 0.429 to 0.630 & 93699 (No Religion, 36 ties) \\
+Pool Model 3 & Other Religion & 1.684 & 0.977 to 1.795 & 63904 (Other Religion, 35 ties) \\
+Pool Model 3 & Protestant & 0.479 & 0.366 to 0.543 & 44927 (Protestant, 34 ties) \\
+\bottomrule
+\end{tabular}
+\\[4pt]
+\begin{minipage}{0.95\textwidth}\footnotesize \textit{Note:} Ego-clustered SEs cluster on egoid; two-way SEs cluster on egoid and alterid. Boot 95\% CIs are percentile intervals from 1000 ego-cluster pairs replicates (egos resampled with replacement within group). Panel D refits the model 422 times, dropping one ego at a time; the most influential ego is the one whose removal shifts the coefficient most. With 19 Other Religion egos, these checks indicate sensitivity rather than providing exact inference.\end{minipage}
+\end{table}
