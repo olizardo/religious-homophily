@@ -21,18 +21,19 @@ library(dplyr)
 
 # Fit models via the canonical scripts -------------------------------------
 # Sourcing (rather than reimplementing) guarantees this table can never
-# drift from the actual model specifications: model1_pooled/model2_pooled/
-# model3_pooled/m1_clustered/m2_clustered/m3_clustered/df_pooled_clean come
-# from 02_dyadic_models_pooled.R; model_interaction/clustered_results come
-# from 02_dyadic_models_interaction.R.
-source(here("Code", "02_dyadic_models_pooled.R"), local = TRUE)
-source(here("Code", "02_dyadic_models_interaction.R"), local = TRUE)
+# drift from the actual model specifications. Each script is sourced into its
+# own environment: local = TRUE would assign the fitted objects into the global
+# environment when this script is run from top level.
+env_pooled <- new.env()
+source(here("Code", "02_dyadic_models_pooled.R"), local = env_pooled)
+env_interaction <- new.env()
+source(here("Code", "02_dyadic_models_interaction.R"), local = env_interaction)
 
 models <- list(
-  "Model 1" = m1_clustered,
-  "Model 2" = m2_clustered,
-  "Model 3 (+Degree)" = m3_clustered,
-  "Interaction (+Degree)" = clustered_results
+  "Model 1" = env_pooled$m1_clustered,
+  "Model 2" = env_pooled$m2_clustered,
+  "Model 3 (+Degree)" = env_pooled$m3_clustered,
+  "Interaction (+Degree)" = env_interaction$clustered_results
 )
 
 # Helpers -------------------------------------------------------------------
@@ -87,7 +88,7 @@ body_rows <- sapply(row_specs, function(spec) {
 })
 
 # Group sample sizes (fully-adjusted pooled sample, Models 2/3) ------------
-group_n <- df_pooled_clean |>
+group_n <- env_pooled$df_pooled_clean |>
   group_by(ego_rel) |>
   summarise(n_egos = n_distinct(egoid), n_ties = n(), .groups = "drop") |>
   mutate(ego_rel = factor(ego_rel, levels = c("Catholic", "No Religion", "Other Religion", "Protestant"))) |>
@@ -106,8 +107,8 @@ group_n_rows <- sprintf(
 # Pull the actual p-values for the degree terms so the footnote's stated
 # range can never silently go stale relative to the fitted models.
 p_degree <- c(
-  get_p(m3_clustered, "log_ego_degree"),
-  get_p(clustered_results, "log_ego_degree")
+  get_p(env_pooled$m3_clustered, "log_ego_degree"),
+  get_p(env_interaction$clustered_results, "log_ego_degree")
 )
 p_degree_lo <- sprintf("%.2f", min(p_degree, na.rm = TRUE))
 p_degree_hi <- sprintf("%.2f", max(p_degree, na.rm = TRUE))

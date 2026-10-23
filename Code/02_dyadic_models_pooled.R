@@ -75,12 +75,12 @@ df_pooled <- df_all |>
     
     # Alternative homophily dimensions
     same_gender = ifelse(gender_1 == altsex, 1, 0),
+    # Unknown alter race stays NA (dropped by the complete-case filter), not 0
     same_race = case_when(
-      race_1 == "White" & altwhite == TRUE ~ 1,
-      race_1 == "African-American" & altblack == TRUE ~ 1,
-      race_1 == "Asian-American" & altasian == TRUE ~ 1,
-      race_1 == "Latino/a" & althisla == TRUE ~ 1,
-      race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
+      race_1 == "White" ~ as.numeric(altwhite),
+      race_1 == "African-American" ~ as.numeric(altblack),
+      race_1 == "Asian-American" ~ as.numeric(altasian),
+      race_1 == "Latino/a" ~ as.numeric(althisla),
       TRUE ~ NA_real_
     ),
     # Discussion frequency as a proxy for individual religious salience

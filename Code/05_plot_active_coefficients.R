@@ -2,6 +2,8 @@
 # Title: 05_plot_active_coefficients
 # Author: Posit Assistant (Omar Lizardo)
 # Created: 2026-06-23
+# Revised: 2026-10-22 (cont.) - unknown alter race coded NA (not 0); confidence
+#          intervals use ego-clustered SEs (vcov = ~egoid), as in the pooled tables.
 # Revised: 2026-10-22 - Figure 3 now plots true average marginal effects (avg over
 #          all observed ties per wave, offset fixed at 0; covariates = Model 2 minus
 #          religious salience) and the offset is written as offset() in the formula.
@@ -72,12 +74,12 @@ df_pooled <- df_all |>
     # contrasts are always each non-Catholic group vs. Catholic.
     ego_rel = factor(ego_rel, levels = c("Catholic", "No Religion", "Other Religion", "Protestant")),
     same_gender = ifelse(gender_1 == altsex, 1, 0),
+    # Unknown alter race stays NA (dropped by the complete-case filter), not 0
     same_race = case_when(
-      race_1 == "White" & altwhite == TRUE ~ 1,
-      race_1 == "African-American" & altblack == TRUE ~ 1,
-      race_1 == "Asian-American" & altasian == TRUE ~ 1,
-      race_1 == "Latino/a" & althisla == TRUE ~ 1,
-      race_1 %in% c("White", "African-American", "Asian-American", "Latino/a") ~ 0,
+      race_1 == "White" ~ as.numeric(altwhite),
+      race_1 == "African-American" ~ as.numeric(altblack),
+      race_1 == "Asian-American" ~ as.numeric(altasian),
+      race_1 == "Latino/a" ~ as.numeric(althisla),
       TRUE ~ NA_real_
     ),
     close_num = case_when(
@@ -110,9 +112,11 @@ for (w in paste0("Wave", 3:8)) {
     data = df_w
   )
   
+  # Ego-clustered SEs, consistent with the pooled regression tables
   cmp <- avg_comparisons(
     model,
     variables = list(ego_rel = "reference"),
+    vcov = ~egoid,
     newdata = df_w |>
       select(ego_rel, same_gender, same_race, roommates, samedorm, close_num) |>
       mutate(opportunity_offset = 0)

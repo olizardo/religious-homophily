@@ -181,7 +181,9 @@ print(pairwise_ci, n = Inf)
 wald_contrast <- function(model, vcov_mat, term1, term2 = NULL) {
   b <- coef(model)
   L <- setNames(rep(0, length(b)), names(b))
-  L[term1] <- 1
+  # Contrast is always group1 minus group2 as labelled. For a Catholic-vs-X
+  # contrast the estimate must be Catholic minus X, i.e. -b_X.
+  L[term1] <- if (is.null(term2)) -1 else 1
   if (!is.null(term2)) L[term2] <- -1
   est <- sum(L * b)
   se <- sqrt(as.numeric(t(L) %*% vcov_mat %*% L))
@@ -214,24 +216,24 @@ all_group_pairs <- list(
 # structural foci, religious salience, and ego/alter degree are controlled
 # for. Rather than re-implementing that data prep and model spec a third
 # time (risking drift from the canonical script, per the lesson in
-# AGENTS.md Section 13), source Code/02_dyadic_models_pooled.R directly and
-# reuse its fitted `model3_pooled` object and analytic sample. This
-# overwrites this script's own `df_all`/`df_pooled`/`wave_alter_props`
-# objects, but only after the bootstrap and Model 1 Wald test above have
-# already used them, so nothing upstream is affected.
+# AGENTS.md Section 13), source Code/02_dyadic_models_pooled.R into its own
+# environment (`pooled_env`) and reuse its fitted `model3_pooled` object and
+# analytic sample. A dedicated environment keeps the sourced objects out of the
+# global workspace (local = TRUE would assign them there at top level).
 cat("\n--- Sourcing Code/02_dyadic_models_pooled.R for the fully-adjusted Model 3 fit ---\n")
-source(here("Code", "02_dyadic_models_pooled.R"), local = TRUE)
+pooled_env <- new.env()
+source(here("Code", "02_dyadic_models_pooled.R"), local = pooled_env)
 
 ## Model 1 (baseline, opportunity-offset only) -----------------------------
 # Uses model1_pooled from the sourced pooled script, so the Model 1 Wald
 # tests are on the same fully adjusted analytic sample as Table 1.
-vcov_wald_m1 <- vcovCL(model1_pooled, cluster = df_pooled_clean$egoid)
+vcov_wald_m1 <- vcovCL(pooled_env$model1_pooled, cluster = pooled_env$df_pooled_clean$egoid)
 
 cat("\n--- Pooled Model 1 coefficients (clustered SE), for reference ---\n")
-print(coeftest(model1_pooled, vcov = vcov_wald_m1))
+print(coeftest(pooled_env$model1_pooled, vcov = vcov_wald_m1))
 
 wald_results_m1 <- bind_rows(lapply(all_group_pairs, function(p) {
-  wald_contrast(model1_pooled, vcov_wald_m1, p$term1, p$term2)
+  wald_contrast(pooled_env$model1_pooled, vcov_wald_m1, p$term1, p$term2)
 }))
 wald_results_m1$p_holm <- p.adjust(wald_results_m1$p_value, method = "holm")
 
@@ -239,10 +241,10 @@ cat("\n--- Wald tests (Model 1, baseline): all 6 pairwise contrasts ---\n")
 cat("(Holm-adjusted across the 6 contrasts)\n")
 print(wald_results_m1, n = Inf)
 
-vcov_wald_m3 <- vcovCL(model3_pooled, cluster = df_pooled_clean$egoid)
+vcov_wald_m3 <- vcovCL(pooled_env$model3_pooled, cluster = pooled_env$df_pooled_clean$egoid)
 
 wald_results_m3 <- bind_rows(lapply(all_group_pairs, function(p) {
-  wald_contrast(model3_pooled, vcov_wald_m3, p$term1, p$term2)
+  wald_contrast(pooled_env$model3_pooled, vcov_wald_m3, p$term1, p$term2)
 }))
 wald_results_m3$p_holm <- p.adjust(wald_results_m3$p_value, method = "holm")
 
@@ -328,7 +330,7 @@ tex <- c(
   "\\textit{Panel C: Wald tests of pairwise equality, pooled log-odds coefficients (Model 1, baseline)}\\\\[2pt]",
   "\\begin{tabular}{llrrrrr}",
   "\\toprule",
-  "Group 1 & Group 2 & Log-Odds Diff. & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
+  "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
   "\\midrule"
 )
 
@@ -349,7 +351,7 @@ tex <- c(
   "\\textit{Panel D: Wald tests of pairwise equality, pooled log-odds coefficients (Model 3, fully adjusted)}\\\\[2pt]",
   "\\begin{tabular}{llrrrrr}",
   "\\toprule",
-  "Group 1 & Group 2 & Log-Odds Diff. & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
+  "Group 1 & Group 2 & Log-Odds Diff. (G1 $-$ G2) & SE & $\\chi^2$ & $p$ & Holm $p$ \\\\",
   "\\midrule"
 )
 
