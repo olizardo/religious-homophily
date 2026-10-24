@@ -1,0 +1,81 @@
+% DRAFT: within-cohort Methods section (plan WC-AS-v1). Not part of paper.tex.
+% Intended for a revision file (for example paper_R1.tex) after the framing decision.
+% Bibliography keys to add and verify before compiling:
+%   cox1972 (Cox 1972, regression models and life tables; conditional likelihood basis)
+%   gail1981 (Gail, Lubin and Rubinstein 1981, Biometrika; exact conditional likelihood with ties)
+%   breslow1974 (Breslow 1974, Biometrics; approximation for tied events)
+%   cameron2011 (Cameron, Gelbach and Miller 2011, JBES; multiway cluster-robust variance)
+% Open decision (race coding) is marked DECISION below.
+
+\subsection{Within-cohort choice model}
+\label{sec:within-cohort-methods}
+
+The campus-wide models in Section~\ref{sec:methods-data} compare observed same-religion ties with an external opportunity baseline. The within-cohort analysis asks a narrower question that needs no external baseline. The choice set is the surveyed cohort itself: among students in the roster, do students nominate co-religious roster members at different odds, and does this differ by the nominating student's religion?
+
+\paragraph{Sample.}
+The roster consists of in-study students in Tiers 1 and 3 whose wave-1 religion, gender, race, and first-year residence hall are non-missing in the basic survey. This gives 595 students: 430 Catholic, 73 No Religion, 28 Other Religion, and 64 Protestant. Tier 2 students were recruited by referral from Tier 1 students, so they are excluded from the primary model and included only in a sensitivity analysis. The analysis covers waves 3 through 8. A student is a \emph{chooser} in a wave if they nominated any alter in that wave. Across waves, 430 roster students chose at least once, and 1,673 ego-waves had at least one nomination. Ego-waves without nominations are treated as non-responses. Non-response cannot be separated from a true absence of nominations.
+
+\paragraph{Religion and race coding.}
+Religion is the wave-1 self-report for both the nominating student and the candidate, and it is held fixed across waves. Self-reports are used because ego reports of alter religion differ from the alter's own report. Among 3,213 nominated roster ties with both reports, the two agree on 87.1\% of ties. Of students who self-report No Religion and are nominated by a roster member, 32\% are recorded in the ego report as Catholic. Race is an exact match on the recorded category. The 43 ``Foreign Student'' responses and the single ``Other'' response are coded as one ``Other'' category (44 students). Two students in this category therefore count as a race match. The campus-wide analysis codes these responses as missing, so the two analyses differ on this point. This recoding was decided after the first run of the models had been read (plan amendment 1). It changed no reported coefficient by more than 0.01 log-odds, and it changed no decision rule's category.
+
+\paragraph{Risk set and outcome.}
+For each wave, every responding roster student is a chooser who faces every other roster student as a candidate. This produces 993,740 chooser-candidate-wave rows. Nominations to roster members that were coded as family are removed from the risk set. The outcome $y_{ijw}$ equals 1 if chooser $i$ nominated candidate $j$ as a non-family alter in wave $w$. There are 2,752 such nominations.
+
+\paragraph{Model.}
+The primary model is a conditional logistic regression with one stratum for each candidate-wave pair. Within a stratum, the likelihood conditions on the choosers who nominated that candidate in that wave. The candidate's popularity in that wave is therefore absorbed by the stratum and does not need to be modeled. Let $\mathcal{E}_{jw}$ be the set of choosers who nominated candidate $j$ in wave $w$, and $\mathcal{R}_{jw}$ the set of responding choosers in wave $w$ other than $j$. The contribution of stratum $(j,w)$ to the likelihood is
+\[
+\prod_{i \in \mathcal{E}_{jw}} \frac{\exp(\mathbf{x}_{ijw}^\top \boldsymbol{\beta})}{\sum_{k \in \mathcal{R}_{jw}} \exp(\mathbf{x}_{kjw}^\top \boldsymbol{\beta})}.
+\]
+The linear predictor for the primary model (M1) is
+\[
+\mathbf{x}_{ijw}^\top \boldsymbol{\beta} =
+\theta_C\,\mathrm{same}^{C}_{ij} + \theta_N\,\mathrm{same}^{N}_{ij}
++ \gamma_{NR}\,\mathrm{NR}_i + \gamma_{OR}\,\mathrm{OR}_i + \gamma_{P}\,\mathrm{P}_i
++ \kappa\,\log d_{iw} + \gamma_{g}\,\mathrm{same\ gender}_{ij}
++ \gamma_{r}\,\mathrm{same\ race}_{ij} + \gamma_{h}\,\mathrm{same\ hall}_{ij},
+\]
+where $\mathrm{same}^{C}_{ij}$ equals 1 when both students are Catholic, and $\mathrm{same}^{N}_{ij}$ equals 1 when the chooser is not Catholic and both students share a religion. The indicators NR, OR, and P mark No Religion, Other Religion, and Protestant choosers, with Catholic choosers as the reference. The activity term $d_{iw}$ is the chooser's total number of nominations in wave $w$, across all alter types. The coefficient $\theta_C$ is the log-odds ratio for a Catholic chooser nominating a same-religion candidate rather than a different-religion candidate, within the candidate-wave stratum. $\theta_N$ is the same quantity for non-Catholic choosers. The estimand is
+\[
+\Delta = \theta_N - \theta_C,
+\]
+the non-Catholic minus Catholic difference in in-group log-odds. Because the strata are alter-wave, $\Delta$ describes a pattern of nominations within this roster. It does not describe preferences or causes, and it does not describe the campus.
+
+\paragraph{Estimation and variance.}
+Point estimates come from the exact conditional likelihood \citep{gail1981}, fit with \texttt{survival::clogit}. Standard errors use a two-way cluster-robust variance, clustering on the chooser and on the candidate, following \citet{cameron2011}. The variance is computed from the Breslow form of the same model \citep{breslow1974} as
+\[
+\mathbf{V}_{\text{two}} = \mathbf{V}_0 \left(\mathbf{M}_{\text{chooser}} + \mathbf{M}_{\text{candidate}} - \mathbf{M}_{\text{dyad}}\right) \mathbf{V}_0,
+\]
+where $\mathbf{V}_0$ is the model-based variance from the Cox form, $\mathbf{M}_{c}$ is the sum over clusters of the outer products of cluster-summed score residuals, and the dyad term is subtracted because each chooser-candidate pair belongs to both the chooser cluster and the candidate cluster. Of the 1,253 chooser-candidate pairs with at least one nomination, 687 (54.8\%) were nominated in two or more waves, and these repeated pairs account for 79.4\% of nominations. A one-way variance clustered on the chooser is reported for comparison. Two-way intervals use the normal critical value and no small-sample adjustment. The sample has about 430 choosers and 595 candidates, and 351 choosers (81.6\%) also receive at least one nomination. This is the crossed structure that motivates two-way clustering.
+
+We do not use \texttt{fixest::feglm} for the primary estimates. That estimator is an unconditional fixed-effects logit and is biased when strata are sparse. Here the average alter-wave stratum contains about 0.8 nominations.
+
+\paragraph{Validity checks.}
+Before any standard error is used, four checks are applied. (C1) The absolute gap between exact and Breslow coefficients for the focal terms is at most 0.05; for M1 the largest gap is 0.018. (C2) The one-way variance from the custom code matches \texttt{coxph}'s own cluster-robust variance; the largest difference across models is $1.2 \times 10^{-15}$. (C3) The two-way variance is positive semidefinite; the smallest eigenvalue is 0.0036 for M1. (C4) The M1 fit produces no convergence warnings. The variance functions were checked by six unit tests against \texttt{sandwich::vcovCL} (five tests) and \texttt{coxph}'s cluster-robust variance (one test), with a maximum absolute difference of $4.5 \times 10^{-13}$. Reciprocity is not estimable in the alter-stratified design (the reciprocity-only exact likelihood does not converge), so the reciprocity model is ego-stratified, and its standard errors are point estimates only.
+
+\paragraph{Alternative specifications.}
+Table~\ref{tab:within-models} lists the models run under the same plan. Each makes a different assumption about how candidate popularity is handled.
+
+\begin{table}[ht]
+\centering
+\caption{Within-cohort models (plan WC-AS-v1)}
+\label{tab:within-models}
+\begin{tabular}{llp{0.52\linewidth}}
+\toprule
+Model & Stratum & Purpose \\
+\midrule
+M1 & Candidate-wave & Primary. Popularity absorbed by the stratum; Tier 1/3 roster; two-way SEs. \\
+S1 & Chooser-wave & Popularity adjusted with candidate-group indicators and leave-own-out log in-degree; no reciprocity; two-way SEs. \\
+S2 & Candidate-wave & M1 with Tier 2 students included; two-way SEs. \\
+S3 & Chooser-wave & S1 plus reciprocity; point estimates only (one-way SEs are not used in claims). \\
+S4 & Chooser-wave & Headcount-type chance model with no candidate-group terms; reference only. \\
+S5 & Candidate-wave & Group-specific same-religion terms; descriptive. \\
+S10 & Candidate-wave & Linear probability model with two-way fixed effects (\texttt{fixest}); robustness only, not log-odds. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Decision rules.}
+Four decision rules were specified in the plan before the two-way standard errors were computed. D1 (primary): report $\Delta$ as in the MDH direction if the lower bound of its two-way 95\% interval is above zero, in the MEH direction if the upper bound is below zero, and as inconclusive otherwise. D2: report that Catholic in-group odds are elevated only if the lower bound of the $\theta_C$ interval is above zero. D3: report no detectable non-Catholic in-group excess only if the $\theta_N$ interval contains zero, and report its upper bound as an odds ratio. D4: check whether the popularity-adjusted model S1 gives the same categories as M1. Other Religion has 28 students and 9 same-religion nominations, and any statement about that group must give both numbers. The alter-stratified design was chosen after an ego-stratified sensitivity analysis showed that the estimates depended on how candidate popularity was modeled. The primary contrast was first estimated under one-way standard errors in an exploratory run before these rules were written. The results are therefore not confirmatory. The exploratory run is archived with the project and should be reported alongside these results. The NetHealth release contains waves 1 through 8 only, so no independent data are available for confirmation.
+
+\paragraph{Software.}
+Models were fit in R 4.2.2 with \texttt{survival} 3.4.0 on a university computing cluster. Code and frozen outputs are in the project repository (\texttt{Code/12\_within\_cohort\_choice\_model.R} and \texttt{Code/cluster\_vcov.R}).
